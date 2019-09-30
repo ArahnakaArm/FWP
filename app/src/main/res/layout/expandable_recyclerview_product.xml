@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+
+        android:background="@color/white2">
+
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:translationZ="2dp"
+            android:drawableStart="@drawable/offsetlocationresize"
+            android:padding="?android:listPreferredItemPaddingLeft"
+            android:text="Bankok And Metropolitan Region"
+
+            android:textSize="16dp"
+            android:drawablePadding="8dp"
+
+            android:fontFamily="@font/kanit_light"
+            android:id="@+id/textView"
+            android:textColor="@color/Grey"/>
+
+        <LinearLayout
+            android:layout_marginTop="49.5dp"
+            android:layout_marginLeft="25dp"
+            android:background="@color/Grey"
+            android:layout_marginRight="25dp"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp">
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+</FrameLayout>
