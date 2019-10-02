@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -64,7 +65,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Complain"
+            android:text="ร้องเรียน"
             android:textColor="@color/Grey"
             android:id="@+id/complain"
             android:textSize="28dp"
@@ -76,21 +77,21 @@
             android:layout_width="330dp"
             android:layout_marginTop="10dp"
             android:id="@+id/lineartype"
+            android:gravity="center"
             android:background="@drawable/inputboxcomplain"
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
             android:layout_centerHorizontal="true"
             android:layout_height="47dp">
-            <EditText
-                android:layout_width="match_parent"
-                android:background="@null"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="15dp"
-                android:hint="Type"
-                android:fontFamily="@font/kanit_light"
-                android:textSize="21dp"
-                android:layout_marginLeft="15dp"
-                android:layout_height="wrap_content" />
+           <Spinner
+               android:layout_width="match_parent"
+               android:layout_marginLeft="15dp"
+               android:overlapAnchor="false"
+               android:spinnerMode="dropdown"
+               android:popupBackground="#EAEAEA"
+               android:id="@+id/spinner"
+               android:layout_marginRight="10dp"
+               android:layout_height="wrap_content"></Spinner>
         </LinearLayout>
 
         <LinearLayout
@@ -108,7 +109,8 @@
                 android:background="@null"
                 android:layout_marginRight="15dp"
                 android:layout_gravity="center_vertical"
-                android:hint="Subject"
+                android:hint="หัวข้อ"
+                android:textColorHint="@color/Grey"
                 android:fontFamily="@font/kanit_light"
                 android:textSize="21dp"
                 android:layout_marginLeft="15dp"
@@ -129,7 +131,8 @@
                 android:background="@null"
                 android:layout_marginRight="15dp"
                 android:gravity="start"
-                android:hint="Detail..."
+                android:textColorHint="@color/Grey"
+                android:hint="รายละเอียด..."
                 android:fontFamily="@font/kanit_light"
                 android:textSize="21dp"
                 android:layout_marginLeft="15dp"
@@ -164,7 +167,7 @@ android:layout_marginLeft="10dp"
                 android:layout_marginLeft="8dp"
 
                 android:textColor="@color/Primary2"
-                android:text="Add Photo / File"/>
+                android:text="เพิ่มรูปภาพ / ไฟล์"/>
 
         </LinearLayout>
         <Button
@@ -173,7 +176,7 @@ android:layout_marginLeft="10dp"
             android:layout_width="330dp"
             android:background="@drawable/sendcomplainbutton"
             android:layout_marginTop="10dp"
-            android:text="Send"
+            android:text="ส่งคำร้อง"
             android:textSize="21dp"
             android:textColor="@color/White"
             android:textAllCaps="false"

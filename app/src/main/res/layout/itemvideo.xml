@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/White"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/videolayout"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:translationZ="3dp"
+            android:src="@drawable/videoplayer"/>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+       android:src="@drawable/homepic1"
+        android:scaleType="fitXY"/>
+
+    </RelativeLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/videolayout"
+        android:id="@+id/videotopic"
+        android:layout_marginTop="5dp"
+        android:text="“ธนาธร” ชี้ปัญหา รัฐราชการรวมศูนย์ทำประเทศไม่พัฒนา"
+        android:textColor="@color/colorPrimary"
+        android:layout_marginRight="10dp"
+        android:fontFamily="@font/kanit"
+        android:layout_marginLeft="10pt"/>
+    <TextView
+        android:layout_marginLeft="10pt"
+        android:layout_width="40dp"
+        android:elevation="0dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/White"
+        android:translationZ="3dp"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/gallery"
+        android:textAlignment="center"
+        android:background="@color/backgroundgreydark"
+        android:textSize="8dp"
+        android:fontFamily="@font/kanit"
+        android:layout_below="@id/videotopic"
+        android:layout_height="wrap_content"
+        android:text="Category"
+        />
+    <ImageView
+        android:layout_marginLeft="4dp"
+        android:layout_width="15dp"
+        android:id="@+id/clockdate"
+        android:elevation="0dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/White"
+        android:translationZ="3dp"
+        android:layout_toRightOf="@+id/gallery"
+        android:layout_below="@id/videotopic"
+        android:layout_height="15dp"
+        android:src="@drawable/time"
+        android:layout_marginBottom="10dp"
+
+        />
+    <TextView
+        android:layout_marginLeft="4dp"
+        android:layout_width="wrap_content"
+        android:layout_toRightOf="@+id/clockdate"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/battleshipgrey"
+        android:translationZ="3dp"
+        android:id="@+id/date"
+        android:textAlignment="center"
+        android:textSize="10dp"
+        android:fontFamily="@font/kanit"
+        android:layout_below="@id/videotopic"
+        android:layout_height="wrap_content"
+        android:text="Date"
+        android:layout_marginBottom="10dp"
+        />
+
+    </RelativeLayout>
+

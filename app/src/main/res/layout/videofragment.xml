@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
+        android:id="@+id/linear4bar"
         android:orientation="vertical"
-        android:id="@+id/linear4barprofile"
         android:layout_height="wrap_content">
         <RelativeLayout
             android:layout_width="match_parent"
@@ -16,7 +17,14 @@
                 android:layout_height="60dp"
                 android:background="?attr/colorPrimary"
                 >
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="25dp"
+                    android:id="@+id/search"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="30.3px"
 
+                    android:src="@drawable/search"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -38,14 +46,33 @@
                     android:layout_width="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_height="wrap_content">
+                    <ImageView
 
+                        android:layout_width="40dp"
+                        android:id="@+id/notification"
+                        android:layout_marginRight="21.4dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_height="40dp"
+                        android:layout_centerVertical="true"
+
+                        android:src="@drawable/curved_rectangle">
+
+                    </ImageView>
 
                     <RelativeLayout
                         android:layout_width="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_height="wrap_content">
 
+                        <ImageView
 
+
+                            android:layout_width="23dp"
+                            android:layout_height="25dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="30dp"
+                            android:src="@drawable/notification" />
                     </RelativeLayout>
                     />
 
@@ -56,4 +83,13 @@
         </RelativeLayout>
     </LinearLayout>
 
-</RelativeLayout>
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+
+        android:layout_height="match_parent"
+        android:id="@+id/list_recycler_view">
+
+
+    </android.support.v7.widget.RecyclerView>
+
+</LinearLayout>

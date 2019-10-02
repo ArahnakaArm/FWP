@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.deimos.fwp">
-
+<uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -19,7 +19,9 @@
         </activity>
 
         <activity android:name=".GalleryInfo" />
-        <activity android:name=".RecyclerTest" />
+
+        <activity android:name=".LocationContent" />
+        <activity android:name=".VideoContent" />
 
         <meta-data
             android:name="preloaded_fonts"

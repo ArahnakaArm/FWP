@@ -18,4 +18,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
 
     </style>
+    <style name="SpinnerStyle" parent="android:style/Widget.ListView.DropDown">
+        <item name="android:divider">@color/Grey</item>
+        <item name="android:dividerHeight">1dp</item>
+    </style>
 </resources>

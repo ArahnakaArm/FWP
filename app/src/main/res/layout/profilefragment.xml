@@ -73,7 +73,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:fontFamily="@font/kanit_light"
-        android:text="Sign In"
+        android:text="เข้าสู่ระบบ"
         android:textColor="@color/Grey"
         android:textSize="28dp" />
     <LinearLayout
@@ -98,7 +98,7 @@
             android:background="@null"
             android:layout_width="330dp"
             android:layout_marginLeft="8dp"
-            android:hint="Email Address"
+            android:hint="อีเมล์"
             android:id="@+id/emailinput"
             android:layout_gravity="center_vertical"
             android:textSize="20dp"
@@ -133,7 +133,7 @@
         android:background="@null"
         android:layout_width="330dp"
         android:layout_marginLeft="8dp"
-        android:hint="Password"
+        android:hint="รหัสผ่าน"
         android:id="@+id/passwordinput"
         android:layout_gravity="center_vertical"
         android:textSize="20dp"
@@ -164,7 +164,7 @@
            android:textSize="28dp"
            android:textColor="@color/White"
            android:layout_height="match_parent"
-           android:text="Sign in"
+           android:text="เข้าสู่ระบบ"
            android:textAllCaps="false"
            android:background="@drawable/buttonround"
            />
@@ -189,7 +189,7 @@
         android:fontFamily="@font/kanit_light"
         android:textAlignment="center"
         android:textColor="@color/Grey"
-        android:text="Forgoting Password?"/>
+        android:text="ลืมรหัสผ่าน ?"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -200,7 +200,7 @@
         android:textSize="18dp"
         android:textAlignment="center"
         android:textColor="@color/Primary2"
-        android:text="Create account"/>
+        android:text="สร้างบัญชีผู้ใช้"/>
 </LinearLayout>
 <LinearLayout
     android:id="@+id/stick"
@@ -220,7 +220,7 @@
         android:layout_width="330dp"
         android:textColor="@color/Grey"
         android:layout_height="wrap_content"
-        android:text="Or Sign in with"
+        android:text="หรือ เข้าสู่ระบบด้วย"
         android:fontFamily="@font/kanit"
         android:textAlignment="center"
         android:layout_marginTop="20dp"
@@ -239,7 +239,7 @@
         android:weightSum="2"
         >
         <Button
-            android:text="Sign in"
+            android:text="เข้าสู่ระบบ"
             android:paddingLeft="3dp"
             android:paddingTop="1dp"
             android:id="@+id/facebooksignin"
@@ -265,7 +265,7 @@
             android:fontFamily="@font/kanit_light"
             android:textColor="@color/Grey"
             android:textSize="20dp"
-            android:text="Sign in"
+            android:text="เข้าสู่ระบบ"
             android:layout_marginLeft="5dp"
             android:layout_width="10dp"
             android:layout_weight="1"

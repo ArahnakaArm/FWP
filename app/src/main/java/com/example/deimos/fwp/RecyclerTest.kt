@@ -13,6 +13,7 @@ import android.widget.Toast
 
 import com.thoughtbot.expandablerecyclerview.listeners.GroupExpandCollapseListener
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup
+import kotlinx.android.synthetic.main.recyclertest.*
 
 import java.util.ArrayList
 
@@ -30,26 +31,27 @@ class RecyclerTest : Fragment() {
         val companies = ArrayList<Company>()
 
         val googleProduct = ArrayList<Product>()
-        googleProduct.add(Product("Google AdSense"))
-        googleProduct.add(Product("Google Drive"))
-        googleProduct.add(Product("Google Mail"))
-        googleProduct.add(Product("Google Doc"))
-        googleProduct.add(Product("Android"))
+        googleProduct.add(Product("Location 1","Info(Location1)","0978512369","Location1@Bankok.com"))
+        googleProduct.add(Product("Location 2","Info(Location2)","0978512369","Location2@Bankok.com"))
+        googleProduct.add(Product("Location 3","Info(Location3)","0978512369","Location3@Bankok.com"))
+        googleProduct.add(Product("Location 4","Info(Location4)","0978512369","Location4@Bankok.com"))
+        googleProduct.add(Product("Location 5","Info(Location5)","0978512369","Location5@Bankok.com"))
 
-        val google = Company("Google", googleProduct)
+        val google = Company("" +
+                "Bankok And Metropolitan Region", googleProduct)
         companies.add(google)
 
         val microsoftProduct = ArrayList<Product>()
-        microsoftProduct.add(Product("Windows"))
-        microsoftProduct.add(Product("Skydrive"))
-        microsoftProduct.add(Product("Microsoft Store"))
-        microsoftProduct.add(Product("Microsoft Office"))
+        microsoftProduct.add(Product("Location 1","Info(Location1)","0978512369","Location1@Central.com"))
+        microsoftProduct.add(Product("Location 2","Info(Location2)","0978512369","Location2@Central.com"))
+        microsoftProduct.add(Product("Location 3","Info(Location3)","0978512369","Location3@Central.com"))
+        microsoftProduct.add(Product("Location 4","Info(Location4)","0978512369","Location4@Central.com"))
 
-        val microsoft = Company("Microsoft", microsoftProduct)
+        val microsoft = Company("Central Region", microsoftProduct)
         companies.add(microsoft)
 
         val adapter = ProductAdapter(companies)
-        Toast.makeText(context, Integer.toString(adapter.itemCount), Toast.LENGTH_SHORT).show()
+        //Toast.makeText(context, Integer.toString(adapter.itemCount), Toast.LENGTH_SHORT).show()
 
 
         for (i in adapter.groups.size - 1 downTo 0) {
@@ -58,8 +60,19 @@ class RecyclerTest : Fragment() {
 
 
         recyclerView.adapter = adapter
+
+
+        map.setOnClickListener {
+            replaceFragment(MapMarker())
+        }
     }
 
-
+    private fun replaceFragment(fragment: Fragment){
+        val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+        fragmentTransaction?.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
+        fragmentTransaction?.replace(R.id.fragmentcontainer,fragment)
+        fragmentTransaction?.commit()
+        fragmentTransaction?.addToBackStack(null)
+    }
 
 }

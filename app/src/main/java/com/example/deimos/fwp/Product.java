@@ -5,13 +5,24 @@ import android.os.Parcelable;
 
 public class Product implements Parcelable {
     public final String name;
+    public final String info;
+    public final String tel;
+    public final String email;
 
-    public Product(String name) {
+    public Product(String name,String info,String tel,String email) {
         this.name = name;
+        this.info = info;
+        this.tel = tel;
+        this.email = email;
+
     }
+
 
     protected Product(Parcel in) {
         name = in.readString();
+        info = in.readString();
+        tel = in.readString();
+        email = in.readString();
     }
 
     public static final Creator<Product> CREATOR = new Creator<Product>() {

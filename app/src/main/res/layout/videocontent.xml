@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/linearbar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="?attr/colorPrimary"
+        >
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/backprees"
+                android:layout_marginTop="11dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="3dp"
+                android:src="@drawable/backarrow"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="0dp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+
+
+                <ImageView
+                    android:layout_width="124dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/logoparty" />
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="60dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@drawable/bottom_border"
+        android:id="@+id/videocard"
+        android:layout_height="wrap_content">
+
+
+    <VideoView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:id="@+id/videoplayer"
+        />
+    <TextView
+        android:layout_marginLeft="5pt"
+        android:layout_width="40dp"
+        android:elevation="0dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/White"
+        android:translationZ="3dp"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/gallery"
+        android:textAlignment="center"
+        android:background="@color/backgroundgreydark"
+        android:textSize="8dp"
+        android:fontFamily="@font/kanit"
+        android:layout_below="@id/videoplayer"
+        android:layout_height="wrap_content"
+        android:text="Category"
+        />
+    <ImageView
+        android:layout_marginLeft="4dp"
+        android:layout_width="15dp"
+        android:id="@+id/clockdate"
+        android:elevation="0dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/White"
+        android:translationZ="3dp"
+        android:layout_toRightOf="@+id/gallery"
+        android:layout_below="@id/videoplayer"
+        android:layout_height="15dp"
+        android:src="@drawable/time"
+        android:layout_marginBottom="10dp"
+
+        />
+    <TextView
+        android:layout_marginLeft="4dp"
+        android:layout_width="wrap_content"
+        android:layout_toRightOf="@+id/clockdate"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/battleshipgrey"
+        android:translationZ="3dp"
+        android:id="@+id/date"
+        android:textAlignment="center"
+        android:textSize="10dp"
+        android:fontFamily="@font/kanit"
+        android:layout_below="@id/videoplayer"
+        android:layout_height="wrap_content"
+        android:text="Date"
+        android:layout_marginBottom="10dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_below="@id/gallery"
+        android:id="@+id/videonamelayout"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:layout_height="wrap_content">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/kanit"
+        android:textSize="16dp"
+        android:layout_marginLeft="5pt"
+        android:id="@+id/videotitle"
+        android:layout_weight="2"
+        android:text="videoname"
+        android:textColor="@color/Black"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:layout_below="@+id/videonamelayout">
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_marginLeft="5pt"
+            android:layout_height="20dp"
+            android:src="@drawable/view"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="View"
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/battleshipgrey"
+            android:textSize="11dp"
+            android:fontFamily="@font/kanit_light"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="777"
+            android:id="@+id/viewValue"
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/battleshipgrey"
+            android:textSize="11dp"
+            android:fontFamily="@font/kanit_light"/>
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginLeft="15dp"
+            android:src="@drawable/sharesmall"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Shared"
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/battleshipgrey"
+            android:textSize="11dp"
+            android:fontFamily="@font/kanit_light"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="777"
+            android:id="@+id/shareValue"
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/battleshipgrey"
+            android:textSize="11dp"
+            android:fontFamily="@font/kanit_light"/>
+
+    </LinearLayout>
+
+    </RelativeLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_below="@+id/videocard"
+        android:background="@color/White"
+        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:background="@color/White"
+
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:fontFamily="@font/kanit"
+            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+            android:textSize="12dp"
+            android:textColor="@color/battleshipgrey"/>
+
+
+    </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
+
+
+</RelativeLayout>
