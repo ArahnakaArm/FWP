@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:id="@+id/linearbar"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="?attr/colorPrimary"
+            >
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/backpreescomplain"
+                    android:layout_marginTop="11dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="3dp"
+                    android:src="@drawable/backarrow"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="0dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+
+
+                    <ImageView
+                        android:layout_width="124dp"
+                        android:layout_height="35dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/logoparty" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+    </LinearLayout>
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:elevation="20dp"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:elevation="15dp"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                >
+
+                <RelativeLayout
+                    android:layout_width="330dp"
+
+                    android:layout_height="40dp"
+                    android:background="@drawable/inputsearchlocation">
+                    <EditText
+                        android:layout_marginLeft="15dp"
+                        android:id="@+id/searchcomplain"
+                        android:drawableStart="@drawable/newsearch"
+                        android:drawableTint="@color/Grey"
+
+                        android:layout_width="match_parent"
+                        android:hint="ค้นหา..."
+                        android:layout_height="match_parent"
+                        android:drawablePadding="10dp"
+                        android:background="@null"/>
+                </RelativeLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="6"
+        android:gravity="center"
+        android:background="@color/Primary2"
+        android:layout_height="28dp">
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_weight="2"
+          android:layout_marginLeft="5dp"
+          android:fontFamily="@font/kanit"
+          android:textSize="16dp"
+          android:textColor="@color/White"
+          android:layout_height="wrap_content"
+          android:text="ชื่อเรื่อง"/>
+        <TextView
+            android:textColor="@color/White"
+            android:fontFamily="@font/kanit"
+            android:layout_width="wrap_content"
+            android:textSize="16dp"
+            android:layout_weight="2"
+            android:layout_marginLeft="25dp"
+            android:drawablePadding="-20dp"
+            android:drawableLeft="@drawable/time2small"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:text="วันที่"/>
+        <TextView
+            android:textColor="@color/White"
+            android:fontFamily="@font/kanit"
+            android:drawablePadding="-5dp"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="40dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="2dp"
+            android:drawableLeft="@drawable/alert"
+            android:gravity="center"
+            android:textSize="16dp"
+
+            android:layout_height="wrap_content"
+            android:text="สถานะ"/>
+
+
+
+
+    </LinearLayout>
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+
+        android:layout_height="match_parent"
+        android:id="@+id/list_recycler_view_complain">
+
+
+    </android.support.v7.widget.RecyclerView>
+
+</LinearLayout>

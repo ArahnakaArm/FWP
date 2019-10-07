@@ -66,15 +66,20 @@
 
             <RelativeLayout
                 android:layout_width="330dp"
-                android:padding="5dp"
-                android:layout_height="35dp"
+
+                android:layout_height="40dp"
                 android:background="@drawable/inputsearchlocation">
-                <ImageView
-                    android:layout_width="160dp"
+                <EditText
+                    android:layout_marginLeft="15dp"
+                    android:id="@+id/searchbookmark"
+                    android:drawableStart="@drawable/newsearch"
+                    android:drawableTint="@color/Grey"
+
+                    android:layout_width="match_parent"
+                    android:hint="ค้นหา..."
                     android:layout_height="match_parent"
-
-                    android:src="@drawable/searchtitle"/>
-
+                    android:drawablePadding="10dp"
+                    android:background="@null"/>
             </RelativeLayout>
 
         </LinearLayout>

@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/linear4barprofile"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <RelativeLayout
+                android:id="@+id/linearbar"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="?attr/colorPrimary"
+                >
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="0dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="124dp"
+                        android:layout_height="35dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/logoparty" />
+
+                </LinearLayout>
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@drawable/backarrow"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginLeft="10dp"
+                    android:id="@+id/backbuttonedit"/>
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_height="wrap_content">
+
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_height="wrap_content">
+
+
+                    </RelativeLayout>
+                    />
+
+                </RelativeLayout>
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+    </LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="60dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+
+                android:fontFamily="@font/kanit_light"
+                android:text="แก้ไขโปรไฟล์"
+                android:id="@+id/createaccount"
+                android:textColor="@color/Grey"
+                android:textSize="28dp" />
+            <LinearLayout
+                android:layout_width="330dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:id="@+id/linear1"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_below="@+id/createaccount"
+                android:background="@drawable/imputtextbox"
+                android:layout_height="47dp">
+                <ImageView
+                    android:layout_marginTop="1dp"
+                    android:layout_width="30dp"
+                    android:paddingLeft="9dp"
+                    android:layout_marginLeft="17dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/user"/>
+                <EditText
+                    android:background="@null"
+                    android:layout_width="330dp"
+                    android:layout_marginLeft="8dp"
+                    android:hint="ชื่อ"
+                    android:id="@+id/emailinput"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="20dp"
+
+                    android:fontFamily="@font/kanit_light"
+                    android:textColor="@color/Grey"
+                    android:layout_height="wrap_content"
+                    />
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="330dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/linear1"
+                android:id="@+id/linear2"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/imputtextbox"
+                android:layout_height="47dp">
+                <ImageView
+                    android:layout_marginTop="1dp"
+                    android:layout_width="30dp"
+                    android:paddingLeft="9dp"
+                    android:layout_marginLeft="17dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/user"/>
+                <EditText
+                    android:background="@null"
+                    android:layout_width="330dp"
+                    android:layout_marginLeft="8dp"
+                    android:hint="นามสกุล"
+                    android:id="@+id/passwordinput2"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="20dp"
+
+                    android:fontFamily="@font/kanit_light"
+                    android:textColor="@color/Grey"
+                    android:layout_height="wrap_content"
+                    />
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="330dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/linear2"
+                android:id="@+id/linear3"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/imputtextbox"
+                android:layout_height="47dp">
+                <ImageView
+                    android:layout_marginTop="1dp"
+                    android:layout_width="30dp"
+                    android:paddingLeft="9dp"
+                    android:layout_marginLeft="17dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/birthday"/>
+                <EditText
+                    android:background="@null"
+                    android:layout_width="330dp"
+                    android:layout_marginLeft="8dp"
+                    android:hint="วันเกิด"
+                    android:id="@+id/passwordinput"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="20dp"
+
+                    android:fontFamily="@font/kanit_light"
+                    android:textColor="@color/Grey"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_below="@+id/linear3"
+                android:layout_width="330dp"
+                android:orientation="horizontal"
+                android:id="@+id/linear4"
+                android:layout_marginTop="10dp"
+                android:layout_centerHorizontal="true"
+                android:weightSum="3"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:layout_width="30dp"
+                    android:layout_weight="1"
+                    android:layout_height="47dp"
+                    android:id="@+id/buttest1"
+                    android:fontFamily="@font/kanit"
+                    android:textColor="@color/White"
+                    android:layout_margin="9dp"
+                    android:background="@drawable/buttonround"
+                    android:text="ชาย"
+                    android:layout_below="@id/linear3"/>
+                <Button
+                    android:layout_width="30dp"
+                    android:layout_height="47dp"
+                    android:layout_toRightOf="@+id/buttest1"
+                    android:id="@+id/buttest2"
+                    android:textColor="@color/Grey"
+                    android:fontFamily="@font/kanit"
+                    android:layout_weight="1"
+                    android:layout_margin="9dp"
+                    android:background="@drawable/buttonround2"
+                    android:text="หญิง"
+                    android:layout_below="@id/linear3"/>
+                <Button
+                    android:layout_weight="1"
+                    android:layout_width="30dp"
+                    android:textColor="@color/Grey"
+                    android:layout_height="47dp"
+                    android:layout_margin="9dp"
+                    android:fontFamily="@font/kanit"
+                    android:background="@drawable/buttonround2"
+                    android:id="@+id/buttest3"
+                    android:layout_toRightOf="@+id/buttest2"
+                    android:text="LGBT"
+                    android:layout_below="@id/linear3"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="330dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/linear4"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:id="@+id/linear5"
+                android:background="@drawable/imputtextbox"
+                android:layout_height="47dp">
+                <ImageView
+                    android:layout_marginTop="1dp"
+                    android:layout_width="30dp"
+                    android:paddingLeft="9dp"
+                    android:layout_marginLeft="17dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/mail"/>
+                <EditText
+                    android:background="@null"
+                    android:layout_width="330dp"
+                    android:layout_marginLeft="8dp"
+                    android:hint="อีเมล์"
+                    android:id="@+id/email"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="20dp"
+
+                    android:fontFamily="@font/kanit_light"
+                    android:textColor="@color/Grey"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="330dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/linear5"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:id="@+id/linear6"
+                android:background="@drawable/imputtextbox"
+                android:layout_height="47dp">
+                <ImageView
+                    android:layout_marginTop="1dp"
+                    android:layout_width="30dp"
+                    android:paddingLeft="9dp"
+                    android:layout_marginLeft="17dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/key"/>
+                <EditText
+                    android:background="@null"
+                    android:layout_width="330dp"
+                    android:layout_marginLeft="8dp"
+                    android:hint="รหัสผ่าน"
+                    android:id="@+id/password"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="20dp"
+
+                    android:fontFamily="@font/kanit_light"
+                    android:textColor="@color/Grey"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="330dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/linear6"
+                android:id="@+id/linear7"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/imputtextbox"
+                android:layout_height="47dp">
+                <ImageView
+                    android:layout_marginTop="1dp"
+                    android:layout_width="30dp"
+                    android:paddingLeft="9dp"
+                    android:layout_marginLeft="17dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/key"/>
+                <EditText
+                    android:background="@null"
+                    android:layout_width="330dp"
+                    android:layout_marginLeft="8dp"
+                    android:hint="ยืนยันรหัสผ่าน"
+                    android:id="@+id/confirmpass"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="20dp"
+
+                    android:fontFamily="@font/kanit_light"
+                    android:textColor="@color/Grey"
+                    android:layout_height="wrap_content"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearsignin"
+                android:layout_width="330dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_below="@+id/linear7"
+                android:background="@drawable/imputtextbox"
+                android:layout_height="47dp">
+
+                <Button
+                    android:id="@+id/signinbut"
+
+                    android:layout_width="match_parent"
+                    android:fontFamily="@font/kanit_light"
+                    android:textSize="28dp"
+                    android:textColor="@color/White"
+                    android:layout_height="match_parent"
+                    android:text="ลงทะเบียน"
+                    android:textAllCaps="false"
+                    android:background="@drawable/buttonround"
+                    />
+
+
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>
+

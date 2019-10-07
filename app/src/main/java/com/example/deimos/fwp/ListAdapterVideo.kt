@@ -18,15 +18,7 @@ class ListAdapterVideo(private val list: List<Video>)
     override fun onBindViewHolder(holder: VideoViewHolder, position: Int) {
         val video: Video = list[position]
         holder.bind(video)
-        holder.itemView.setOnClickListener {
-            val titleExtra: String = video.name
-            val dateExtra : String = video.username
-            val intent=Intent(holder.itemView.context,VideoContent::class.java)
-            //Toast.makeText(holder.itemView.context,video.title,Toast.LENGTH_SHORT).show()
-            intent.putExtra("Title",titleExtra)
-            intent.putExtra("Date",dateExtra)
-            holder.itemView.context?.startActivity(intent)
-        }
+
     }
 
     override fun getItemCount(): Int = list.size

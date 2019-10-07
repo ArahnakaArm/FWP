@@ -224,6 +224,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/kanit_light"
                         android:text="แก้ไข"
+                        android:id="@+id/editprofile"
                         android:layout_marginRight="15dp"
                         android:textSize="14dp"
                         android:textColor="@color/Grey"
@@ -241,7 +242,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="แปลี่ยนรหัสผ่าน"
+                        android:text="เปลี่ยนรหัสผ่าน"
+                        android:id="@+id/changepasswordbut"
                         android:layout_marginLeft="15dp"
                         android:textSize="14dp"
                         android:textColor="@color/Grey"
@@ -253,20 +255,34 @@
         </LinearLayout>
 
 
-        <ImageButton
+        <RelativeLayout
+            android:orientation="horizontal"
             android:id="@+id/service_image_on_orderpage"
             android:layout_width="120dp"
 
             android:layout_height="120dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
-            android:background="@drawable/profile_circular_border_imageview"
             android:elevation="1dp"
             android:translationZ="11dp"
-            android:padding="40dp"
-            android:src="@drawable/camera"
-            android:scaleType="fitCenter"
-            android:layout_marginBottom="20dp"/>
+
+            android:background="@drawable/profile_circular_border_imageview"
+            android:layout_marginBottom="20dp">
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/camera"/>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                android:id="@+id/imageset"
+               android:elevation="1dp"
+
+                />
+    </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -308,6 +324,7 @@
                 android:elevation="5dp"
                 android:orientation="vertical"
                 android:layout_marginRight="5dp"
+                android:id="@+id/setting"
                 android:gravity="center_horizontal"
                 android:layout_marginLeft="5dp"
                 android:layout_height="match_parent"

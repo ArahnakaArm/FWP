@@ -1,5 +1,7 @@
 package com.example.deimos.fwp
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -17,11 +19,13 @@ import android.widget.TextView
 
 
 class FragmentComplain : Fragment(){
+    var sp: SharedPreferences? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.complainfragment,container,false);
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        sp = activity?.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
         var arrayList = mutableListOf<String>()
         arrayList.add("ประเภท")
         arrayList.add("Mock1")
@@ -75,9 +79,26 @@ class FragmentComplain : Fragment(){
         sendcomplainbutton.setOnClickListener {
             Toast.makeText(context,"Sent",Toast.LENGTH_SHORT).show()
         }
+
+        buttongocomplainlist.setOnClickListener {
+            if(sp?.getBoolean("My_Value", true)==true){
+                replaceFragment(ComplainList())
+            }
+            else{
+                replaceFragment(FragmentProfile())
+            }
+        }
     }
 
 
+    private fun replaceFragment(fragment: Fragment){
+        val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
 
+        fragmentTransaction?.replace(R.id.fragmentcontainer,fragment)
+        fragmentTransaction?.addToBackStack(null)
+        fragmentTransaction?.commit()
+
+
+    }
 
 }

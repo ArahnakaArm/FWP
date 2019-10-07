@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
@@ -42,13 +42,13 @@
                     <ImageView
 
                         android:layout_width="40dp"
-                        android:id="@+id/notification"
+                        android:id="@+id/map"
                         android:layout_marginRight="21.4dp"
                         android:layout_alignParentRight="true"
                         android:layout_height="40dp"
                         android:layout_centerVertical="true"
 
-                        android:src="@drawable/curved_rectangle">
+                        android:src="@drawable/gpsconnericon">
 
                     </ImageView>
 
@@ -57,15 +57,7 @@
                         android:layout_centerVertical="true"
                         android:layout_height="wrap_content">
 
-                        <ImageView
 
-
-                            android:layout_width="23dp"
-                            android:layout_height="25dp"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginRight="30dp"
-                            android:src="@drawable/notification" />
                     </RelativeLayout>
                     />
 
@@ -91,10 +83,9 @@
                 android:padding="5dp"
                 android:layout_height="35dp"
                 android:background="@drawable/inputsearchlocation">
-
                 <EditText
                     android:layout_marginLeft="15dp"
-                    android:id="@+id/searchvideo"
+                    android:id="@+id/searchlocation"
                     android:drawableStart="@drawable/newsearch"
                     android:drawableTint="@color/Grey"
 
@@ -108,13 +99,11 @@
 
         </LinearLayout>
     </LinearLayout>
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_margin="5dp"
-        android:layout_height="match_parent"
-        android:id="@+id/list_recycler_view">
+<android.support.v7.widget.RecyclerView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/recyclerView">
 
 
-    </android.support.v7.widget.RecyclerView>
-
+</android.support.v7.widget.RecyclerView>
 </LinearLayout>

@@ -8,6 +8,7 @@
         android:layout_width="match_parent"
         android:id="@+id/linear4bar"
         android:orientation="vertical"
+        android:translationZ="3dp"
         android:layout_height="wrap_content">
         <RelativeLayout
             android:layout_width="match_parent"
@@ -47,33 +48,14 @@
                     android:layout_width="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_height="wrap_content">
-                    <ImageView
 
-                        android:layout_width="40dp"
-                        android:id="@+id/notification"
-                        android:layout_marginRight="21.4dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_height="40dp"
-                        android:layout_centerVertical="true"
-
-                        android:src="@drawable/curved_rectangle">
-
-                    </ImageView>
 
                     <RelativeLayout
                         android:layout_width="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_height="wrap_content">
 
-                        <ImageView
 
-
-                            android:layout_width="23dp"
-                            android:layout_height="25dp"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginRight="30dp"
-                            android:src="@drawable/notification" />
                     </RelativeLayout>
                     />
 
@@ -85,7 +67,7 @@
     </LinearLayout>
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_marginTop="55dp"
+        android:layout_marginTop="60dp"
         android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
@@ -200,12 +182,12 @@
 
 
             <ImageView
-                app:layout_heightPercent="40%"
+                android:layout_height="130dp"
                 app:layout_widthPercent="90%"
                 android:id="@+id/homepic1"
                 android:layout_centerHorizontal="true"
                 android:background="@drawable/picturehome1"
-                android:translationZ="3dp"
+                android:translationZ="1dp"
 
                 />
             <TextView
@@ -299,7 +281,8 @@
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_centerHorizontal="true"
-                app:layout_heightPercent="55%"
+                android:layout_height="200dp"
+
                 app:layout_widthPercent="90%"
                 android:id="@+id/lipic1"
                 android:background="@color/backgroundgrey">

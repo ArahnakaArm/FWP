@@ -5,5 +5,5 @@ import retrofit2.http.GET
 
 interface ApiService {
     @GET("/users")
-fun fecthAllUsers(): Call<List<Video>>
+fun fecthAllUsers(): Call<ArrayList<SearchModel>>
 }
