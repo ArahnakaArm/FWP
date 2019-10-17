@@ -42,7 +42,15 @@
                             android:src="@drawable/logoparty" />
 
                     </LinearLayout>
-
+                    <ImageView
+                        android:id="@+id/backlocation"
+                        android:layout_width="33dp"
+                        android:layout_height="31dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginLeft="10dp"
+                        android:src="@drawable/backarrow" />
 
                 </RelativeLayout>
 
@@ -64,8 +72,8 @@
             android:layout_width="wrap_content"
             android:fontFamily="@font/kanit_light"
             android:textColor="@color/Primary2"
-            android:layout_margin="20dp"
-            android:drawablePadding="10dp"
+            android:layout_margin="15dp"
+            android:drawablePadding="5dp"
             android:textSize="24dp"
             android:id="@+id/locationname"
             android:drawableStart="@drawable/offsetlocationorangeresize"
@@ -75,11 +83,11 @@
         <ImageView
             android:layout_width="330dp"
             android:layout_centerHorizontal="true"
-            android:layout_height="250dp"
+            android:layout_height="200dp"
             android:layout_marginLeft="10dp"
             android:src="@color/backgroundgreydark"
             android:id="@+id/locationimage"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:layout_below="@+id/locationname"/>
 
         <TextView
@@ -126,10 +134,10 @@
             android:layout_width="wrap_content"
             android:layout_marginLeft="21dp"
 
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:text="E-Mail: "
             android:textSize="18dp"
-            android:layout_marginBottom="35dp"
+            android:layout_marginBottom="10dp"
             android:id="@+id/emailtopic"
             android:fontFamily="@font/kanit_light"
             android:textColor="@color/battleshipgrey"
@@ -140,7 +148,7 @@
             android:layout_width="wrap_content"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:text="abc@abc.com"
             android:textSize="18dp"
             android:layout_toRightOf="@+id/teltopic"
@@ -149,8 +157,16 @@
             android:textColor="@color/battleshipgrey"
             android:layout_centerHorizontal="true"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="35dp"
+            android:layout_marginBottom="10dp"
             android:layout_below="@id/telinfo"/>
+        <com.google.android.gms.maps.MapView
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:id="@+id/mapViewContent"
+            android:layout_below="@id/emailinfo"
+            android:layout_width="330dp"
+            android:layout_marginBottom="20dp"
+            android:layout_height="150dp" />
 
     </RelativeLayout>
 

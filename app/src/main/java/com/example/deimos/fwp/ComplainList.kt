@@ -1,6 +1,7 @@
 package com.example.deimos.fwp
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -15,6 +16,8 @@ import kotlinx.android.synthetic.main.complainlist.*
 import java.lang.Exception
 
 class ComplainList : Fragment() {
+    var sp: SharedPreferences? = null
+    var sp2: SharedPreferences? = null
     private var etsearch: EditText? = null
     internal var textlength = 0
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -23,6 +26,7 @@ class ComplainList : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         var array_sort = java.util.ArrayList<ComplainModel>()
         var mockcomplains = ArrayList<ComplainModel>()
         mockcomplains.add(ComplainModel("Complain 1", "17/8/2019", "Complete"))

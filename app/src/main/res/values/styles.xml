@@ -22,4 +22,13 @@
         <item name="android:divider">@color/Grey</item>
         <item name="android:dividerHeight">1dp</item>
     </style>
+    <style name="FacebookLoginButton">
+        <item name="android:drawablePadding">-15dp</item>
+        <item name=" android:drawableStart">@drawable/facebookresize</item>
+        <item name="android:background">@drawable/imputtextbox</item>
+        <item name="android:layout_height">47dp</item>
+        <item name="android:layout_marginRight">5dp</item>
+        <item name="android:textSize">20dp</item>
+
+    </style>
 </resources>

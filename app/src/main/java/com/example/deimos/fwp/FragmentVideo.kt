@@ -2,6 +2,7 @@ package com.example.deimos.fwp
 
 import android.content.Context
 import android.os.Bundle
+import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v7.widget.LinearLayoutManager
@@ -62,7 +63,11 @@ class FragmentVideo : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = activity!!.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        view.menu.getItem(0).isCheckable=true
+        view.menu.getItem(0).isChecked=true
         return inflater.inflate(R.layout.videofragment,container,false)
+
 
     }
 
@@ -84,7 +89,7 @@ class FragmentVideo : Fragment() {
         api.fecthAllUsers().enqueue(object : Callback<ArrayList<SearchModel>>{
 
             override fun onResponse(call: Call<ArrayList<SearchModel>>, response: Response<ArrayList<SearchModel>>) {
-                d("arm","onRespones:${response.body()!![0].getNames()}" )
+
                 showData(response.body()!!)
 
 ///// Searching /////
@@ -116,11 +121,11 @@ class FragmentVideo : Fragment() {
                     }
                 })
 
-
+            }
 ///// Searching /////
 
 
-            }
+
 
             override fun onFailure(call: Call<ArrayList<SearchModel>>, t: Throwable) {
                 d("arm","onFailure")
@@ -216,7 +221,17 @@ class FragmentVideo : Fragment() {
         }
     }
 
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
 
+
+    }
+    override fun onResume() {
+        val view = activity!!.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        view.menu.getItem(0).isCheckable=true
+        view.menu.getItem(0).isChecked=true
+        super.onResume()
+    }
 
 
 

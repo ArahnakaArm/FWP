@@ -2,31 +2,33 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/item_recent"
+        android:id="@+id/video"
         android:enabled="true"
         android:icon="@drawable/menu1"
 
         android:title=""/>
     <item
-        android:id="@+id/item_favorite"
+        android:id="@+id/complain"
         android:enabled="true"
-        android:icon="@drawable/menu2"
+        android:icon="@drawable/complain"
         android:title=""/>
     <item
-        android:id="@+id/item_nearby2"
+        android:id="@+id/news"
         android:enabled="true"
 
         android:title=""/>
     <item
-        android:id="@+id/item_nearby3"
+        android:id="@+id/location"
         android:enabled="true"
         android:icon="@drawable/menu3"
         android:title=""/>
     <item
-        android:id="@+id/item_nearby4"
+        android:id="@+id/profile"
         android:enabled="true"
         android:icon="@drawable/menu4"
         android:title=""/>
+
+
 
 
 </menu>

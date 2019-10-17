@@ -3,6 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
 <LinearLayout
     android:layout_width="match_parent"
     android:orientation="vertical"
@@ -23,11 +25,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
                 <ImageView
+
+                    android:id="@+id/exitbut"
+                    android:layout_marginTop="11dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/cancel"/>
+                <ImageView
+                    android:layout_alignParentEnd="true"
                     android:id="@+id/logoutbut"
                     android:layout_marginTop="11dp"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
                     android:src="@drawable/signout"/>
 
                 <LinearLayout
@@ -85,6 +96,7 @@
                 android:layout_width="40dp"
                 android:translationZ="10dp"
                 android:layout_height="40dp"
+                android:id="@+id/gendericon"
                 android:layout_centerHorizontal="true"
                 android:layout_toRightOf="@id/service_image_on_orderpage"
                 android:background="@drawable/circular_border_gender"
@@ -94,7 +106,7 @@
                 android:layout_marginTop="-65dp"
 
                 android:src="@drawable/gender"
-                android:scaleType="fitCenter"
+
                />
 
 
@@ -127,15 +139,16 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/kanit_light"
                 android:textColor="@color/Grey"
-                android:text="หมายเลขสมาชิก  :"/>
+                android:text="หมายเลขสมาชิก:"/>
             <TextView
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="2dp"
                 android:textColor="@color/Grey"
                 android:textSize="14dp"
+                android:id="@+id/memberid"
                 android:layout_width="wrap_content"
                 android:fontFamily="@font/kanit_light"
                 android:layout_height="wrap_content"
-                android:text="0000000001"/>
+                android:text=""/>
 
 
             </LinearLayout>
@@ -148,15 +161,30 @@
                     android:orientation="horizontal"
                     android:gravity="center"
                     >
-
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="25dp"
                         android:fontFamily="@font/kanit_semibold"
-                        android:text="Firstname Lastname"
+                        android:text=""
+                        android:id="@+id/firstName"
+                        android:layout_marginRight="5dp"
                         android:textColor="@color/Primary2" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/lastName"
+        android:layout_marginLeft="5dp"
+        android:textSize="25dp"
+        android:fontFamily="@font/kanit_semibold"
+        android:text=""
+        android:textColor="@color/Primary2" />
 
+</LinearLayout>
 
                 </LinearLayout>
                 <LinearLayout
@@ -174,9 +202,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="6dp"
                         android:textSize="14dp"
+                        android:id="@+id/birthday"
                         android:textColor="@color/Grey"
                         android:layout_marginTop="8dp"
-                        android:text="20 สิงหาคม 1992"/>
+                        android:text=""/>
 
 
 
@@ -195,8 +224,8 @@
                         android:textSize="21dp"
                         android:textColor="@color/Grey"
                         android:layout_marginTop="8dp"
-
-                        android:text="mockup@wadteam.dev"/>
+                        android:id="@+id/textEmail"
+                        android:text=""/>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -332,16 +361,19 @@
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
+                    android:tint="@color/Primary2"
                     android:layout_margin="15dp"
-                    android:src="@drawable/settings2"
+                    android:src="@drawable/complain"
                     />
                 <TextView
                     android:layout_width="wrap_content"
                     android:fontFamily="@font/kanit_light"
                     android:layout_height="wrap_content"
+                    android:padding="2dp"
                     android:textColor="@color/Grey"
+                    android:autoSizeTextType="uniform"
                     android:layout_marginTop="-10dp"
-                    android:text="ตั้งค่า"/>
+                    android:text="รายการร้องเรียน"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -356,6 +388,7 @@
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
+                    android:tint="@color/Primary2"
                     android:layout_margin="15dp"
                     android:src="@drawable/document"
                     />
@@ -383,4 +416,5 @@
             android:text="License / Version"/>
     </RelativeLayout>
 </ScrollView>
+
 </RelativeLayout>

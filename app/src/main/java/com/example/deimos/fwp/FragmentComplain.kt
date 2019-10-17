@@ -1,10 +1,14 @@
 package com.example.deimos.fwp
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
+import android.opengl.Visibility
 import android.os.Bundle
+import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
+import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,13 +23,36 @@ import android.widget.TextView
 
 
 class FragmentComplain : Fragment(){
+
+    var i:Int=0
     var sp: SharedPreferences? = null
+    var sp2: SharedPreferences? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = activity!!.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        view.menu.getItem(1).isCheckable=true
+        view.menu.getItem(1).isChecked=true
+
+
+
+
+
         return inflater.inflate(R.layout.complainfragment,container,false);
+
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         sp = activity?.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        if (sp?.getBoolean("LogIn_State",true)==true){
+
+            linearname.visibility = View.GONE
+            linearsurname.visibility = View.GONE
+            lineartel.visibility = View.GONE
+
+        }
+        //editor?.putBoolean("isComplain", false)
+
         var arrayList = mutableListOf<String>()
         arrayList.add("ประเภท")
         arrayList.add("Mock1")
@@ -80,25 +107,27 @@ class FragmentComplain : Fragment(){
             Toast.makeText(context,"Sent",Toast.LENGTH_SHORT).show()
         }
 
-        buttongocomplainlist.setOnClickListener {
-            if(sp?.getBoolean("My_Value", true)==true){
-                replaceFragment(ComplainList())
-            }
-            else{
-                replaceFragment(FragmentProfile())
-            }
-        }
+
     }
 
 
     private fun replaceFragment(fragment: Fragment){
         val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
 
-        fragmentTransaction?.replace(R.id.fragmentcontainer,fragment)
+        fragmentTransaction?.replace(R.id.fragmentcontainercomplain,fragment)
         fragmentTransaction?.addToBackStack(null)
         fragmentTransaction?.commit()
 
 
+    }
+
+    override fun onResume() {
+        val view = activity!!.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        view.menu.getItem(1).isCheckable=true
+        view.menu.getItem(1).isChecked=true
+        super.onResume()
+
+       // set flag
     }
 
 }

@@ -23,9 +23,10 @@
                     android:layout_width="24dp"
                     android:layout_height="25dp"
                     android:id="@+id/search"
+                    android:layout_marginRight="8dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="30.3px"
 
+                    android:layout_alignParentEnd="true"
                     android:src="@drawable/search"/>
 
                 <LinearLayout
@@ -47,16 +48,11 @@
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_centerVertical="true"
+
                     android:layout_height="wrap_content">
 
 
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_height="wrap_content">
 
-
-                    </RelativeLayout>
                     />
 
                 </RelativeLayout>
@@ -87,6 +83,7 @@
                 android:id="@+id/li1"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:gravity="center"
                 android:layout_weight="1"
                 android:background="@drawable/black_curved_rectangle_with_border">
 
@@ -94,10 +91,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="4dp"
+
                     android:drawableLeft="@drawable/featureresize"
-                    android:drawablePadding="3dp"
+                    android:drawablePadding="4dp"
                     android:fontFamily="@font/kanit"
+                    android:gravity="center"
                     android:text="Featured"
                     android:textColor="@color/White"
                     android:textSize="16dp" />
@@ -110,6 +108,7 @@
                 android:id="@+id/li2"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:gravity="center"
                 android:layout_weight="1"
                 android:background="@drawable/black_curved_rectangle_with_border">
                 <TextView
@@ -118,10 +117,11 @@
                     android:drawablePadding="3dp"
                     android:fontFamily="@font/kanit"
                     android:drawableLeft="@drawable/editresize"
-                    android:layout_marginLeft="5dp"
+
                     android:layout_gravity="center_vertical"
                     android:text="Article"
                     android:textSize="16dp"
+                    android:gravity="center"
                     android:textColor="@color/White"
                     />
             </LinearLayout>
@@ -130,16 +130,18 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:id="@+id/li3"
+                android:gravity="center"
                 android:background="@drawable/black_curved_rectangle_with_border">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="5dp"
+
                     android:drawableLeft="@drawable/videoresize"
-                    android:drawablePadding="3dp"
+                    android:drawablePadding="4dp"
                     android:text="Video"
+                    android:gravity="center"
                     android:fontFamily="@font/kanit"
                     android:textColor="@color/White"
                     android:textSize="16dp" />
@@ -148,32 +150,48 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:id="@+id/li4"
                 android:background="@drawable/black_curved_rectangle_with_border">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawablePadding="3dp"
+                    android:drawablePadding="4dp"
                     android:drawableLeft="@drawable/galleryresize"
-                    android:layout_marginLeft="6dp"
+
                     android:layout_gravity="center_vertical"
                     android:text="Gallery"
+
                     android:fontFamily="@font/kanit"
                     android:textSize="16dp"
                     android:textColor="@color/White"
                     />
             </LinearLayout>
         </LinearLayout>
-        <LinearLayout
-
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ImageView
+            android:layout_height="180dp" >
 
+            <android.support.v4.view.ViewPager
+                android:id="@+id/pager"
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:background="@drawable/homepic1"/>
-        </LinearLayout>
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true" />
+
+            <com.viewpagerindicator.CirclePageIndicator
+                android:id="@+id/indicator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:gravity="bottom"
+                android:padding="10dip"
+                app:centered="true"
+                app:fillColor="@color/White"
+                app:pageColor="@color/Grey"
+                app:strokeColor="@color/Grey"
+                app:snap="false" />
+        </RelativeLayout>
 
         <android.support.percent.PercentRelativeLayout
             android:layout_width="match_parent"
@@ -182,7 +200,7 @@
 
 
             <ImageView
-                android:layout_height="130dp"
+                android:layout_height="160dp"
                 app:layout_widthPercent="90%"
                 android:id="@+id/homepic1"
                 android:layout_centerHorizontal="true"
@@ -244,7 +262,7 @@
                 android:translationZ="3dp"
                 android:id="@+id/date"
                 android:textAlignment="center"
-                android:textSize="12dp"
+                android:textSize="14dp"
                 android:fontFamily="@font/kanit"
                 android:layout_below="@id/hometopic"
                 android:layout_height="wrap_content"
@@ -253,7 +271,6 @@
             <TextView
                 android:layout_marginRight="33dp"
                 android:layout_width="wrap_content"
-
                 android:layout_marginTop="9dp"
                 android:textColor="@color/battleshipgrey"
                 android:translationZ="3dp"
@@ -281,7 +298,7 @@
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_centerHorizontal="true"
-                android:layout_height="200dp"
+                android:layout_height="230dp"
 
                 app:layout_widthPercent="90%"
                 android:id="@+id/lipic1"

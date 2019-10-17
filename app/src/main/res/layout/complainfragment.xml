@@ -45,14 +45,6 @@
 
                     </LinearLayout>
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:id="@+id/buttongocomplainlist"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="21.4dp"
-                        android:src="@drawable/rectangle"
-                        android:layout_alignParentEnd="true"/>
                 </RelativeLayout>
 
             </RelativeLayout>
@@ -82,6 +74,73 @@
             android:layout_centerHorizontal="true"/>
         <LinearLayout
             android:layout_below="@+id/complain"
+            android:layout_width="330dp"
+            android:id="@+id/linearname"
+
+            android:background="@drawable/inputboxcomplain"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_height="47dp">
+            <EditText
+                android:layout_width="match_parent"
+                android:background="@null"
+                android:layout_marginRight="15dp"
+                android:layout_gravity="center_vertical"
+                android:hint="ชื่อ"
+                android:textColorHint="@color/Grey"
+                android:fontFamily="@font/kanit_light"
+                android:textSize="21dp"
+                android:layout_marginLeft="15dp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_below="@+id/linearname"
+            android:layout_width="330dp"
+            android:id="@+id/linearsurname"
+            android:background="@drawable/inputboxcomplain"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_height="47dp">
+            <EditText
+                android:layout_width="match_parent"
+                android:background="@null"
+                android:layout_marginRight="15dp"
+                android:layout_gravity="center_vertical"
+                android:hint="หัวข้อ"
+                android:textColorHint="@color/Grey"
+                android:fontFamily="@font/kanit_light"
+                android:textSize="21dp"
+                android:layout_marginLeft="15dp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_below="@+id/linearsurname"
+            android:layout_width="330dp"
+            android:id="@+id/lineartel"
+            android:background="@drawable/inputboxcomplain"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_height="47dp">
+            <EditText
+                android:layout_width="match_parent"
+                android:background="@null"
+                android:layout_marginRight="15dp"
+                android:layout_gravity="center_vertical"
+                android:hint="เบอร์โทรศัพท์"
+                android:textColorHint="@color/Grey"
+                android:fontFamily="@font/kanit_light"
+                android:textSize="21dp"
+                android:layout_marginLeft="15dp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_below="@+id/lineartel"
             android:layout_width="330dp"
             android:layout_marginTop="10dp"
             android:id="@+id/lineartype"

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+
+        android:id="@+id/barprofilewithpicture"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <RelativeLayout
+                android:id="@+id/linearbar"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="?attr/colorPrimary"
+                >
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginTop="0dp"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal">
+
+
+
+                        <ImageView
+                            android:id="@+id/logoparty"
+                            android:layout_width="124dp"
+                            android:layout_height="35dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/logoparty" />
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+    </LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="60dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ร้องเรียนSkip"
+                android:textColor="@color/Grey"
+                android:id="@+id/complain"
+                android:textSize="28dp"
+                android:fontFamily="@font/kanit_light"
+                android:layout_marginTop="10dp"
+                android:layout_centerHorizontal="true"/>
+            <LinearLayout
+                android:layout_below="@+id/complain"
+                android:layout_width="330dp"
+                android:layout_marginTop="10dp"
+                android:id="@+id/lineartype"
+                android:gravity="center"
+                android:background="@drawable/inputboxcomplain"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_centerHorizontal="true"
+                android:layout_height="47dp">
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="15dp"
+                    android:overlapAnchor="false"
+                    android:spinnerMode="dropdown"
+                    android:popupBackground="#EAEAEA"
+                    android:id="@+id/spinner"
+                    android:layout_marginRight="10dp"
+                    android:layout_height="wrap_content"></Spinner>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_below="@+id/lineartype"
+                android:layout_width="330dp"
+                android:id="@+id/linearsubject"
+                android:background="@drawable/inputboxcomplain"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_centerHorizontal="true"
+                android:layout_height="47dp">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:background="@null"
+                    android:layout_marginRight="15dp"
+                    android:layout_gravity="center_vertical"
+                    android:hint="หัวข้อ"
+                    android:textColorHint="@color/Grey"
+                    android:fontFamily="@font/kanit_light"
+                    android:textSize="21dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_below="@+id/linearsubject"
+                android:layout_width="330dp"
+                android:id="@+id/lineardetail"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/inputboxcomplain"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_centerHorizontal="true"
+                android:layout_height="250dp">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:background="@null"
+                    android:layout_marginRight="15dp"
+                    android:gravity="start"
+                    android:textColorHint="@color/Grey"
+                    android:hint="รายละเอียด..."
+                    android:fontFamily="@font/kanit_light"
+                    android:textSize="21dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_below="@+id/lineardetail"
+                android:layout_width="330dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/upphotobut"
+                android:background="@drawable/inputcomplainwithborder"
+                android:layout_marginRight="10dp"
+                android:padding="2dp"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:layout_height="47dp">
+                <ImageView
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/add"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/kanit_light"
+                    android:textSize="21dp"
+
+                    android:layout_gravity="center"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginLeft="8dp"
+
+                    android:textColor="@color/Primary2"
+                    android:text="เพิ่มรูปภาพ / ไฟล์"/>
+
+            </LinearLayout>
+            <Button
+                android:id="@+id/sendcomplainbutton"
+                android:layout_below="@+id/upphotobut"
+                android:layout_width="330dp"
+                android:background="@drawable/sendcomplainbutton"
+                android:layout_marginTop="10dp"
+                android:text="ร้องเรียน"
+                android:textSize="21dp"
+                android:textColor="@color/White"
+                android:textAllCaps="false"
+                android:layout_marginRight="10dp"
+                android:layout_centerHorizontal="true"
+                android:layout_height="47dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="10dp"/>
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

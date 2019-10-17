@@ -37,7 +37,8 @@ class BookMarkAdapter(ctx: Context, private val imageModelArrayList: ArrayList<B
 
     override fun onBindViewHolder(holder: BookMarkAdapter.MyViewHolder, position: Int) {
 
-        holder.title.setText(imageModelArrayList[position].getNames())
+        holder.title.setText("  "+imageModelArrayList[position].getNames())
+        holder.date.setText(imageModelArrayList[position].getDate())
         holder.itemView.setOnClickListener {
             Toast.makeText(holder.itemView.context,imageModelArrayList[position].getNames(),Toast.LENGTH_SHORT).show()
         }
@@ -50,10 +51,12 @@ class BookMarkAdapter(ctx: Context, private val imageModelArrayList: ArrayList<B
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         var title: TextView
+        var date : TextView
 
         init {
 
             title = itemView.findViewById(R.id.title) as TextView
+            date = itemView.findViewById(R.id.datebookmark) as TextView
 
         }
 

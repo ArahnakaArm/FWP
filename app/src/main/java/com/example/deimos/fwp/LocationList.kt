@@ -2,6 +2,7 @@ package com.example.deimos.fwp
 
 import android.content.Context
 import android.os.Bundle
+import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -24,6 +25,9 @@ class LocationList : Fragment() {
     private val companyViewHolder: CompanyViewHolder? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = activity!!.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        view.menu.getItem(3).isCheckable=true
+        view.menu.getItem(3).isChecked=true
         return inflater.inflate(R.layout.loacationlist,container,false)
     }
 
@@ -186,5 +190,12 @@ class LocationList : Fragment() {
         override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
 
         }
+    }
+
+    override fun onResume() {
+        val view = activity!!.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        view.menu.getItem(3).isCheckable=true
+        view.menu.getItem(3).isChecked=true
+        super.onResume()
     }
 }

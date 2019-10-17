@@ -106,16 +106,17 @@
             android:layout_height="wrap_content"
             android:src="@drawable/user"/>
         <EditText
+            android:inputType="text"
             android:background="@null"
             android:layout_width="330dp"
             android:layout_marginLeft="8dp"
             android:hint="ชื่อ"
-            android:id="@+id/emailinput"
+            android:id="@+id/nameinput"
             android:layout_gravity="center_vertical"
             android:textSize="20dp"
-
+            android:maxLines="1"
             android:fontFamily="@font/kanit_light"
-            android:textColor="@color/Grey"
+            android:textColor="@color/Black"
             android:layout_height="wrap_content"
             />
 
@@ -140,16 +141,17 @@
             android:layout_height="wrap_content"
             android:src="@drawable/user"/>
         <EditText
+            android:inputType="text"
             android:background="@null"
             android:layout_width="330dp"
             android:layout_marginLeft="8dp"
             android:hint="นามสกุล"
-            android:id="@+id/passwordinput2"
+            android:id="@+id/surnameinput"
             android:layout_gravity="center_vertical"
             android:textSize="20dp"
-
+            android:maxLines="1"
             android:fontFamily="@font/kanit_light"
-            android:textColor="@color/Grey"
+            android:textColor="@color/Black"
             android:layout_height="wrap_content"
             />
 
@@ -173,17 +175,18 @@
             android:layout_gravity="center_vertical"
             android:layout_height="wrap_content"
             android:src="@drawable/birthday"/>
-        <EditText
+        <TextView
+            android:inputType="date"
             android:background="@null"
             android:layout_width="330dp"
             android:layout_marginLeft="8dp"
             android:hint="วันเกิด"
-            android:id="@+id/passwordinput"
+            android:id="@+id/birthinput"
             android:layout_gravity="center_vertical"
             android:textSize="20dp"
 
             android:fontFamily="@font/kanit_light"
-            android:textColor="@color/Grey"
+            android:textColor="@color/Black"
             android:layout_height="wrap_content"
             />
     </LinearLayout>
@@ -203,6 +206,7 @@
         android:layout_width="30dp"
         android:layout_weight="1"
         android:layout_height="47dp"
+        android:textSize="20dp"
         android:id="@+id/buttest1"
         android:fontFamily="@font/kanit"
         android:textColor="@color/White"
@@ -218,6 +222,7 @@
         android:textColor="@color/Grey"
         android:fontFamily="@font/kanit"
         android:layout_weight="1"
+        android:textSize="20dp"
         android:layout_margin="9dp"
         android:background="@drawable/buttonround2"
         android:text="หญิง"
@@ -233,6 +238,7 @@
         android:id="@+id/buttest3"
         android:layout_toRightOf="@+id/buttest2"
         android:text="LGBT"
+        android:textSize="20dp"
         android:layout_below="@id/linear3"/>
 </LinearLayout>
     <LinearLayout
@@ -245,6 +251,9 @@
         android:id="@+id/linear5"
         android:background="@drawable/imputtextbox"
         android:layout_height="47dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
         <ImageView
             android:layout_marginTop="1dp"
             android:layout_width="30dp"
@@ -252,20 +261,49 @@
             android:layout_marginLeft="17dp"
             android:layout_gravity="center_vertical"
             android:layout_height="wrap_content"
+            android:id="@+id/mailpic"
             android:src="@drawable/mail"/>
+
         <EditText
             android:background="@null"
-            android:layout_width="330dp"
+            android:layout_width="match_parent"
             android:layout_marginLeft="8dp"
             android:hint="อีเมล์"
-            android:id="@+id/email"
-            android:layout_gravity="center_vertical"
-            android:textSize="20dp"
+            android:layout_marginRight="40dp"
+            android:layout_toRightOf="@+id/mailpic"
+            android:inputType="textEmailAddress"
+            android:id="@+id/emailinput"
 
+            android:textSize="20dp"
+            android:layout_centerVertical="true"
+            android:maxLines="1"
             android:fontFamily="@font/kanit_light"
-            android:textColor="@color/Grey"
+            android:textColor="@color/Black"
             android:layout_height="wrap_content"
             />
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:id="@+id/check"
+            android:visibility="invisible"
+            android:tint="@color/Primary2"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/checktext"/>
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp"
+                android:id="@+id/checkwrong"
+                android:visibility="invisible"
+                android:tint="@color/Primary2"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/checktextwrong"/>
+        </RelativeLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -278,31 +316,62 @@
         android:id="@+id/linear6"
         android:background="@drawable/imputtextbox"
         android:layout_height="47dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
         <ImageView
             android:layout_marginTop="1dp"
             android:layout_width="30dp"
             android:paddingLeft="9dp"
+            android:id="@+id/keypic2"
             android:layout_marginLeft="17dp"
             android:layout_gravity="center_vertical"
             android:layout_height="wrap_content"
             android:src="@drawable/key"/>
         <EditText
             android:background="@null"
-            android:layout_width="330dp"
+            android:layout_width="match_parent"
             android:layout_marginLeft="8dp"
-            android:hint="รหัสผ่าน"
-            android:id="@+id/password"
+            android:hint="รหัสผ่าน(อย่างน้อย 6 อัคระ)"
+            android:id="@+id/passwordinput"
+            android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
             android:textSize="20dp"
-
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:layout_toRightOf="@+id/keypic2"
             android:fontFamily="@font/kanit_light"
-            android:textColor="@color/Grey"
+            android:textColor="@color/Black"
             android:layout_height="wrap_content"
             />
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/check3"
+            android:layout_marginRight="15dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="center"
+            android:visibility="invisible"
+            android:tint="@color/Primary2"
+            android:src="@drawable/checktext"/>
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp"
+                android:id="@+id/checkwrong2"
+                android:visibility="invisible"
+                android:tint="@color/Primary2"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/checktextwrong"/>
+        </RelativeLayout>
     </LinearLayout>
 
 
     <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="330dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
@@ -310,30 +379,61 @@
         android:id="@+id/linear7"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:weightSum="1"
         android:background="@drawable/imputtextbox"
         android:layout_height="47dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
         <ImageView
             android:layout_marginTop="1dp"
             android:layout_width="30dp"
             android:paddingLeft="9dp"
+            android:id="@+id/keypic"
             android:layout_marginLeft="17dp"
             android:layout_gravity="center_vertical"
             android:layout_height="wrap_content"
             android:src="@drawable/key"/>
+
         <EditText
             android:background="@null"
-            android:layout_width="330dp"
+            android:layout_width="match_parent"
             android:layout_marginLeft="8dp"
             android:hint="ยืนยันรหัสผ่าน"
-            android:id="@+id/confirmpass"
-            android:layout_gravity="center_vertical"
+            android:layout_marginRight="40dp"
+            android:layout_toRightOf="@+id/keypic"
+            android:id="@+id/confirmpassinput"
+            android:layout_centerVertical="true"
             android:textSize="20dp"
-
+            android:inputType="textPassword"
             android:fontFamily="@font/kanit_light"
-            android:textColor="@color/Grey"
+            android:textColor="@color/Black"
             android:layout_height="wrap_content"
             />
-
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/check2"
+            android:layout_marginRight="15dp"
+            android:layout_centerVertical="true"
+           android:layout_alignParentEnd="true"
+            android:layout_gravity="center"
+            android:visibility="invisible"
+            android:tint="@color/Primary2"
+            android:src="@drawable/checktext"/>
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp"
+                android:id="@+id/checkwrong3"
+                android:visibility="invisible"
+                android:tint="@color/Primary2"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/checktextwrong"/>
+        </RelativeLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -350,7 +450,6 @@
 
         <Button
             android:id="@+id/signinbut"
-
             android:layout_width="match_parent"
             android:fontFamily="@font/kanit_light"
             android:textSize="28dp"

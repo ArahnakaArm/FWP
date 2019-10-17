@@ -11,19 +11,24 @@ import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.main.*
 import kotlinx.android.synthetic.main.profiewithpicture.*
 import android.provider.MediaStore
-import android.Manifest.permission
 import android.content.pm.PackageManager
 import android.support.v4.content.ContextCompat.checkSelfPermission
-import android.widget.Toast
-import android.support.annotation.NonNull
-import android.R.attr.data
+
 import android.graphics.Bitmap
 import android.app.Activity
+import android.content.SharedPreferences
 import android.support.design.widget.BottomSheetDialog
+import android.support.v4.app.ActivityCompat
+import android.support.v7.app.AppCompatActivity
+import android.widget.ImageView
 import android.widget.LinearLayout
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class Profilewithpicture : Fragment() {
@@ -35,16 +40,37 @@ class Profilewithpicture : Fragment() {
     private var linearCancel : LinearLayout?=null
     private val MY_CAMERA_PERMISSION_CODE = 100
     private val GALLERY_REQUEST = 1889
+    var genderForChange : String?=null
     var usr : Userstate = Userstate()
+    var usra : UserProfile?=null
+    var token : String?=null
+    var sp: SharedPreferences? = null
+    var mAPIService: ApiService? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        return inflater.inflate(R.layout.profiewithpicture, container, false)
+        sp = activity?.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        token = sp!!.getString("user_token","-")
+
+        getData()
+
+
+
+
+
+
+
+        return inflater.inflate(R.layout.profiewithpicture,container,false)
+
+
+
+
+
+
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        //d("arm",dbHelper?.userstete.toString())
-
-
+        super.onViewCreated(view, savedInstanceState)
         service_image_on_orderpage.setOnClickListener {
             createBottomSheet()
 /*
@@ -63,14 +89,19 @@ class Profilewithpicture : Fragment() {
 
 
         logoutbut.setOnClickListener {
-            val sp = context?.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE)
+            val sp = activity?.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE)
             val editor = sp?.edit()
-            editor?.putBoolean("My_Value",false)
-            editor?.commit()
+            editor?.putString("user_token","-")
+            editor?.putBoolean("LogIn_State",false)
 
-           replaceFragment(FragmentProfile())
-          /*  val intent = Intent(context,FragmentProfile::class.java)
-        context?.startActivity(intent)*/
+            editor?.commit()
+            activity?.finish()
+
+
+
+            //replaceFragment(LogIn())
+            /*  val intent = Intent(context,LogIn::class.java)
+          context?.startActivity(intent)*/
         }
         savelist.setOnClickListener {
 
@@ -87,9 +118,12 @@ class Profilewithpicture : Fragment() {
         setting.setOnClickListener {
             replaceFragmentToRight(ComplainList())
         }
-
+        exitbut.setOnClickListener {
+            activity?.finish()
+        }
 
     }
+
     private fun replaceFragmentToRight(fragment: Fragment){
         val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
         fragmentTransaction?.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
@@ -134,11 +168,13 @@ class Profilewithpicture : Fragment() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == MY_CAMERA_PERMISSION_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(context, "camera permission granted", Toast.LENGTH_LONG).show()
+                d("Permission","camera permission granted")
+
                 val cameraIntent = Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE)
                 startActivityForResult(cameraIntent, CAMERA_REQUEST)
             } else {
-                Toast.makeText(context, "camera permission denied", Toast.LENGTH_LONG).show()
+                d("Permission","camera permission denied")
+
             }
         }
     }
@@ -178,5 +214,52 @@ class Profilewithpicture : Fragment() {
         val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(galleryIntent, GALLERY_REQUEST)
     }
+    fun getData(){
+        val sdf = SimpleDateFormat("yyMMdd")
+        val currentDate = sdf.format(Date())
+        val r = (10..12).shuffled().first()
+        mAPIService = ApiUtils.apiService
+
+        mAPIService!!.getUser("Bearer "+token,Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r)).enqueue(object : Callback<UserProfile> {
+            override fun onResponse(call: Call<UserProfile>, response: Response<UserProfile>) {
+
+                if (response.isSuccessful()) {
+                    textEmail.text = response.body()!!.resultData.email
+                    memberid.text = response.body()!!.resultData._id
+                    firstName.text = response.body()!!.resultData.firstName
+                    lastName.text = response.body()!!.resultData.lastName
+                    birthday.text = response.body()!!.resultData.birthdate
+                    genderForChange=response.body()!!.resultData.gender
+                    val editor = sp?.edit()
+                    editor?.putString("user_id",response.body()!!.resultData._id)
+                    editor?.putString("user_email",response.body()!!.resultData.email)
+                    editor?.commit()
+
+
+                    if (genderForChange == "Male"){
+                        gendericon.scaleType= ImageView.ScaleType.FIT_XY
+                        gendericon.setImageResource(R.drawable.male)
+                    }else if (genderForChange == "Female"){
+                        gendericon.scaleType= ImageView.ScaleType.FIT_XY
+                        gendericon.setImageResource(R.drawable.female)
+                    }else if(genderForChange == "LGBT"){
+                        gendericon.scaleType= ImageView.ScaleType.FIT_XY
+                        gendericon.setImageResource(R.drawable.group2)
+                    }
+                    else{
+                        d("CheckValue",genderForChange)
+                    }
+
+                }
+            }
+            override fun onFailure(call: Call<UserProfile>, t: Throwable) {
+
+            }
+        })
+
+
+
+    }
+
 
 }

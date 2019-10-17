@@ -20,7 +20,7 @@ class BookmarkViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
     }
 
     fun bind(bookmark: Bookmark) {
-        mTitleView?.text = bookmark.title
+        mTitleView?.text =" "+ bookmark.title
         mDateView?.text=bookmark.date
 
     }
