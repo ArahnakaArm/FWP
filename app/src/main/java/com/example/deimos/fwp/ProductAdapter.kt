@@ -3,8 +3,8 @@ package com.example.deimos.fwp
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.support.design.widget.TabLayout
-import android.support.v4.app.Fragment
+import com.google.android.material.tabs.TabLayout
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,14 +12,14 @@ import android.widget.Toast
 
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup
-import android.support.v4.app.FragmentActivity
+import androidx.fragment.app.FragmentActivity
 
 
 
 class ProductAdapter(groups: List<ExpandableGroup<*>>) : ExpandableRecyclerViewAdapter<CompanyViewHolder, ProductViewHolder>(groups) {
     private val companyViewHolder: CompanyViewHolder? = null
     private val context: Context? = null
-    private val myContext: FragmentActivity? = null
+    private val myContext: androidx.fragment.app.FragmentActivity? = null
     override fun onCreateGroupViewHolder(parent: ViewGroup, viewType: Int): CompanyViewHolder {
 
         val v = LayoutInflater.from(parent.context).inflate(R.layout.expandable_recyclerview_company, parent, false)
@@ -39,16 +39,17 @@ class ProductAdapter(groups: List<ExpandableGroup<*>>) : ExpandableRecyclerViewA
         val product = group.items[childIndex] as Product
         holder.bind(product)
         holder.itemView.setOnClickListener {
-            Toast.makeText(holder.itemView.context, product.name + "+" + product.info, Toast.LENGTH_SHORT).show()
-            val nameExtra : String = product.name
-            val infoExtra : String = product.info
-            val telExtra : String = product.tel
-            val emailExtra : String = product.email
+           // Toast.makeText(holder.itemView.context, product.lat + "," + product.lng, Toast.LENGTH_SHORT).show()
+            val nameExtra : String = product.name!!
+            val infoExtra : String = product.info!!
+            val telExtra : String = product.tel!!
+            val emailExtra : String = product.email!!
+            val idExtra : String = product.id!!
+            val latExtra : String = product.lat.toString()
+            val longExtra : String = product.lng.toString()
             val intent = Intent(holder.itemView.context, LocationContent::class.java)
-            intent.putExtra("Name",nameExtra)
-            intent.putExtra("Info",infoExtra)
-            intent.putExtra("Tel",telExtra)
-            intent.putExtra("Email",emailExtra)
+            intent.putExtra("ID",idExtra)
+
             holder.itemView.context?.startActivity(intent)
 
 
@@ -63,7 +64,7 @@ class ProductAdapter(groups: List<ExpandableGroup<*>>) : ExpandableRecyclerViewA
 
 
     }
-    private fun replaceFragment(fragment: Fragment){
+    private fun replaceFragment(fragment: androidx.fragment.app.Fragment){
         val fragmentTransaction = myContext?.supportFragmentManager?.beginTransaction()
         fragmentTransaction?.replace(R.id.fragmentcontainer,fragment)
         fragmentTransaction?.commit()

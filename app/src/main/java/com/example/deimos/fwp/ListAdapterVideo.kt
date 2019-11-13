@@ -2,13 +2,13 @@ package com.example.deimos.fwp
 
 import android.content.Intent
 import android.graphics.Movie
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 
 class ListAdapterVideo(private val list: List<Video>)
-    : RecyclerView.Adapter<VideoViewHolder>() {
+    : androidx.recyclerview.widget.RecyclerView.Adapter<VideoViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VideoViewHolder {
         val inflater = LayoutInflater.from(parent.context)

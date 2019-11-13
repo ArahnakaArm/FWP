@@ -1,7 +1,7 @@
 package com.example.deimos.fwp
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +11,7 @@ import java.util.ArrayList
 
 
 class LocationChildAdapter(ctx: Context, private val imageModelArrayList: ArrayList<LocationChildModel>) :
-        RecyclerView.Adapter<LocationChildAdapter.MyViewHolder>() {
+        androidx.recyclerview.widget.RecyclerView.Adapter<LocationChildAdapter.MyViewHolder>() {
 
     private val inflater: LayoutInflater
     private val arraylist: ArrayList<LocationChildModel>
@@ -34,7 +34,7 @@ class LocationChildAdapter(ctx: Context, private val imageModelArrayList: ArrayL
 
         holder.title.setText(imageModelArrayList[position].getNames())
         holder.itemView.setOnClickListener {
-            Toast.makeText(holder.itemView.context,imageModelArrayList[position].getNames(), Toast.LENGTH_SHORT).show()
+          //  Toast.makeText(holder.itemView.context,imageModelArrayList[position].getNames(), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -42,7 +42,7 @@ class LocationChildAdapter(ctx: Context, private val imageModelArrayList: ArrayL
         return imageModelArrayList.size
     }
 
-    inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class MyViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
 
         var title: TextView
 

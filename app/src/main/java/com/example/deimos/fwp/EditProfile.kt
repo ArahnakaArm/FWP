@@ -2,24 +2,30 @@ package com.example.deimos.fwp
 
 import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.editprofile.*
+import kotlinx.android.synthetic.main.profiewithpicture.*
 import kotlinx.android.synthetic.main.register.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.Exception
 import java.text.SimpleDateFormat
 
 import java.util.*
-data class ChangePasswordModel(var firstName : String,var lastName : String,var gender : String,var birthdate : String,var email:String)
-class EditProfile :Fragment() {
+data class ChangeProfileModel(var firstName : String,var lastName : String,var gender : String,var birthDate : String)
+class EditProfile : AppCompatActivity() {
     var sp: SharedPreferences? = null
     var mDateSetListener: DatePickerDialog.OnDateSetListener? = null
     private var name: String? = null
@@ -29,24 +35,26 @@ class EditProfile :Fragment() {
     var mAPIService: ApiService? = null
     private var gender: String? = "Male"
     var token : String?=null
-    private var changePasswordModel: ChangePasswordModel? = null
+    private var changeprofilemodel: ChangeProfileModel? = null
     private var userId: String? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        sp = activity?.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.editprofile)
+        sp = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
         d("getPara", sp!!.getString("user_id", ""))
         d("getPara", sp!!.getString("user_email", ""))
         email = sp!!.getString("user_email", "")
         userId = sp!!.getString("user_id", "")
 
 
-        return inflater.inflate(R.layout.editprofile, container, false)
-    }
+        token = sp!!.getString("user_token","-")
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        if(token != "-") {
+            setField()
+        }
         backbuttonedit.setOnClickListener {
-            fragmentManager?.popBackStack()
+            onBackPressed()
         }
         mAPIService = ApiUtils.apiService
         butedit1.setOnClickListener {
@@ -85,7 +93,7 @@ class EditProfile :Fragment() {
 
             var day: Int = c.get(Calendar.DAY_OF_MONTH)
 
-            val dpd = DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener { view, yy, mm, dd ->
+            val dpd = DatePickerDialog(this@EditProfile, DatePickerDialog.OnDateSetListener { view, yy, mm, dd ->
 
                 var newMonth: String
                 newMonth = (mm + 1).toString()
@@ -105,15 +113,11 @@ class EditProfile :Fragment() {
             }, year, month, day)
             dpd.show()
         }
-
-
-
         savebut.setOnClickListener {
-
             if (nameinputedit.text.trim().toString().isEmpty() || surnameedit.text.trim().toString().isEmpty() ||
                     dateedit.text.trim().toString().isEmpty()) {
                 val mAlertDialog = AlertDialog.Builder(it.context)
-                mAlertDialog.setTitle("เกิดข้อผิดพลาด")
+                mAlertDialog.setTitle("พบข้อผิดพลาด")
                 mAlertDialog.setMessage("กรุณากรอกข้อมูลให้ครบถ้วน")
                 mAlertDialog.setNegativeButton("ตกลง") { dialog, which ->
                     dialog.dismiss()
@@ -124,29 +128,40 @@ class EditProfile :Fragment() {
                 val sdf = SimpleDateFormat("yyMMdd")
                 val currentDate = sdf.format(Date())
                 val r = (10..12).shuffled().first()
-                changePasswordModel = ChangePasswordModel(nameinputedit.text.toString(),
+                changeprofilemodel = ChangeProfileModel(nameinputedit.text.toString(),
                         surnameedit.text.toString(),
-                        gender!!,birthday!!,email!!)
-
-                d("CheckValue",changePasswordModel.toString())
+                        gender!!,birthday!!)
+                d("CheckValue",changeprofilemodel.toString())
                 d("CheckValue",userId.toString())
-
-                token = sp!!.getString("user_token","-")
                 d("CheckValue",token)
                 /// Save info ///
-                mAPIService!!.updateUser("Bearer "+token,Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),userId!!,
-                        changePasswordModel!!).enqueue(object : Callback<ChangePasswordModel> {
+                val mAlert = AlertDialog.Builder(this@EditProfile)
+                val mProgressDialog = ProgressDialog(this@EditProfile)
+                mProgressDialog.isIndeterminate = true
+                mProgressDialog.setCancelable(false)
+                mProgressDialog.setMessage("Loading...")
+                mProgressDialog.show()
 
-                    override fun onResponse(call: Call<ChangePasswordModel>, response: Response<ChangePasswordModel>) {
+                mAPIService!!.updateUser("Bearer "+token,Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),userId!!,
+                        changeprofilemodel!!).enqueue(object : Callback<ChangeProfileModel> {
+
+                    override fun onResponse(call: Call<ChangeProfileModel>, response: Response<ChangeProfileModel>) {
                         if (response.isSuccessful()) {
                             d("CheckValue","Success")
+                            mProgressDialog.dismiss();
+                            mAlert.setTitle("สำเร็จ")
+                            mAlert.setMessage("แก้ไขข้อมูลเรียบร้อยแล้ว")
+                            mAlert.setPositiveButton("ปิด") { dialog, which ->
+                                dialog.dismiss()
+                                fragmentManager?.popBackStack()
+                            }
+                            mAlert.show()
 
-                            fragmentManager?.popBackStack()
                         }
-                        else if(response.code()==401){
-                            val mAlert = AlertDialog.Builder(view.context)
-                            mAlert.setTitle("เกิดข้อผิดพลาด")
-                            mAlert.setMessage("รหัสผ่านของท่านผิด")
+                        else{
+
+                            mAlert.setTitle("พบข้อผิดพลาด")
+                            mAlert.setMessage("กรุณาลองใหม่อีกครั้ง")
                             mAlert.setNegativeButton("ตกลง"){dialog, which ->
                                 dialog.dismiss()
                             }
@@ -156,11 +171,11 @@ class EditProfile :Fragment() {
 
                     }
 
-                    override fun onFailure(call: Call<ChangePasswordModel>, t: Throwable) {
+                    override fun onFailure(call: Call<ChangeProfileModel>, t: Throwable) {
                         d("ss",t.toString())
-                        val mAlert = AlertDialog.Builder(view.context)
-                        mAlert.setTitle("เกิดข้อผิดพลาด")
-                        mAlert.setMessage("ท่านไม่ได้เชื่อมต่ออินเตอร์เน็ต")
+                        val mAlert = AlertDialog.Builder(this@EditProfile)
+                        mAlert.setTitle("พบข้อผิดพลาด")
+                        mAlert.setMessage("กรุณาลองใหม่อีกครั้ง")
                         mAlert.setNegativeButton("ตกลง"){dialog, which ->
                             dialog.dismiss()
                         }
@@ -174,6 +189,51 @@ class EditProfile :Fragment() {
             }
 
         }
+    }
+
+
+    private fun setField(){
+        val sdf = SimpleDateFormat("yyMMdd")
+        val currentDate = sdf.format(Date())
+        val r = (10..12).shuffled().first()
+        mAPIService = ApiUtils.apiService
+
+        mAPIService!!.getUser("Bearer "+token,Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r)).enqueue(object : Callback<UserProfile> {
+            override fun onResponse(call: Call<UserProfile>, response: Response<UserProfile>) {
+
+                if (response.isSuccessful()) {
+                    try {
+                        nameinputedit.setText(response.body()!!.resultData.firstName)
+                        surnameedit.setText(response.body()!!.resultData.lastName)
+                        dateedit.setText(response.body()!!.resultData.birthDate)
+                        if (response.body()!!.resultData.gender=="Male"){
+                            gender="Male"
+                            butedit1.performClick()
+                        }
+                        if (response.body()!!.resultData.gender=="Female"){
+                            butedit2.performClick()
+                            gender="Female"
+                        }
+                        if (response.body()!!.resultData.gender=="LGBT"){
+                            butedit3.performClick()
+                            gender="LGBT"
+                        }
+                        birthday=response.body()!!.resultData.birthDate
+
+                    }catch (e : Exception){
+
+                    }
+                }
+            }
+            override fun onFailure(call: Call<UserProfile>, t: Throwable) {
+
+            }
+        })
+
+
+
+
 
     }
+
 }

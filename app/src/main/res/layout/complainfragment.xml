@@ -69,7 +69,7 @@
             android:textColor="@color/Grey"
             android:id="@+id/complain"
             android:textSize="28dp"
-            android:fontFamily="@font/kanit_light"
+            android:fontFamily="@font/anakotmai_light"
             android:layout_marginTop="10dp"
             android:layout_centerHorizontal="true"/>
         <LinearLayout
@@ -90,7 +90,7 @@
                 android:layout_gravity="center_vertical"
                 android:hint="ชื่อ"
                 android:textColorHint="@color/Grey"
-                android:fontFamily="@font/kanit_light"
+                android:fontFamily="@font/anakotmai_light"
                 android:textSize="21dp"
                 android:layout_marginLeft="15dp"
                 android:layout_height="wrap_content" />
@@ -110,9 +110,10 @@
                 android:background="@null"
                 android:layout_marginRight="15dp"
                 android:layout_gravity="center_vertical"
-                android:hint="หัวข้อ"
+                android:hint="นามสกุล"
+                android:id="@+id/surnameInput"
                 android:textColorHint="@color/Grey"
-                android:fontFamily="@font/kanit_light"
+                android:fontFamily="@font/anakotmai_light"
                 android:textSize="21dp"
                 android:layout_marginLeft="15dp"
                 android:layout_height="wrap_content" />
@@ -134,7 +135,7 @@
                 android:layout_gravity="center_vertical"
                 android:hint="เบอร์โทรศัพท์"
                 android:textColorHint="@color/Grey"
-                android:fontFamily="@font/kanit_light"
+                android:fontFamily="@font/anakotmai_light"
                 android:textSize="21dp"
                 android:layout_marginLeft="15dp"
                 android:layout_height="wrap_content" />
@@ -177,8 +178,9 @@
                 android:layout_marginRight="15dp"
                 android:layout_gravity="center_vertical"
                 android:hint="หัวข้อ"
+                android:id="@+id/subjectInput"
                 android:textColorHint="@color/Grey"
-                android:fontFamily="@font/kanit_light"
+                android:fontFamily="@font/anakotmai_light"
                 android:textSize="21dp"
                 android:layout_marginLeft="15dp"
                 android:layout_height="wrap_content" />
@@ -198,19 +200,57 @@
                 android:background="@null"
                 android:layout_marginRight="15dp"
                 android:gravity="start"
+                android:id="@+id/detailInput"
                 android:textColorHint="@color/Grey"
                 android:hint="รายละเอียด..."
-                android:fontFamily="@font/kanit_light"
+                android:fontFamily="@font/anakotmai_light"
                 android:textSize="21dp"
                 android:layout_marginLeft="15dp"
                 android:layout_height="match_parent" />
         </LinearLayout>
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_below="@+id/lineardetail"
             android:layout_width="330dp"
+            android:id="@+id/lineargps"
             android:layout_marginTop="10dp"
-android:layout_marginLeft="10dp"
+            android:background="@drawable/inputboxcomplain"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:layout_height="47dp">
+            <RelativeLayout
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:background="@null"
+                    android:layout_marginRight="15dp"
+                    android:layout_gravity="center_vertical"
+                    android:hint="ปักหมุด"
+                    android:textColorHint="@color/Grey"
+                    android:fontFamily="@font/anakotmai_light"
+                    android:textSize="21dp"
+                    android:id="@+id/GPSText"
+                    android:layout_marginLeft="15dp"
+                    android:layout_height="wrap_content" />
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:id="@+id/goChooseGps"
+                    android:layout_centerVertical="true"
+                   android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="15dp"
+                    android:src="@drawable/gpsconnericon"/>
+            </RelativeLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_below="@+id/lineargps"
+            android:layout_width="330dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
             android:id="@+id/upphotobut"
             android:background="@drawable/inputcomplainwithborder"
             android:layout_marginRight="10dp"
@@ -226,7 +266,7 @@ android:layout_marginLeft="10dp"
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:fontFamily="@font/kanit_light"
+                android:fontFamily="@font/anakotmai_light"
                 android:textSize="21dp"
 
                 android:layout_gravity="center"
@@ -252,6 +292,7 @@ android:layout_marginLeft="10dp"
             android:layout_height="47dp"
             android:layout_marginBottom="20dp"
             android:layout_marginLeft="10dp"/>
+
     </RelativeLayout>
     </ScrollView>
 </RelativeLayout>

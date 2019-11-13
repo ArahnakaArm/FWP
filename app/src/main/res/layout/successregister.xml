@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/linear4bar"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <RelativeLayout
+                android:id="@+id/linearbar"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="?attr/colorPrimary">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="0dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="124dp"
+                        android:layout_height="35dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/logoparty" />
+
+                </LinearLayout>
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_height="wrap_content">
+
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_height="wrap_content">
+                    </RelativeLayout>
+                    />
+                </RelativeLayout>
+            </RelativeLayout>
+        </RelativeLayout>
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="60dp"
+        android:background="@color/colorPrimaryDark2"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content"
+            >
+            <ImageView
+                android:layout_width="170dp"
+                android:src="@drawable/success3x"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/successimage"
+                android:layout_height="170dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="สร้างบัญชีสำเร็จ"
+                android:autoSizeTextType="uniform"
+                android:textColor="@color/White"
+                android:fontFamily="@font/anakotmai_light"
+                android:textSize="50dp"
+                android:layout_marginTop="5dp"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/successtext"
+
+                android:layout_below="@+id/successimage"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="โปรดตรวจสอบอีเมล์เพื่อยืนยันการลงทะเบียน"
+                android:textColor="@color/White"
+                android:fontFamily="@font/anakotmai_light"
+                android:textSize="18dp"
+                android:autoSizeTextType="uniform"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/idcomplian"
+                android:layout_below="@+id/successtext"
+                />
+            <Button
+                android:layout_width="300dp"
+                android:layout_height="60dp"
+                android:background="@drawable/buttonround2"
+                android:layout_marginTop="50dp"
+                android:textSize="26dp"
+                android:layout_centerHorizontal="true"
+                android:text="ปิด"
+                android:id="@+id/goProfile"
+                android:fontFamily="@font/anakotmai_light"
+                android:textColor="@color/Primary2"
+                android:layout_below="@+id/idcomplian"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,29 +1,20 @@
 package com.example.deimos.fwp
 
+import android.app.ProgressDialog
 import android.content.Context
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.text.Editable
-import android.text.TextWatcher
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import android.util.Log
 import android.util.Log.d
 import android.view.*
 import android.widget.EditText
-import android.widget.ListAdapter
-import com.example.deimos.fwp.R.id.recyclerView
 import kotlinx.android.synthetic.main.bookmarkfragment.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.Exception
+import java.text.SimpleDateFormat
 import java.util.*
-import java.util.zip.Inflater
 import kotlin.collections.ArrayList
 
 data class Video2(val title : String,val date : String)
@@ -31,10 +22,22 @@ data class addrees(val street:String,val suite:String)
 data class Video(val name : String,
                  val username : String
                  ,val address:addrees)
-class FragmentVideo : Fragment() {
+
+data class VideosModel(var resultCode : String,var developerMessage : String , var resultData : ArrayList<resultData3>)
+data class resultData3(var videoName : videoName,var videoDescription : videoDescription,var keywords : ArrayList<String>,var isPublish : Boolean
+,var _id : String,var videoLink : String, var categoryType : String,var createdAt : String,var updatedAt : String,var categoryId : categoryid
+,var image : VideoImage)
+data class VideoImage(var path : String)
+data class categoryid(var categoryName :categoryName)
+data class categoryName(var en :String,var th : String)
+data class  videoDescription(var en : String,var th : String)
+data class  videoName(var en : String,var th : String)
+class FragmentVideo : androidx.fragment.app.Fragment() {
     private var etsearch: EditText? = null
     internal var textlength = 0
-    private var adapter: SearchAdapter? = null
+    private var token : String?=null
+    var mAPIService: ApiService? = null
+    private var adapter: VideoAdapter? = null
 
     var array_sort = java.util.ArrayList<SearchModel>()
     var usr : Userstate = Userstate()
@@ -64,8 +67,8 @@ class FragmentVideo : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = activity!!.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        view.menu.getItem(0).isCheckable=true
-        view.menu.getItem(0).isChecked=true
+        view.menu.getItem(1).isCheckable=true
+        view.menu.getItem(1).isChecked=true
         return inflater.inflate(R.layout.videofragment,container,false)
 
 
@@ -74,60 +77,41 @@ class FragmentVideo : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        mAPIService = ApiUtils.apiService
         usr.setState(true)
-
+        val partnerId = "5dbfe99c776a690010deb237"
         Log.d("arm", usr.state.toString())
+        val sdf = SimpleDateFormat("yyMMdd")
+        val currentDate = sdf.format(Date())
+        val r = (10..12).shuffled().first()
+        val mProgressDialog = ProgressDialog(requireContext())
+        mProgressDialog.isIndeterminate = true
+        mProgressDialog.setCancelable(false)
+        mProgressDialog.setMessage("Loading...")
+        mProgressDialog.show()
+        mAPIService!!.getVideo(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId).enqueue(object : Callback<VideosModel>{
 
-        val retrofit = Retrofit.Builder()
-                .baseUrl("https://jsonplaceholder.typicode.com")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
+            override fun onResponse(call: Call<VideosModel>, response: Response<VideosModel>) {
 
-        val api = retrofit.create(ApiService::class.java)
+             try {
+                 d("Video",response.body()!!.resultData[0]!!.videoName.th.toString())
+                 showData(response.body()!!.resultData)
+             }catch (e : Exception){
 
-        api.fecthAllUsers().enqueue(object : Callback<ArrayList<SearchModel>>{
+             }
 
-            override fun onResponse(call: Call<ArrayList<SearchModel>>, response: Response<ArrayList<SearchModel>>) {
 
-                showData(response.body()!!)
+                mProgressDialog.dismiss();
 
 ///// Searching /////
-                etsearch = view.findViewById(R.id.searchvideo) as EditText
-                array_sort = java.util.ArrayList<SearchModel>()
-                array_sort = populateList()
-                etsearch!!.addTextChangedListener(object : TextWatcher {
-                    override fun afterTextChanged(s: Editable) {}
-                    override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-                    override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                        textlength = etsearch!!.text.length
-                        array_sort.clear()
-                        for (i in response.body()!!.indices) {
-                            if (textlength <= response.body()!![i].getNames().length) {
-                                Log.d("ertyyy", response.body()!![i].getNames().toLowerCase().trim())
-                                if (response.body()!![i].getNames().toLowerCase().trim().contains(
-                                                etsearch!!.text.toString().toLowerCase().trim { it <= ' ' })
-                                ) {
-                                   array_sort.add(response.body()!![i])
-                                }
-                            }
-                        }
-                        list_recycler_view.apply {
-                            layoutManager = LinearLayoutManager(activity)
-                            adapter = SearchAdapter(context,array_sort)
 
-                        }
 
-                    }
-                })
+
 
             }
 ///// Searching /////
 
-
-
-
-            override fun onFailure(call: Call<ArrayList<SearchModel>>, t: Throwable) {
+            override fun onFailure(call: Call<VideosModel>, t: Throwable) {
                 d("arm","onFailure")
             }
 
@@ -139,11 +123,13 @@ class FragmentVideo : Fragment() {
     companion object {
         fun newInstance(): FragmentVideo = FragmentVideo()
     }
-    private fun  showData(users : ArrayList<SearchModel>){
+    private fun  showData(users :ArrayList<resultData3> ){
         try {
+            users.sortBy{it.updatedAt}
+            users.reverse()
             list_recycler_view.apply {
-                layoutManager = LinearLayoutManager(activity)
-                adapter = SearchAdapter(context,users)
+                layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
+               adapter = VideoAdapter(context,users)
 
             }
 
@@ -184,9 +170,9 @@ class FragmentVideo : Fragment() {
 
     internal class RecyclerTouchListener(
             context: Context,
-            recyclerView: RecyclerView,
+            recyclerView: androidx.recyclerview.widget.RecyclerView,
             private val clickListener: ClickListener?
-    ) : RecyclerView.OnItemTouchListener {
+    ) : androidx.recyclerview.widget.RecyclerView.OnItemTouchListener {
 
         private val gestureDetector: GestureDetector
 
@@ -205,7 +191,7 @@ class FragmentVideo : Fragment() {
             })
         }
 
-        override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+        override fun onInterceptTouchEvent(rv: androidx.recyclerview.widget.RecyclerView, e: MotionEvent): Boolean {
 
             val child = rv.findChildViewUnder(e.x, e.y)
             if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
@@ -214,22 +200,18 @@ class FragmentVideo : Fragment() {
             return false
         }
 
-        override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
+        override fun onTouchEvent(rv: androidx.recyclerview.widget.RecyclerView, e: MotionEvent) {}
 
         override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
 
         }
     }
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
 
-
-    }
     override fun onResume() {
         val view = activity!!.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        view.menu.getItem(0).isCheckable=true
-        view.menu.getItem(0).isChecked=true
+        view.menu.getItem(1).isCheckable=true
+        view.menu.getItem(1).isChecked=true
         super.onResume()
     }
 

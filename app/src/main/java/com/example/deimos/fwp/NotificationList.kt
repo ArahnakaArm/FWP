@@ -1,8 +1,8 @@
 package com.example.deimos.fwp
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +12,7 @@ import java.lang.Exception
 import java.util.ArrayList
 
 
-class NotificationList : Fragment() {
+class NotificationList : androidx.fragment.app.Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.notificationlist,container,false)
     }
@@ -39,7 +39,7 @@ class NotificationList : Fragment() {
 
         try {
             list_recycler_view_noti.apply {
-                layoutManager = LinearLayoutManager(activity)
+                layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
                 adapter = NotificationAdapter(context,notifications)
 
             }  }catch (e: Exception){

@@ -5,8 +5,8 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
-import android.support.v4.app.Fragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.fragment.app.Fragment
 import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.View
@@ -21,7 +21,7 @@ import android.widget.TextView
 
 
 
-class FragmentComplainWithSkip : Fragment(){
+class FragmentComplainWithSkip : androidx.fragment.app.Fragment(){
 
     var i:Int=0
     var sp: SharedPreferences? = null
@@ -101,7 +101,7 @@ class FragmentComplainWithSkip : Fragment(){
     }
 
 
-    private fun replaceFragment(fragment: Fragment){
+    private fun replaceFragment(fragment: androidx.fragment.app.Fragment){
         val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
 
         fragmentTransaction?.replace(R.id.fragmentcontainercomplain,fragment)

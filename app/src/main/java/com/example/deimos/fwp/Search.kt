@@ -1,10 +1,8 @@
 package com.example.deimos.fwp
 
 import android.content.Context
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -18,8 +16,8 @@ import java.util.ArrayList
 
 class Search : AppCompatActivity() {
     private  var BookmarkList = ArrayList<SearchModel>()
-    private var recyclerView: RecyclerView? = null
-    private var adapter: SearchAdapter? = null
+    private var recyclerView: androidx.recyclerview.widget.RecyclerView? = null
+    private var adapter: VideoAdapter? = null
     private var etsearch: EditText? = null
     private var moviewList: Array<String>? = null
     internal var textlength = 0
@@ -45,14 +43,14 @@ class Search : AppCompatActivity() {
                 "Shreck"
         )
         d("hjhjh", moviewList.toString())
-        recyclerView = findViewById(R.id.recycler) as RecyclerView
+        recyclerView = findViewById(R.id.recycler) as androidx.recyclerview.widget.RecyclerView
 
         movieNamesArrayList = bookmarklist
         d("hjhjh", movieNamesArrayList.toString())
         Log.d("hjhjh", movieNamesArrayList.size.toString() + "")
-        adapter = SearchAdapter(this, movieNamesArrayList)
+       // adapter = VideoAdapter(this, movieNamesArrayList)
         recyclerView!!.adapter = adapter
-        recyclerView!!.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
+        recyclerView!!.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(applicationContext, androidx.recyclerview.widget.LinearLayoutManager.VERTICAL, false)
 
         etsearch = findViewById(R.id.editText) as EditText
         array_sort = ArrayList<SearchModel>()
@@ -95,10 +93,10 @@ class Search : AppCompatActivity() {
                         }
                     }
                 }
-                adapter = SearchAdapter(this@Search, array_sort)
+             //   adapter = VideoAdapter(this@Search, array_sort)
                 recyclerView!!.adapter = adapter
                 recyclerView!!.layoutManager =
-                        LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
+                        androidx.recyclerview.widget.LinearLayoutManager(applicationContext, androidx.recyclerview.widget.LinearLayoutManager.VERTICAL, false)
 
             }
         })
@@ -125,9 +123,9 @@ class Search : AppCompatActivity() {
 
     internal class RecyclerTouchListener(
             context: Context,
-            recyclerView: RecyclerView,
+            recyclerView: androidx.recyclerview.widget.RecyclerView,
             private val clickListener: ClickListener?
-    ) : RecyclerView.OnItemTouchListener {
+    ) : androidx.recyclerview.widget.RecyclerView.OnItemTouchListener {
 
         private val gestureDetector: GestureDetector
 
@@ -146,7 +144,7 @@ class Search : AppCompatActivity() {
             })
         }
 
-        override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+        override fun onInterceptTouchEvent(rv: androidx.recyclerview.widget.RecyclerView, e: MotionEvent): Boolean {
 
             val child = rv.findChildViewUnder(e.x, e.y)
             if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
@@ -155,7 +153,7 @@ class Search : AppCompatActivity() {
             return false
         }
 
-        override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
+        override fun onTouchEvent(rv: androidx.recyclerview.widget.RecyclerView, e: MotionEvent) {}
 
         override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
 

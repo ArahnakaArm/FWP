@@ -18,11 +18,11 @@
             android:drawableStart="@drawable/offsetlocationresize"
             android:padding="?android:listPreferredItemPaddingLeft"
             android:text="Bankok And Metropolitan Region"
-
-            android:textSize="16dp"
+            android:autoSizeTextType="uniform"
+            android:textSize="20dp"
             android:drawablePadding="8dp"
 
-            android:fontFamily="@font/kanit_light"
+            android:fontFamily="@font/anakotmai_light"
             android:id="@+id/textView"
             android:textColor="@color/Grey"/>
 

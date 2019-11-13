@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="1"
+    >
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapView2"
+        android:layout_weight="0.1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_weight="0.9"
+        android:weightSum="1"
+        android:padding="10dp"
+        android:orientation="horizontal"
+        android:layout_height="match_parent">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:text="ยกเลิก"
+            android:textColor="@color/White"
+            android:textSize="21dp"
+            android:id="@+id/cancel"
+            android:fontFamily="@font/anakotmai"
+            android:layout_marginRight="10dp"
+            android:backgroundTint="@color/Grey"
+            android:background="@drawable/buttonround"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:text="ยืนยัน"
+            android:id="@+id/confirm"
+            android:fontFamily="@font/anakotmai"
+            android:textSize="21dp"
+            android:textColor="@color/White"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/buttonround"/>
+
+    </LinearLayout>
+</LinearLayout>
+</RelativeLayout>

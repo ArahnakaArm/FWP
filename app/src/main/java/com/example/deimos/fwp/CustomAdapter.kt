@@ -2,7 +2,7 @@ package com.example.deimos.fwp
 
 import android.content.Context
 import android.graphics.ColorSpace.Model
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +16,7 @@ import com.example.deimos.fwp.User
 import java.util.ArrayList
 
 
-class CustomAdapter(private val context: Context, private val BookMarkList: ArrayList<Bookmark>) : RecyclerView.Adapter<CustomAdapter.MyViewHolder>(), Filterable {
+class CustomAdapter(private val context: Context, private val BookMarkList: ArrayList<Bookmark>) : androidx.recyclerview.widget.RecyclerView.Adapter<CustomAdapter.MyViewHolder>(), Filterable {
     private var filteredUserList: ArrayList<Bookmark>? = null
 
     init {
@@ -80,7 +80,7 @@ class CustomAdapter(private val context: Context, private val BookMarkList: Arra
         }
     }
 
-    inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class MyViewHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
         public val title: TextView
 
 

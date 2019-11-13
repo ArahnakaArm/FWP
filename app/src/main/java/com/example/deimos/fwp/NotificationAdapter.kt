@@ -1,7 +1,7 @@
 package com.example.deimos.fwp
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +16,7 @@ import java.util.ArrayList
  * Created by Parsania Hardik on 26-Jun-17.
  */
 class NotificationAdapter(ctx: Context, private val imageModelArrayList: ArrayList<NotificationModel>) :
-        RecyclerView.Adapter<NotificationAdapter.MyViewHolder>() {
+        androidx.recyclerview.widget.RecyclerView.Adapter<NotificationAdapter.MyViewHolder>() {
 
     private val inflater: LayoutInflater
     private val arraylist: ArrayList<NotificationModel>
@@ -47,7 +47,7 @@ class NotificationAdapter(ctx: Context, private val imageModelArrayList: ArrayLi
         return imageModelArrayList.size
     }
 
-    inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class MyViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
 
         var title: TextView
         var info : TextView

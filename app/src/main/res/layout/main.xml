@@ -37,7 +37,7 @@
             android:layout_height="62dp"
             android:translationZ="10dp"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/orangebutton"/>
+            android:src="@drawable/homeicon"/>
 
 
         <View
@@ -46,7 +46,7 @@
             android:layout_above="@id/bottomNavigationView"
             android:background="@drawable/shadow"/>
 
-    <android.support.design.widget.BottomNavigationView
+    <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="50dp"

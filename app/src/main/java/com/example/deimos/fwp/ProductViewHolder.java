@@ -12,6 +12,6 @@ public class ProductViewHolder extends ChildViewHolder {
         mTextView = itemView.findViewById(R.id.textView);
     }
     public void bind(Product product){
-        mTextView.setText(product.name);
+        mTextView.setText(product.getName());
     }
 }

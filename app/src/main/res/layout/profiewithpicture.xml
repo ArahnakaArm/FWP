@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
 
 <LinearLayout
@@ -24,14 +25,7 @@
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
-                <ImageView
 
-                    android:id="@+id/exitbut"
-                    android:layout_marginTop="11dp"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_marginLeft="10dp"
-                    android:src="@drawable/cancel"/>
                 <ImageView
                     android:layout_alignParentEnd="true"
                     android:id="@+id/logoutbut"
@@ -85,7 +79,7 @@
             android:text="โปรไฟล์"
             android:layout_marginTop="25dp"
             android:layout_marginLeft="30dp"
-            android:fontFamily="@font/kanit_light"
+            android:fontFamily="@font/anakotmai_light"
             android:textColor="@color/White"
             android:textSize="28dp"/>
 
@@ -114,7 +108,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="330dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="70dp"
             android:layout_marginRight="30dp"
             android:id="@+id/backgroundwhite"
@@ -133,22 +127,6 @@
                 android:orientation="horizontal"
                 android:gravity="center"
                 >
-            <TextView
-                android:textSize="14dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/kanit_light"
-                android:textColor="@color/Grey"
-                android:text="หมายเลขสมาชิก:"/>
-            <TextView
-                android:layout_marginLeft="2dp"
-                android:textColor="@color/Grey"
-                android:textSize="14dp"
-                android:id="@+id/memberid"
-                android:layout_width="wrap_content"
-                android:fontFamily="@font/kanit_light"
-                android:layout_height="wrap_content"
-                android:text=""/>
 
 
             </LinearLayout>
@@ -156,6 +134,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="@dimen/h5"
                     android:id="@+id/linearname"
                     android:layout_below="@+id/linearID"
                     android:orientation="horizontal"
@@ -169,8 +149,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="25dp"
-                        android:fontFamily="@font/kanit_semibold"
+                        android:fontFamily="@font/anakotmai_bold"
                         android:text=""
+                        android:ellipsize="end"
+                        android:maxLines="1"
                         android:id="@+id/firstName"
                         android:layout_marginRight="5dp"
                         android:textColor="@color/Primary2" />
@@ -180,7 +162,9 @@
         android:id="@+id/lastName"
         android:layout_marginLeft="5dp"
         android:textSize="25dp"
-        android:fontFamily="@font/kanit_semibold"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:fontFamily="@font/anakotmai_bold"
         android:text=""
         android:textColor="@color/Primary2" />
 
@@ -188,24 +172,25 @@
 
                 </LinearLayout>
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_below="@+id/linearname"
                     android:id="@+id/linearbirth"
+                    android:layout_centerHorizontal="true"
                     android:layout_height="wrap_content">
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:layout_marginLeft="90dp"
                         android:src="@drawable/bdcake"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="6dp"
                         android:textSize="14dp"
+
                         android:id="@+id/birthday"
                         android:textColor="@color/Grey"
                         android:layout_marginTop="8dp"
-                        android:text=""/>
+                        android:text="-  -  -"/>
 
 
 
@@ -220,7 +205,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/kanit_light"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:fontFamily="@font/anakotmai_light"
                         android:textSize="21dp"
                         android:textColor="@color/Grey"
                         android:layout_marginTop="8dp"
@@ -239,19 +226,43 @@
                     android:background="@color/backgroundgrey"
 
                     ></LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_below="@id/linearbarr"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:id="@+id/linearSocial"
+                        android:visibility="invisible"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/anakotmai_light"
+                            android:text="แก้ไข"
+                            android:id="@+id/editprofilewithsocial"
+                            android:layout_marginRight="15dp"
+                            android:textSize="14dp"
+                            android:textColor="@color/Grey"
+                            />
+                    </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:id="@+id/linearLocal"
+                    android:layout_marginBottom="25dp"
                     android:layout_marginTop="10dp"
-                    android:gravity="center"
-                    android:layout_below="@id/linearbarr"
-
-                    >
+                    android:gravity="center">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/kanit_light"
+                        android:fontFamily="@font/anakotmai_light"
                         android:text="แก้ไข"
                         android:id="@+id/editprofile"
                         android:layout_marginRight="15dp"
@@ -265,7 +276,7 @@
                         android:text="l"
                         android:textSize="14dp"
                         android:textColor="@color/Grey"
-                        android:fontFamily="@font/kanit_light"
+                        android:fontFamily="@font/anakotmai_light"
 
                         />
                     <TextView
@@ -276,10 +287,10 @@
                         android:layout_marginLeft="15dp"
                         android:textSize="14dp"
                         android:textColor="@color/Grey"
-                        android:fontFamily="@font/kanit_light"
+                        android:fontFamily="@font/anakotmai_light"
                         />
                 </LinearLayout>
-
+                </RelativeLayout>
             </RelativeLayout>
         </LinearLayout>
 
@@ -288,7 +299,6 @@
             android:orientation="horizontal"
             android:id="@+id/service_image_on_orderpage"
             android:layout_width="120dp"
-
             android:layout_height="120dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
@@ -302,7 +312,7 @@
                 android:layout_height="40dp"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
-                android:src="@drawable/camera"/>
+                android:src="@drawable/logo"/>
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="120dp"
                 android:layout_height="120dp"
@@ -315,7 +325,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             android:layout_height="110dp"
             android:id="@+id/linear3layer"
             android:layout_marginLeft="30dp"
@@ -330,21 +340,23 @@
                 android:orientation="vertical"
                 android:elevation="5dp"
                 android:gravity="center_horizontal"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="5dp"
                 android:layout_height="match_parent"
                 android:background="@drawable/curve_rectangle_white">
                 <ImageView
-                    android:layout_width="50dp"
+                    android:layout_width="40dp"
                     android:layout_margin="15dp"
-                    android:layout_height="50dp"
+                    android:layout_height="40dp"
                     android:src="@drawable/bookmark"
                     />
                 <TextView
                     android:layout_width="wrap_content"
-                    android:fontFamily="@font/kanit_light"
+                    android:fontFamily="@font/anakotmai_light"
                     android:layout_height="wrap_content"
                     android:textColor="@color/Grey"
-                    android:layout_marginTop="-10dp"
+                    android:layout_marginTop="-5dp"
+                    android:textSize="12dp"
+
                     android:text="รายการโปรด"/>
             </LinearLayout>
             <LinearLayout
@@ -359,49 +371,53 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/curve_rectangle_white">
                 <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:tint="@color/Primary2"
                     android:layout_margin="15dp"
-                    android:src="@drawable/complain"
+                    android:src="@drawable/complaintreport"
                     />
                 <TextView
                     android:layout_width="wrap_content"
-                    android:fontFamily="@font/kanit_light"
+                    android:fontFamily="@font/anakotmai_light"
                     android:layout_height="wrap_content"
-                    android:padding="2dp"
+                    android:layout_marginTop="-5dp"
+                    android:textSize="12dp"
+                   android:layout_gravity="center_horizontal"
                     android:textColor="@color/Grey"
-                    android:autoSizeTextType="uniform"
-                    android:layout_marginTop="-10dp"
-                    android:text="รายการร้องเรียน"/>
+
+
+                    android:text="  รายการ\n ร้องเรียน"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="5dp"
+                android:id="@+id/FWP"
                 android:layout_height="match_parent"
                 android:background="@drawable/curve_rectangle_white"
                 android:elevation="5dp"
                 >
                 <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:tint="@color/Primary2"
                     android:layout_margin="15dp"
-                    android:src="@drawable/document"
+                    android:src="@drawable/logopartycolor"
                     />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/kanit_light"
+                    android:fontFamily="@font/anakotmai_light"
                     android:textColor="@color/Grey"
-
+                    android:layout_marginTop="-5dp"
                     android:justificationMode="inter_word"
-                    android:textSize="14dp"
-                    android:layout_marginTop="-10dp"
-                    android:text="เงื่อนไข &amp;\nข้อตกลง"/>
+                    android:textSize="12dp"
+                    android:layout_gravity="center_horizontal"
+
+                    android:text="      สมัคร \n สมาชิกพรรค"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -413,7 +429,7 @@
             android:layout_marginBottom="20dp"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/linear3layer"
-            android:text="License / Version"/>
+            android:text="เวอร์ชั่น 1.0"/>
     </RelativeLayout>
 </ScrollView>
 

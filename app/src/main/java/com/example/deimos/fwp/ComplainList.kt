@@ -3,21 +3,35 @@ package com.example.deimos.fwp
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.util.Log.d
 import android.view.*
 import android.widget.EditText
 import kotlinx.android.synthetic.main.bookmarkfragment.*
 import kotlinx.android.synthetic.main.complainlist.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.lang.Exception
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
-class ComplainList : Fragment() {
+data class ComplianModel(var resultCode : String,var developerMessage: String,var resultData : ArrayList<CompliansData>,var rowCount : Int)
+data class CompliansData(var map : complianMap,var _id : String,var status : String, var subject : String ,var complainType : String,
+                         var complainDesc : String,var updatedAt : String)
+data class complianMap(var lat :Number,var long : Number)
+class ComplainList : androidx.fragment.app.Fragment() {
     var sp: SharedPreferences? = null
+    var token : String?=null
+    var user_ID : String?=null
     var sp2: SharedPreferences? = null
+    var mAPIService: ApiService? = null
     private var etsearch: EditText? = null
     internal var textlength = 0
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -26,17 +40,72 @@ class ComplainList : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        mAPIService = ApiUtils.apiService
+        sp = activity?.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        token = sp!!.getString("user_token","-")
+        user_ID = sp!!.getString("user_id","-")
         var array_sort = java.util.ArrayList<ComplainModel>()
         var mockcomplains = ArrayList<ComplainModel>()
         mockcomplains.add(ComplainModel("Complain 1", "17/8/2019", "Complete"))
         mockcomplains.add(ComplainModel("Complain 2", "1/8/2019", "In Progress"))
         mockcomplains.add(ComplainModel("Complain 3", "27/8/2019", "Complete"))
         mockcomplains.add(ComplainModel("Complain 4", "7/8/2019", "In Progress"))
+        Log.d("Complain", token)
+        val partnerId = "5dbfe99c776a690010deb237"
+        //Log.d("arm", usr.state.toString())
+        val sdf = SimpleDateFormat("yyMMdd")
+        val currentDate = sdf.format(Date())
+        val r = (10..12).shuffled().first()
+
+        mAPIService!!.getComplianList(token!!,Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId,user_ID!!).enqueue(object : Callback <ComplianModel> {
+
+            override fun onResponse(call: Call <ComplianModel>, response: Response <ComplianModel>) {
+              //  Log.d("Complain", response.body()!!.resultData[0].toString())
+               // Log.d("Complain", response.body()!!)
+                //showData(response.body()!!.resultData)
+
+              try {
+                    list_recycler_view_complain.apply {
+                        layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
+                        adapter = ComplainAdapter(context,response.body()!!.resultData)
+
+                    }
+
+                }catch (e:Exception){
+
+                    d("Ex",e.toString())
+                }
+///// Searching /////
+
+
+
+
+            }
+///// Searching /////
+
+            override fun onFailure(call: Call <ComplianModel>, t: Throwable) {
+                Log.d("Complain", t.toString())
+            }
+
+        })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         ///// Searching /////
-        etsearch = view.findViewById(R.id.searchcomplain) as EditText
+    /*    etsearch = view.findViewById(R.id.searchcomplain) as EditText
         array_sort = java.util.ArrayList<ComplainModel>()
         array_sort = populateList()
         etsearch!!.addTextChangedListener(object : TextWatcher {
@@ -63,7 +132,7 @@ class ComplainList : Fragment() {
 
             }
         })
-
+*/
 
 ///// Searching /////
 
@@ -79,24 +148,24 @@ class ComplainList : Fragment() {
 
 
 
-        try {
-            list_recycler_view_complain.apply {
-                layoutManager = LinearLayoutManager(activity)
-                adapter = ComplainAdapter(context, mockcomplains)
 
-
-            }
-        }catch (e:Exception){
-
-        }
 
         backpreescomplain.setOnClickListener {
-            fragmentManager?.popBackStack()
+           activity!!.onBackPressed()
         }
 
 
 
     }
+
+    private fun  showData(complians :ArrayList<CompliansData> ){
+
+
+
+
+    }
+
+
     private fun populateList(): java.util.ArrayList<ComplainModel> {
 
         val list = java.util.ArrayList<ComplainModel>()
@@ -117,9 +186,9 @@ class ComplainList : Fragment() {
 
     internal class RecyclerTouchListener(
             context: Context,
-            recyclerView: RecyclerView,
+            recyclerView: androidx.recyclerview.widget.RecyclerView,
             private val clickListener: ClickListener?
-    ) : RecyclerView.OnItemTouchListener {
+    ) : androidx.recyclerview.widget.RecyclerView.OnItemTouchListener {
 
         private val gestureDetector: GestureDetector
 
@@ -138,7 +207,7 @@ class ComplainList : Fragment() {
             })
         }
 
-        override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+        override fun onInterceptTouchEvent(rv: androidx.recyclerview.widget.RecyclerView, e: MotionEvent): Boolean {
 
             val child = rv.findChildViewUnder(e.x, e.y)
             if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
@@ -147,7 +216,7 @@ class ComplainList : Fragment() {
             return false
         }
 
-        override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
+        override fun onTouchEvent(rv: androidx.recyclerview.widget.RecyclerView, e: MotionEvent) {}
 
         override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
 

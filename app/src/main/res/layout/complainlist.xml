@@ -48,7 +48,7 @@
 
         </RelativeLayout>
     </LinearLayout>
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:elevation="20dp"
         android:layout_height="wrap_content">
@@ -88,63 +88,16 @@
 
             </LinearLayout>
         </LinearLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
     
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:weightSum="6"
-        android:gravity="center"
-        android:background="@color/Primary2"
-        android:layout_height="28dp">
-      <TextView
-          android:layout_width="wrap_content"
-          android:layout_weight="2"
-          android:layout_marginLeft="5dp"
-          android:fontFamily="@font/kanit"
-          android:textSize="16dp"
-          android:textColor="@color/White"
-          android:layout_height="wrap_content"
-          android:text="ชื่อเรื่อง"/>
-        <TextView
-            android:textColor="@color/White"
-            android:fontFamily="@font/kanit"
-            android:layout_width="wrap_content"
-            android:textSize="16dp"
-            android:layout_weight="2"
-            android:layout_marginLeft="25dp"
-            android:drawablePadding="-20dp"
-            android:drawableLeft="@drawable/time2small"
-            android:gravity="center"
-            android:layout_height="wrap_content"
-            android:text="วันที่"/>
-        <TextView
-            android:textColor="@color/White"
-            android:fontFamily="@font/kanit"
-            android:drawablePadding="-5dp"
-            android:layout_width="wrap_content"
-            android:layout_weight="1"
-            android:paddingLeft="40dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="2dp"
-            android:drawableLeft="@drawable/alert"
-            android:gravity="center"
-            android:textSize="16dp"
 
-            android:layout_height="wrap_content"
-            android:text="สถานะ"/>
-
-
-
-
-    </LinearLayout>
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
 
         android:layout_height="match_parent"
         android:id="@+id/list_recycler_view_complain">
 
 
-    </android.support.v7.widget.RecyclerView>
+    </androidx.recyclerview.widget.RecyclerView>
 
 </LinearLayout>

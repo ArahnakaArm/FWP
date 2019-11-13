@@ -82,7 +82,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
 
-        android:fontFamily="@font/kanit_light"
+        android:fontFamily="@font/anakotmai_light"
         android:text="สร้างบัญชีผู้ใช้"
         android:id="@+id/createaccount"
         android:textColor="@color/Grey"
@@ -108,14 +108,15 @@
         <EditText
             android:inputType="text"
             android:background="@null"
-            android:layout_width="330dp"
+            android:layout_width="match_parent"
+            android:layout_marginRight="2dp"
             android:layout_marginLeft="8dp"
             android:hint="ชื่อ"
             android:id="@+id/nameinput"
             android:layout_gravity="center_vertical"
             android:textSize="20dp"
             android:maxLines="1"
-            android:fontFamily="@font/kanit_light"
+            android:fontFamily="@font/anakotmai_light"
             android:textColor="@color/Black"
             android:layout_height="wrap_content"
             />
@@ -143,14 +144,15 @@
         <EditText
             android:inputType="text"
             android:background="@null"
-            android:layout_width="330dp"
+            android:layout_width="match_parent"
             android:layout_marginLeft="8dp"
             android:hint="นามสกุล"
+            android:layout_marginRight="2dp"
             android:id="@+id/surnameinput"
             android:layout_gravity="center_vertical"
             android:textSize="20dp"
             android:maxLines="1"
-            android:fontFamily="@font/kanit_light"
+            android:fontFamily="@font/anakotmai_light"
             android:textColor="@color/Black"
             android:layout_height="wrap_content"
             />
@@ -178,14 +180,15 @@
         <TextView
             android:inputType="date"
             android:background="@null"
-            android:layout_width="330dp"
+            android:layout_width="match_parent"
+            android:layout_marginRight="2dp"
             android:layout_marginLeft="8dp"
             android:hint="วันเกิด"
             android:id="@+id/birthinput"
             android:layout_gravity="center_vertical"
             android:textSize="20dp"
 
-            android:fontFamily="@font/kanit_light"
+            android:fontFamily="@font/anakotmai_light"
             android:textColor="@color/Black"
             android:layout_height="wrap_content"
             />
@@ -208,7 +211,7 @@
         android:layout_height="47dp"
         android:textSize="20dp"
         android:id="@+id/buttest1"
-        android:fontFamily="@font/kanit"
+        android:fontFamily="@font/anakotmai"
         android:textColor="@color/White"
         android:layout_margin="9dp"
         android:background="@drawable/buttonround"
@@ -220,7 +223,7 @@
         android:layout_toRightOf="@+id/buttest1"
         android:id="@+id/buttest2"
         android:textColor="@color/Grey"
-        android:fontFamily="@font/kanit"
+        android:fontFamily="@font/anakotmai"
         android:layout_weight="1"
         android:textSize="20dp"
         android:layout_margin="9dp"
@@ -233,7 +236,7 @@
         android:textColor="@color/Grey"
         android:layout_height="47dp"
         android:layout_margin="9dp"
-        android:fontFamily="@font/kanit"
+        android:fontFamily="@font/anakotmai"
         android:background="@drawable/buttonround2"
         android:id="@+id/buttest3"
         android:layout_toRightOf="@+id/buttest2"
@@ -269,7 +272,7 @@
             android:layout_width="match_parent"
             android:layout_marginLeft="8dp"
             android:hint="อีเมล์"
-            android:layout_marginRight="40dp"
+
             android:layout_toRightOf="@+id/mailpic"
             android:inputType="textEmailAddress"
             android:id="@+id/emailinput"
@@ -277,7 +280,7 @@
             android:textSize="20dp"
             android:layout_centerVertical="true"
             android:maxLines="1"
-            android:fontFamily="@font/kanit_light"
+            android:fontFamily="@font/anakotmai_light"
             android:textColor="@color/Black"
             android:layout_height="wrap_content"
             />
@@ -289,9 +292,9 @@
             android:layout_marginRight="15dp"
             android:id="@+id/check"
             android:visibility="invisible"
-            android:tint="@color/Primary2"
+
             android:layout_gravity="center_vertical"
-            android:src="@drawable/checktext"/>
+            android:src="@drawable/shapecorrect"/>
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
@@ -300,9 +303,9 @@
                 android:layout_marginRight="15dp"
                 android:id="@+id/checkwrong"
                 android:visibility="invisible"
-                android:tint="@color/Primary2"
+
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/checktextwrong"/>
+                android:src="@drawable/shapeincorrect"/>
         </RelativeLayout>
     </LinearLayout>
 
@@ -332,7 +335,7 @@
             android:background="@null"
             android:layout_width="match_parent"
             android:layout_marginLeft="8dp"
-            android:hint="รหัสผ่าน(อย่างน้อย 6 อัคระ)"
+            android:hint="รหัสผ่าน"
             android:id="@+id/passwordinput"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
@@ -340,7 +343,7 @@
             android:inputType="textPassword"
             android:maxLines="1"
             android:layout_toRightOf="@+id/keypic2"
-            android:fontFamily="@font/kanit_light"
+            android:fontFamily="@font/anakotmai_light"
             android:textColor="@color/Black"
             android:layout_height="wrap_content"
             />
@@ -353,8 +356,8 @@
             android:layout_alignParentEnd="true"
             android:layout_gravity="center"
             android:visibility="invisible"
-            android:tint="@color/Primary2"
-            android:src="@drawable/checktext"/>
+
+            android:src="@drawable/shapecorrect"/>
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
@@ -363,9 +366,9 @@
                 android:layout_marginRight="15dp"
                 android:id="@+id/checkwrong2"
                 android:visibility="invisible"
-                android:tint="@color/Primary2"
+
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/checktextwrong"/>
+                android:src="@drawable/shapeincorrect"/>
         </RelativeLayout>
     </LinearLayout>
 
@@ -401,13 +404,13 @@
             android:layout_width="match_parent"
             android:layout_marginLeft="8dp"
             android:hint="ยืนยันรหัสผ่าน"
-            android:layout_marginRight="40dp"
+
             android:layout_toRightOf="@+id/keypic"
             android:id="@+id/confirmpassinput"
             android:layout_centerVertical="true"
             android:textSize="20dp"
             android:inputType="textPassword"
-            android:fontFamily="@font/kanit_light"
+            android:fontFamily="@font/anakotmai_light"
             android:textColor="@color/Black"
             android:layout_height="wrap_content"
             />
@@ -420,8 +423,8 @@
            android:layout_alignParentEnd="true"
             android:layout_gravity="center"
             android:visibility="invisible"
-            android:tint="@color/Primary2"
-            android:src="@drawable/checktext"/>
+
+            android:src="@drawable/shapecorrect"/>
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
@@ -430,9 +433,9 @@
                 android:layout_marginRight="15dp"
                 android:id="@+id/checkwrong3"
                 android:visibility="invisible"
-                android:tint="@color/Primary2"
+
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/checktextwrong"/>
+                android:src="@drawable/shapeincorrect"/>
         </RelativeLayout>
     </LinearLayout>
 
@@ -451,7 +454,7 @@
         <Button
             android:id="@+id/signinbut"
             android:layout_width="match_parent"
-            android:fontFamily="@font/kanit_light"
+            android:fontFamily="@font/anakotmai_light"
             android:textSize="28dp"
             android:textColor="@color/White"
             android:layout_height="match_parent"

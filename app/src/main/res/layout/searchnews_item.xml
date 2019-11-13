@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView android:layout_width="match_parent"
+    android:elevation="50dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.makeramen.roundedimageview.RoundedImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/imagesearchnews"
+            android:layout_height="70dp"
+            android:layout_centerVertical="true"
+            android:layout_width="70dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="15dp"
+            android:src="@drawable/picturehome1"
+            android:scaleType="centerCrop"
+            app:riv_corner_radius="7dp"
+            app:riv_mutate_background="true"
+            />
+        <TextView
+            android:layout_marginLeft="5dp"
+            android:layout_width="40dp"
+            android:elevation="0dp"
+            android:layout_toRightOf="@+id/imagesearchnews"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/White"
+            android:translationZ="3dp"
+            android:id="@+id/gallerysearchnews"
+            android:textAlignment="center"
+            android:background="@color/backgroundgreydark"
+            android:textSize="8dp"
+            android:fontFamily="@font/anakotmai"
+
+            android:layout_height="wrap_content"
+            android:text="Category"
+            />
+        <ImageView
+            android:layout_marginLeft="4dp"
+            android:layout_width="15dp"
+            android:id="@+id/clockdatesearchnews"
+
+            android:elevation="0dp"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/White"
+            android:translationZ="3dp"
+            android:layout_toRightOf="@+id/gallerysearchnews"
+
+            android:layout_height="15dp"
+            android:src="@drawable/time"
+
+
+            />
+        <TextView
+            android:layout_marginLeft="4dp"
+            android:layout_width="wrap_content"
+            android:layout_toRightOf="@+id/clockdatesearchnews"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/battleshipgrey"
+            android:translationZ="3dp"
+            android:id="@+id/datesearchnews"
+            android:textAlignment="center"
+            android:textSize="10dp"
+            android:fontFamily="@font/anakotmai"
+
+            android:layout_height="wrap_content"
+            android:text="Date"
+            />
+        <TextView
+            android:layout_width="260dp"
+            android:layout_marginTop="5dp"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/imagesearchnews"
+            android:layout_below="@+id/gallerysearchnews"
+            android:textColor="@color/Primary2"
+            android:textSize="16dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:fontFamily="@font/anakotmai"
+            android:layout_marginBottom="20dp"
+            android:id="@+id/titlesearchnews"
+            android:text=" “ธนาธร” ชี้ปัญหา “รัฐราชการรวมศูนย์”
+ทำประเทศไม่พัฒนา "
+            android:layout_marginLeft="5dp"
+            >
+
+        </TextView>
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>
+

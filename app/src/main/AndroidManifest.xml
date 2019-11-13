@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ndroid="http://schemas.android.com/apk/res-auto"
     package="com.example.deimos.fwp">
 <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+
     <application
         android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:screenOrientation="portrait"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity" android:theme="@style/AppTheme.NoActionBar" android:windowSoftInputMode="adjustPan">
+        <activity android:name=".MainActivity" android:theme="@style/AppTheme.NoActionBar" android:screenOrientation="portrait" android:windowSoftInputMode="adjustPan" >
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,17 +29,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+        <activity android:name=".GalleryInfo" android:screenOrientation="portrait"/>
 
-        <activity android:name=".GalleryInfo" />
+        <activity android:name=".LocationContent" android:screenOrientation="portrait" />
+        <activity android:name=".VideoContent" android:screenOrientation="portrait"/>
 
-        <activity android:name=".LocationContent" />
-        <activity android:name=".VideoContent" />
 
-        <activity android:name=".Register" />
-        <activity android:name=".Search" />
+        <activity android:name=".Search" android:screenOrientation="portrait"/>
 
-        <activity android:name=".LogInAndProfileHolder" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ComplainHolder" android:theme="@style/AppTheme.NoActionBar" android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".LogInAndProfileHolder" android:screenOrientation="portrait" android:theme="@style/AppTheme.NoActionBar" android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".ComplainHolder" android:screenOrientation="portrait" android:theme="@style/AppTheme.NoActionBar" android:windowSoftInputMode="adjustPan"/>
 
 
         <meta-data android:name="com.facebook.sdk.ApplicationId"
@@ -44,6 +51,20 @@
         android:exported="true"> <intent-filter> <action
         android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.DEFAULT" /> <category android:name="android.intent.category.BROWSABLE" /> <data android:scheme="@string/fb_login_protocol_scheme" /> </intent-filter> </activity>
+        <activity android:name=".TestGoogle" />
+        <activity android:name=".test" />
+        <activity android:name=".MapPin" android:screenOrientation="portrait"/>
+        <activity android:name=".MultiGalleryTest" android:screenOrientation="portrait"/>
+        <activity android:name=".TestGallery" android:screenOrientation="portrait"/>
+        <activity android:name=".GPSTest" android:screenOrientation="portrait"/>
+        <activity android:name=".Complian" android:screenOrientation="portrait" android:theme="@style/AppTheme.NoActionBar" android:launchMode='singleTask'/>
+        <activity android:name=".LogInWithSkip" android:screenOrientation="portrait"  android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".Success" android:screenOrientation="portrait" android:theme="@style/AppTheme.NoActionBar" android:launchMode='singleTask'/>
+        <activity android:name=".RegisterHolder" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ForgotPassword" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".EditProfile" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ChangePassword" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".LogIn" android:theme="@style/AppTheme.NoActionBar" />
 
 
         <meta-data
@@ -52,6 +73,18 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAzPVSpG9bv1Wav2rld5ecRYzipe1qGnvU"/>
+
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.deimos.fwp"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
+
     </application>
 
 

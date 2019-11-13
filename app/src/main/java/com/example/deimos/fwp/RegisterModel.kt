@@ -9,15 +9,15 @@ class RegisterModel {
 
     private var firstName: String? = null
     private var lastName: String? = null
-    private var birthdate : String?=null
+    private var birthDate : String?=null
     private var gender  : String?=null
     private var email : String?=null
     private var password : String?=null
 
-    constructor(firstName: String,lastName: String,birthdate: String,gender : String,email:String,password:String) {
+    constructor(firstName: String,lastName: String,birthDate: String,gender : String,email:String,password:String) {
         this.firstName = firstName
         this.lastName = lastName
-        this.birthdate = birthdate
+        this.birthDate = birthDate
         this.gender = gender
         this.email = email
         this. password = password
@@ -45,11 +45,11 @@ class RegisterModel {
         this.lastName = lastName
     }
     fun getBirthdate(): String {
-        return birthdate.toString()
+        return birthDate.toString()
     }
 
     fun setBirthdate(birthdate: String) {
-        this.birthdate = birthdate
+        this.birthDate = birthDate
     }
     fun getGender():String{
         return gender.toString()

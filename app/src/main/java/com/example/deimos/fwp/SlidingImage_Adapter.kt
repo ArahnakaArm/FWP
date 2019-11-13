@@ -1,16 +1,20 @@
 package com.example.deimos.fwp
 
 import android.content.Context
+import android.content.Intent
 import android.os.Parcelable
-import android.support.v4.view.PagerAdapter
+import androidx.viewpager.widget.PagerAdapter
+import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import com.bumptech.glide.Glide
 
 
-class SlidingImage_Adapter(private val context: Context, private val urls: Array<String>) : PagerAdapter() {
+class SlidingImage_Adapter(private val context: Context, private val urls: Array<Any>,private val urls2: Array<Any>,private val urls3: Array<Any>) : androidx.viewpager.widget.PagerAdapter() {
     private val inflater: LayoutInflater
 
 
@@ -31,14 +35,23 @@ class SlidingImage_Adapter(private val context: Context, private val urls: Array
 
         val imageView = imageLayout
                 .findViewById<View>(R.id.image) as ImageView
-
+        imageView.setOnClickListener {
+           //d("Sli",urls[position])
+            val newArray = urls2[position].toString()
+            val intent = Intent(context, GalleryInfo::class.java)
+            intent.putExtra("ID",newArray)
+            context?.startActivity(intent)
+        }
 
         Glide.with(context)
                 .load(urls[position])
                 .into(imageView)
 
-        view.addView(imageLayout, 0)
 
+        val text = imageLayout.findViewById<View>(R.id.textslide) as TextView
+            text.setText(urls3[position].toString())
+        view.addView(imageLayout, 0)
+        imageView.scaleType = ImageView.ScaleType.CENTER_CROP
         return imageLayout
     }
 

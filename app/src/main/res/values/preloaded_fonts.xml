@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="preloaded_fonts" translatable="false">
-        <item>@font/kanit</item>
-        <item>@font/kanit_light</item>
-        <item>@font/kanit_semibold</item>
+        <item>@font/anakotmai</item>
+        <item>@font/anakotmai_light</item>
+        <item>@font/anakotmai_bold</item>
     </array>
 </resources>

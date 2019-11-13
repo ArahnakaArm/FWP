@@ -1,12 +1,12 @@
 package com.example.deimos.fwp
 
 import android.graphics.Movie
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 
 class ListAdapter(private val list: List<Bookmark>)
-    : RecyclerView.Adapter<BookmarkViewHolder>() {
+    : androidx.recyclerview.widget.RecyclerView.Adapter<BookmarkViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookmarkViewHolder {
         val inflater = LayoutInflater.from(parent.context)

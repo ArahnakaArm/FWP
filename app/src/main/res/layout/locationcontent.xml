@@ -70,7 +70,7 @@
         android:layout_height="wrap_content">
         <TextView
             android:layout_width="wrap_content"
-            android:fontFamily="@font/kanit_light"
+            android:fontFamily="@font/anakotmai_light"
             android:textColor="@color/Primary2"
             android:layout_margin="15dp"
             android:drawablePadding="5dp"
@@ -85,33 +85,35 @@
             android:layout_centerHorizontal="true"
             android:layout_height="200dp"
             android:layout_marginLeft="10dp"
-            android:src="@color/backgroundgreydark"
+            android:background="@color/backgroundgrey"
+            android:scaleType="center"
+            android:src="@drawable/logo"
             android:id="@+id/locationimage"
             android:layout_marginTop="5dp"
             android:layout_below="@+id/locationname"/>
 
         <TextView
             android:layout_width="330dp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="20dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="15dp"
             android:text="locationinfo"
             android:textSize="18dp"
             android:id="@+id/locationinfo"
-            android:fontFamily="@font/kanit_light"
+            android:fontFamily="@font/anakotmai_light"
             android:textColor="@color/battleshipgrey"
-            android:layout_centerHorizontal="true"
+
             android:layout_height="wrap_content"
             android:layout_below="@id/locationimage"/>
         <TextView
             android:layout_width="wrap_content"
-            android:layout_marginLeft="21dp"
+            android:layout_marginLeft="20dp"
 
             android:layout_marginTop="20dp"
-            android:text="Tel: "
+            android:text="เบอร์โทรศัพท์: "
             android:textSize="18dp"
             android:id="@+id/teltopic"
-            android:fontFamily="@font/kanit_light"
+            android:fontFamily="@font/anakotmai_light"
             android:textColor="@color/battleshipgrey"
 
             android:layout_height="wrap_content"
@@ -123,37 +125,41 @@
             android:layout_marginTop="20dp"
             android:text="094523123"
             android:textSize="18dp"
+            android:autoLink="phone"
             android:layout_toRightOf="@+id/teltopic"
             android:id="@+id/telinfo"
-            android:fontFamily="@font/kanit_light"
+            android:textColorLink="@color/colorPrimary"
+            android:fontFamily="@font/anakotmai_light"
             android:textColor="@color/battleshipgrey"
             android:layout_centerHorizontal="true"
             android:layout_height="wrap_content"
             android:layout_below="@id/locationinfo"/>
         <TextView
             android:layout_width="wrap_content"
-            android:layout_marginLeft="21dp"
+            android:layout_marginLeft="20dp"
 
             android:layout_marginTop="10dp"
-            android:text="E-Mail: "
+            android:text="อีเมล์: "
             android:textSize="18dp"
             android:layout_marginBottom="10dp"
             android:id="@+id/emailtopic"
-            android:fontFamily="@font/kanit_light"
+            android:fontFamily="@font/anakotmai_light"
             android:textColor="@color/battleshipgrey"
 
             android:layout_height="wrap_content"
             android:layout_below="@id/teltopic"/>
         <TextView
             android:layout_width="wrap_content"
-            android:layout_marginLeft="25dp"
+
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
+            android:autoLink="email"
             android:text="abc@abc.com"
             android:textSize="18dp"
-            android:layout_toRightOf="@+id/teltopic"
+            android:layout_toRightOf="@+id/emailtopic"
             android:id="@+id/emailinfo"
-            android:fontFamily="@font/kanit_light"
+            android:textColorLink="@color/colorPrimary"
+            android:fontFamily="@font/anakotmai_light"
             android:textColor="@color/battleshipgrey"
             android:layout_centerHorizontal="true"
             android:layout_height="wrap_content"

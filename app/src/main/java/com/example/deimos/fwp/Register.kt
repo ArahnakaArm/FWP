@@ -3,14 +3,17 @@ package com.example.deimos.fwp
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.app.ProgressDialog
 import android.content.Intent
+import android.content.SharedPreferences
 import android.opengl.Visibility
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
-import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
-import android.support.v4.content.res.ResourcesCompat.getColor
-import android.support.v7.app.AppCompatActivity
+
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.fragment.app.Fragment
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat.getColor
+import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -32,13 +35,14 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.nextDown
 
-class Register : Activity() {
+class Register : androidx.fragment.app.Fragment() {
 
     private var name : String?=null
     private var surname : String?=null
     private var birthday  : String?=null
     private var gender  : String?="Male"
     private var email : String?=null
+    private var sp : SharedPreferences?=null
     private var password : String?=null
     private var confirmpassword : String?=null
     var mAPIService: ApiService? = null
@@ -46,9 +50,13 @@ class Register : Activity() {
 
 
     var mDateSetListener  : DatePickerDialog.OnDateSetListener?=null
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.register)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
+        return inflater.inflate(R.layout.register,container,false)
+}
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         mAPIService = ApiUtils.apiService
         emailinput!!.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
@@ -90,7 +98,6 @@ class Register : Activity() {
                 }
             }
         })
-
         passwordinput!!.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
@@ -102,7 +109,7 @@ class Register : Activity() {
                     check3.visibility=View.VISIBLE
                     d("emailTest", "Yes")
                 }
-                if (!isConfirmPasswordValid(s.toString(),confirmpassinput.text.toString())) {
+                else if (!isConfirmPasswordValid(s.toString(),confirmpassinput.text.toString())) {
                     checkwrong3.visibility=View.VISIBLE
                     check2.visibility=View.INVISIBLE
 
@@ -118,7 +125,7 @@ class Register : Activity() {
 
 
 
-    buttest1.setOnClickListener {
+        buttest1.setOnClickListener {
             buttest1.setBackgroundResource(R.drawable.buttonround)
             buttest1.setTextColor(resources.getColor(R.color.White))
             buttest2.setBackgroundResource(R.drawable.buttonround2)
@@ -151,7 +158,7 @@ class Register : Activity() {
 
 
         backbuttonregister.setOnClickListener {
-            onBackPressed()
+            activity?.onBackPressed()
         }
         birthinput.setOnClickListener {
             val c = Calendar.getInstance()
@@ -160,7 +167,7 @@ class Register : Activity() {
 
             var day : Int = c.get(Calendar.DAY_OF_MONTH)
 
-            val dpd = DatePickerDialog(this@Register, DatePickerDialog.OnDateSetListener { view, yy, mm, dd ->
+            val dpd = DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener { view, yy, mm, dd ->
 
                 var newMonth : String
                 newMonth = (mm+1).toString()
@@ -185,8 +192,8 @@ class Register : Activity() {
         signinbut.setOnClickListener {
             if (!isValidate()){
                 //Toast.makeText(this@Register,"No!!",Toast.LENGTH_SHORT).show()
-                val mAlertDialog = AlertDialog.Builder(this@Register)
-                mAlertDialog.setTitle("เกิดข้อผิดพลาด")
+                val mAlertDialog = AlertDialog.Builder(requireContext())
+                mAlertDialog.setTitle("พบข้อผิดพลาด")
                 mAlertDialog.setMessage("กรุณากรอกข้อมูลให้ครบถ้วน")
                 mAlertDialog.setNegativeButton("ตกลง"){dialog, which ->
                     dialog.dismiss()
@@ -195,8 +202,8 @@ class Register : Activity() {
             }
 
             else if(!isEmailValid(emailinput.text.trim().toString())) {
-                val mAlertDialog = AlertDialog.Builder(this@Register)
-                mAlertDialog.setTitle("เกิดข้อผิดพลาด")
+                val mAlertDialog = AlertDialog.Builder(requireContext())
+                mAlertDialog.setTitle("พบข้อผิดพลาด")
                 mAlertDialog.setMessage("กรุณากรอกอีเมล์ให้ถูกต้อง")
                 mAlertDialog.setNegativeButton("ตกลง"){dialog, which ->
                     dialog.dismiss()
@@ -204,8 +211,8 @@ class Register : Activity() {
                 mAlertDialog.show()
             }
             else if(!isConfirmPasswordValid(confirmpassinput.text.trim().toString(),passwordinput.text.trim().toString())) {
-                val mAlertDialog = AlertDialog.Builder(this@Register)
-                mAlertDialog.setTitle("เกิดข้อผิดพลาด")
+                val mAlertDialog = AlertDialog.Builder(requireContext())
+                mAlertDialog.setTitle("พบข้อผิดพลาด")
                 mAlertDialog.setMessage("กรุณากรอกยืนยันรหัสผ่านให้ถูกต้อง")
                 mAlertDialog.setNegativeButton("ตกลง"){dialog, which ->
                     dialog.dismiss()
@@ -222,20 +229,34 @@ class Register : Activity() {
                 val sdf = SimpleDateFormat("yyMMdd")
                 val currentDate = sdf.format(Date())
                 val r = (10..12).shuffled().first()
+                val mProgressDialog = ProgressDialog(requireContext())
+                mProgressDialog.isIndeterminate = true
+                mProgressDialog.setCancelable(false)
+                mProgressDialog.setMessage("Loading...")
+                mProgressDialog.show()
                 mAPIService!!.createSignup(GenerateRandomString.randomString(22),"AND-"+currentDate+GenerateRandomString.randomString(r),registermodel).enqueue(object : Callback<RegisterModel> {
 
                     override fun onResponse(call: Call<RegisterModel>, response: Response<RegisterModel>) {
                         if (response.isSuccessful()) {
-                            onBackPressed()
+                            mProgressDialog.dismiss()
+                            replaceFragment(SuccessRegister())
                         }
                         if(response.code().toString()=="409"){
-                            Toast.makeText(this@Register,"Conflict",Toast.LENGTH_SHORT).show()
+                            mProgressDialog.dismiss()
+                            val mAlert = AlertDialog.Builder(requireContext())
+                            mAlert.setTitle("พบข้อผิดพลาด")
+                            mAlert.setMessage("ท่านไม่ได้เชื่อมต่ออินเตอร์เน็ต")
+                            mAlert.setNegativeButton("ตกลง"){dialog, which ->
+                                dialog.dismiss()
+                            }
+                            mAlert.show()
                         }
                     }
                     override fun onFailure(call: Call<RegisterModel>, t: Throwable) {
-                       //d("fail",t.toString())
-                        val mAlert = AlertDialog.Builder(this@Register)
-                        mAlert.setTitle("เกิดข้อผิดพลาด")
+                        //d("fail",t.toString())
+                        mProgressDialog.dismiss()
+                        val mAlert = AlertDialog.Builder(requireContext())
+                        mAlert.setTitle("พบข้อผิดพลาด")
                         mAlert.setMessage("ท่านไม่ได้เชื่อมต่ออินเตอร์เน็ต")
                         mAlert.setNegativeButton("ตกลง"){dialog, which ->
                             dialog.dismiss()
@@ -245,13 +266,9 @@ class Register : Activity() {
                 })
             }
         }
-
     }
 
-    override fun onBackPressed() {
-        d("arm","Exited")
-        super.onBackPressed()
-    }
+
 
     private fun isValidate():Boolean{
         if(nameinput.text.isEmpty()||surnameinput.text.isEmpty()||birthinput.text.isEmpty()||emailinput.text.isEmpty()
@@ -259,10 +276,6 @@ class Register : Activity() {
             return false
         }
         return true
-    }
-    private fun goSignIn(registermodel:RegisterModel){
-
-
     }
 
     fun isEmailValid(email: String): Boolean {
@@ -276,20 +289,22 @@ class Register : Activity() {
     }
 
     object GenerateRandomString {
-
         val DATA = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         var RANDOM = Random()
-
         fun randomString(len: Int): String {
             val sb = StringBuilder(len)
 
             for (i in 0 until len) {
                 sb.append(DATA[RANDOM.nextInt(DATA.length)])
             }
-
             return sb.toString()
         }
-
+    }
+    public fun replaceFragment(fragment: androidx.fragment.app.Fragment) {
+        val fragmentTransaction = activity!!.supportFragmentManager.beginTransaction()
+        fragmentTransaction?.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
+        fragmentTransaction.replace(R.id.fragmentcontainerregister, fragment)
+        fragmentTransaction.commit()
     }
 }
 

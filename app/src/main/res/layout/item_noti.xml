@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v7.widget.CardView android:layout_width="match_parent"
+<androidx.cardview.widget.CardView android:layout_width="match_parent"
     android:elevation="50dp"
 
     android:layout_marginBottom="1dp"
@@ -18,7 +18,7 @@
             android:layout_marginBottom="20dp"
             android:layout_marginLeft="15dp"
             android:src="@drawable/picturehome1"
-            android:scaleType="fitXY"
+            android:scaleType="centerCrop"
             app:riv_corner_radius="7dp"
             app:riv_mutate_background="true"
             />
@@ -31,7 +31,7 @@
             android:layout_below="@+id/gallery"
             android:textColor="@color/Primary2"
             android:textSize="15dp"
-            android:fontFamily="@font/kanit"
+            android:fontFamily="@font/anakotmai"
             android:id="@+id/title"
             android:text=" “ธนาธร” ชี้ปัญหา “รัฐราชการรวมศูนย์”ทำประเทศไม่พัฒนา "
             android:layout_marginLeft="5dp"
@@ -45,7 +45,7 @@
             android:textColor="@color/battleshipgrey"
             android:textSize="11dp"
             android:layout_marginRight="10dp"
-            android:fontFamily="@font/kanit"
+            android:fontFamily="@font/anakotmai"
             android:layout_marginBottom="20dp"
             android:id="@+id/infotitle"
             android:text=" “ธนาธร” ชี้ปัญหา“รัฐราชการรวมศูนย์”ทำประเทศไม่พัฒนา"
@@ -55,5 +55,5 @@
         </TextView>
 
     </RelativeLayout>
-</android.support.v7.widget.CardView>
+</androidx.cardview.widget.CardView>
 

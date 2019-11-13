@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white2">
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="15dp"
+            android:id="@+id/status"
+            android:scaleType="fitXY"
+            android:layout_marginTop="7dp"
+            android:layout_marginStart="25dp"
+            android:src="@drawable/successstatus"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/status"
+            android:text="หัวข้อ"
+            android:layout_marginTop="1dp"
+            android:textSize="16dp"
+            android:id="@+id/topicComplian"
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/Primary2"
+            android:fontFamily="@font/anakotmai"/>
+
+        <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14dp"
+        android:layout_marginStart="25dp"
+        android:fontFamily="@font/anakotmai"
+        android:textColor="@color/Grey"
+        android:text="หมายเลขคำร้อง"
+        android:id="@+id/idComplianTopic"
+        android:layout_below="@+id/status"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14dp"
+            android:layout_marginStart="5dp"
+            android:fontFamily="@font/anakotmai_light"
+            android:textColor="@color/Grey"
+            android:text="id"
+            android:id="@+id/idComplian"
+            android:layout_toRightOf="@id/idComplianTopic"
+            android:layout_below="@+id/status"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14dp"
+            android:layout_marginStart="25dp"
+            android:fontFamily="@font/anakotmai"
+            android:textColor="@color/Grey"
+            android:text="ประเภท"
+            android:id="@+id/typeComplianTopic"
+            android:layout_below="@+id/idComplianTopic"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14dp"
+            android:layout_marginStart="5dp"
+            android:fontFamily="@font/anakotmai_light"
+            android:textColor="@color/Grey"
+            android:text="type"
+            android:layout_toRightOf="@+id/typeComplianTopic"
+            android:id="@+id/typeComplian"
+            android:layout_below="@+id/idComplianTopic"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14dp"
+            android:layout_marginStart="5dp"
+            android:fontFamily="@font/anakotmai_light"
+            android:textColor="@color/Grey"
+            android:text="วันที่"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/dateComplianTopic"
+            android:layout_below="@+id/idComplianTopic"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14dp"
+            android:layout_marginStart="5dp"
+            android:fontFamily="@font/anakotmai_light"
+            android:textColor="@color/Grey"
+            android:text="date"
+            android:layout_toRightOf="@+id/dateComplianTopic"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/dateComplian"
+            android:layout_below="@+id/idComplianTopic"/>
+
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/typeComplianTopic"
+            android:layout_marginLeft="25dp"
+            android:layout_marginBottom="2dp"
+            android:background="@color/Grey"
+            android:layout_marginRight="25dp"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp">
+        </LinearLayout>
+
+    </RelativeLayout>
+</FrameLayout>

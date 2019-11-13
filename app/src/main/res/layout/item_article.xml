@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_marginStart="5dp"
+    android:layout_marginEnd="5dp"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:id="@+id/articleImage"
+        android:scaleType="center"
+        android:src="@drawable/logo"
+        android:background="@color/backgroundgrey"
+        />
+
+    <TextView
+        android:id="@+id/articleTopic"
+        android:textColor="@color/LightNavi"
+        android:fontFamily="@font/anakotmai"
+        android:layout_below="@+id/articleImage"
+        android:layout_width="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:layout_height="wrap_content"
+        android:text="Title line1"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/articleTopic"
+        android:paddingBottom="5dp"
+        android:id="@+id/articleDate"
+        android:drawablePadding="4dp"
+        android:drawableStart="@drawable/timeresize"
+        android:text="Date"/>
+</RelativeLayout>

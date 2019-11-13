@@ -82,7 +82,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
 
-                android:fontFamily="@font/kanit_light"
+                android:fontFamily="@font/anakotmai_light"
                 android:text="แก้ไขโปรไฟล์"
                 android:id="@+id/createaccount"
                 android:textColor="@color/Grey"
@@ -115,8 +115,7 @@
                     android:id="@+id/nameinputedit"
                     android:layout_gravity="center_vertical"
                     android:textSize="20dp"
-
-                    android:fontFamily="@font/kanit_light"
+                    android:fontFamily="@font/anakotmai_light"
                     android:textColor="@color/Black"
                     android:layout_height="wrap_content"
                     />
@@ -151,7 +150,7 @@
                     android:textSize="20dp"
                     android:inputType="text"
                     android:layout_marginRight="20dp"
-                    android:fontFamily="@font/kanit_light"
+                    android:fontFamily="@font/anakotmai_light"
                     android:textColor="@color/Black"
                     android:layout_height="wrap_content"
                     />
@@ -178,14 +177,14 @@
                     android:src="@drawable/birthday"/>
                 <TextView
                     android:background="@null"
-                    android:layout_width="330dp"
+                    android:layout_width="match_parent"
                     android:layout_marginLeft="8dp"
                     android:hint="วันเกิด"
                     android:id="@+id/dateedit"
                     android:layout_gravity="center_vertical"
                     android:textSize="20dp"
                     android:inputType="date"
-                    android:fontFamily="@font/kanit_light"
+                    android:fontFamily="@font/anakotmai_light"
                     android:textColor="@color/Black"
                     android:layout_height="wrap_content"
                     />
@@ -208,7 +207,7 @@
                     android:layout_height="47dp"
                     android:id="@+id/butedit1"
                     android:textSize="20dp"
-                    android:fontFamily="@font/kanit"
+                    android:fontFamily="@font/anakotmai"
                     android:textColor="@color/White"
                     android:layout_margin="9dp"
                     android:background="@drawable/buttonround"
@@ -220,7 +219,7 @@
                     android:layout_toRightOf="@+id/buttest1"
                     android:id="@+id/butedit2"
                     android:textColor="@color/Grey"
-                    android:fontFamily="@font/kanit"
+                    android:fontFamily="@font/anakotmai"
                     android:layout_weight="1"
                     android:textSize="20dp"
                     android:layout_margin="9dp"
@@ -233,7 +232,7 @@
                     android:textColor="@color/Grey"
                     android:layout_height="47dp"
                     android:layout_margin="9dp"
-                    android:fontFamily="@font/kanit"
+                    android:fontFamily="@font/anakotmai"
                     android:background="@drawable/buttonround2"
                     android:id="@+id/butedit3"
                     android:layout_toRightOf="@+id/buttest2"
@@ -260,7 +259,7 @@
                     android:id="@+id/savebut"
 
                     android:layout_width="match_parent"
-                    android:fontFamily="@font/kanit_light"
+                    android:fontFamily="@font/anakotmai_light"
                     android:textSize="28dp"
                     android:textColor="@color/White"
                     android:layout_height="match_parent"

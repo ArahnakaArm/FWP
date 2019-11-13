@@ -35,7 +35,7 @@
             android:layout_toRightOf="@+id/gpsicon"
             android:text="Bankok And Metropolitan Region"
             android:textSize="18dp"
-            android:fontFamily="@font/kanit_light"
+            android:fontFamily="@font/anakotmai_light"
             android:id="@+id/textView"
 
             android:textColor="@color/White"/>

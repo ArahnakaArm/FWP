@@ -69,7 +69,7 @@
                 android:textColor="@color/Grey"
                 android:id="@+id/complain"
                 android:textSize="28dp"
-                android:fontFamily="@font/kanit_light"
+                android:fontFamily="@font/anakotmai_light"
                 android:layout_marginTop="10dp"
                 android:layout_centerHorizontal="true"/>
             <LinearLayout
@@ -111,7 +111,7 @@
                     android:layout_gravity="center_vertical"
                     android:hint="หัวข้อ"
                     android:textColorHint="@color/Grey"
-                    android:fontFamily="@font/kanit_light"
+                    android:fontFamily="@font/anakotmai_light"
                     android:textSize="21dp"
                     android:layout_marginLeft="15dp"
                     android:layout_height="wrap_content" />
@@ -133,7 +133,7 @@
                     android:gravity="start"
                     android:textColorHint="@color/Grey"
                     android:hint="รายละเอียด..."
-                    android:fontFamily="@font/kanit_light"
+                    android:fontFamily="@font/anakotmai_light"
                     android:textSize="21dp"
                     android:layout_marginLeft="15dp"
                     android:layout_height="match_parent" />
@@ -159,7 +159,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:fontFamily="@font/kanit_light"
+                    android:fontFamily="@font/anakotmai_light"
                     android:textSize="21dp"
 
                     android:layout_gravity="center"

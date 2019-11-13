@@ -61,10 +61,11 @@
 
         </RelativeLayout>
     </LinearLayout>
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginTop="60dp"
-        android:layout_height="match_parent">
+        >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_below="@+id/linear4bar"
@@ -77,7 +78,7 @@
             android:layout_height="30dp"
 
             android:orientation="horizontal"
-            android:weightSum="4"
+            android:weightSum="3"
             android:background="@color/colorSecondary">
             <LinearLayout
                 android:id="@+id/li1"
@@ -91,12 +92,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-
-                    android:drawableLeft="@drawable/featureresize"
                     android:drawablePadding="4dp"
-                    android:fontFamily="@font/kanit"
+                    android:fontFamily="@font/anakotmai"
                     android:gravity="center"
-                    android:text="Featured"
+                    android:text="Top"
                     android:textColor="@color/White"
                     android:textSize="16dp" />
 
@@ -115,11 +114,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawablePadding="3dp"
-                    android:fontFamily="@font/kanit"
-                    android:drawableLeft="@drawable/editresize"
+                    android:fontFamily="@font/anakotmai"
 
                     android:layout_gravity="center_vertical"
-                    android:text="Article"
+                    android:text="ข่าวสาร"
                     android:textSize="16dp"
                     android:gravity="center"
                     android:textColor="@color/White"
@@ -137,44 +135,24 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-
-                    android:drawableLeft="@drawable/videoresize"
                     android:drawablePadding="4dp"
-                    android:text="Video"
+                    android:text="กิจกรรม"
                     android:gravity="center"
-                    android:fontFamily="@font/kanit"
+                    android:fontFamily="@font/anakotmai"
                     android:textColor="@color/White"
                     android:textSize="16dp" />
             </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:id="@+id/li4"
-                android:background="@drawable/black_curved_rectangle_with_border">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="4dp"
-                    android:drawableLeft="@drawable/galleryresize"
 
-                    android:layout_gravity="center_vertical"
-                    android:text="Gallery"
-
-                    android:fontFamily="@font/kanit"
-                    android:textSize="16dp"
-                    android:textColor="@color/White"
-                    />
-            </LinearLayout>
         </LinearLayout>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="180dp" >
 
-            <android.support.v4.view.ViewPager
+            <androidx.viewpager.widget.ViewPager
                 android:id="@+id/pager"
                 android:layout_width="match_parent"
+                android:background="@color/backgroundgrey"
+
                 android:layout_height="match_parent"
                 android:layout_alignParentTop="true" />
 
@@ -193,48 +171,65 @@
                 app:snap="false" />
         </RelativeLayout>
 
-        <android.support.percent.PercentRelativeLayout
+        <androidx.percentlayout.widget.PercentRelativeLayout
             android:layout_width="match_parent"
             android:layout_marginTop="5dp"
             android:layout_height="wrap_content">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_centerHorizontal="true"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                app:layout_widthPercent="95%"
+                android:id="@+id/Topic1"
+                android:background="@color/backgroundgrey">
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+
+                    android:layout_height="match_parent">
 
             <ImageView
+                android:layout_width="match_parent"
                 android:layout_height="160dp"
                 app:layout_widthPercent="90%"
-                android:id="@+id/homepic1"
+                android:id="@+id/newsImage1"
+                android:scaleType="center"
+                android:src="@drawable/logo"
+                android:background="@color/backgroundgrey"
                 android:layout_centerHorizontal="true"
-                android:background="@drawable/picturehome1"
                 android:translationZ="1dp"
 
                 />
             <TextView
-                android:layout_centerHorizontal="true"
+
                 android:layout_width="wrap_content"
-                app:layout_widthPercent="85%"
                 android:layout_marginTop="4dp"
                 android:textColor="@color/LightNavi"
-                android:translationZ="3dp"
-                android:id="@+id/hometopic"
-                android:textSize="14dp"
-                android:fontFamily="@font/kanit"
-                android:layout_below="@+id/homepic1"
+                android:id="@+id/newsTopic1"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:layout_marginLeft="10dp"
+                android:autoSizeTextType="uniform"
+                android:fontFamily="@font/anakotmai"
+                android:layout_below="@+id/newsImage1"
                 android:layout_height="wrap_content"
                 android:text=" 'ธนาธร' ชี้ปัญหา รัฐราชกาลร่วมทำประเทศไม่พัฒนา  "/>
             <TextView
-                android:layout_marginLeft="30dp"
-                android:layout_width="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_width="70dp"
                 app:layout_widthPercent="17%"
                 android:elevation="0dp"
+
                 android:layout_marginTop="10dp"
                 android:textColor="@color/White"
-                android:translationZ="3dp"
-                android:id="@+id/gallery"
+                android:id="@+id/category1"
+                android:layout_marginBottom="5dp"
                 android:textAlignment="center"
                 android:background="@color/backgroundgreydark"
                 android:textSize="12dp"
-                android:fontFamily="@font/kanit"
-                android:layout_below="@id/hometopic"
+                android:fontFamily="@font/anakotmai"
+                android:layout_below="@id/newsTopic1"
                 android:layout_height="wrap_content"
                 android:text="Category"
                 />
@@ -245,11 +240,12 @@
                 android:elevation="0dp"
                 android:layout_marginTop="11dp"
                 android:textColor="@color/White"
-                android:translationZ="3dp"
-                android:layout_toRightOf="@+id/gallery"
-                android:layout_below="@id/hometopic"
+
+                android:layout_toRightOf="@+id/category1"
+                android:layout_below="@id/newsTopic1"
                 android:layout_height="20dp"
                 android:src="@drawable/time"
+
 
 
                 />
@@ -259,50 +255,19 @@
                 android:layout_toRightOf="@+id/clockdate"
                 android:layout_marginTop="10dp"
                 android:textColor="@color/battleshipgrey"
-                android:translationZ="3dp"
-                android:id="@+id/date"
+
+
+                android:id="@+id/textdate1"
                 android:textAlignment="center"
-                android:textSize="14dp"
-                android:fontFamily="@font/kanit"
-                android:layout_below="@id/hometopic"
+                android:textSize="12dp"
+                android:autoSizeTextType="uniform"
+                android:fontFamily="@font/anakotmai"
+                android:layout_below="@id/newsTopic1"
                 android:layout_height="wrap_content"
                 android:text="Date"
                 />
-            <TextView
-                android:layout_marginRight="33dp"
-                android:layout_width="wrap_content"
-                android:layout_marginTop="9dp"
-                android:textColor="@color/battleshipgrey"
-                android:translationZ="3dp"
-                android:layout_alignParentRight="true"
-                android:id="@+id/share"
-                android:textAlignment="center"
-                android:textSize="14dp"
-                android:fontFamily="@font/kanit"
-                android:layout_below="@id/hometopic"
-                android:layout_height="wrap_content"
-                android:text="Share"
-                />
-            <ImageView
-                android:layout_toLeftOf="@+id/share"
-                android:layout_width="wrap_content"
-                android:src="@drawable/share"
-                android:layout_marginTop="11dp"
-                android:translationZ="3dp"
-                android:id="@+id/sharebutton"
-                android:textAlignment="center"
-                android:layout_below="@id/hometopic"
-                android:layout_height="20dp"
-                android:text="Share"
-                />
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_centerHorizontal="true"
-                android:layout_height="230dp"
 
-                app:layout_widthPercent="90%"
-                android:id="@+id/lipic1"
-                android:background="@color/backgroundgrey">
+                </RelativeLayout>
            </LinearLayout>
 
 
@@ -310,14 +275,28 @@
 
 
 
-        </android.support.percent.PercentRelativeLayout>
+        </androidx.percentlayout.widget.PercentRelativeLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:weightSum="2"
+            android:layout_marginTop="7dp"
             android:orientation="horizontal">
-            <RelativeLayout
 
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:nestedScrollingEnabled="false"
+                android:id="@+id/list_recycler_view_article">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+
+            <RelativeLayout
+                android:id="@+id/Topic2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -329,31 +308,29 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:id="@+id/image2"
-                android:scaleType="fitXY"
-                android:src="@drawable/picturehome2"/>
+                android:id="@+id/newsImage2"
+                android:scaleType="center"
+                android:src="@drawable/logo"
+                android:background="@color/backgroundgrey"
+               />
 
                 <TextView
-                    android:id="@+id/title1"
+                    android:id="@+id/newsTopic2"
                     android:textColor="@color/LightNavi"
-                    android:fontFamily="@font/kanit"
-                    android:layout_below="@+id/image2"
+                    android:fontFamily="@font/anakotmai"
+                    android:layout_below="@+id/newsImage2"
                     android:layout_width="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="2"
                     android:layout_height="wrap_content"
                     android:text="Title line1"/>
-                <TextView
-                    android:textColor="@color/LightNavi"
-                    android:fontFamily="@font/kanit"
-                    android:layout_below="@+id/title1"
-                    android:layout_width="wrap_content"
-                    android:id="@+id/title2"
-                    android:layout_height="wrap_content"
-                    android:text="Title line2"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/title2"
+                    android:layout_below="@id/newsTopic2"
                     android:paddingBottom="5dp"
+                    android:id="@+id/textdate2"
                     android:drawablePadding="4dp"
                     android:drawableStart="@drawable/timeresize"
                     android:text="Date"/>
@@ -364,38 +341,37 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="2dp"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:id="@+id/Topic3"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginLeft="5dp"
                 android:background="@color/backgroundgrey"
                 android:layout_marginRight="22dp">
                 <ImageView
-                    android:id="@+id/image3"
+                    android:id="@+id/newsImage3"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/picturehome2"/>
+                    android:scaleType="center"
+
+                    android:src="@drawable/logo"
+                    android:background="@color/backgroundgrey"/>
                 <TextView
-                    android:id="@+id/title3"
+                    android:id="@+id/newsTopic3"
                     android:textColor="@color/LightNavi"
-                    android:fontFamily="@font/kanit"
-                    android:layout_below="@+id/image3"
+                    android:fontFamily="@font/anakotmai"
+                    android:layout_below="@+id/newsImage3"
                     android:layout_width="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="2"
                     android:layout_height="wrap_content"
                     android:text="Title line1"/>
-                <TextView
-                    android:textColor="@color/LightNavi"
-                    android:fontFamily="@font/kanit"
-                    android:layout_below="@+id/title3"
-                    android:layout_width="wrap_content"
-                    android:id="@+id/title4"
-                    android:layout_height="wrap_content"
-                    android:text="Title line2"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/title4"
+                    android:layout_below="@id/newsTopic3"
                     android:paddingBottom="5dp"
+                    android:id="@+id/textdate3"
                     android:drawablePadding="4dp"
                     android:drawableStart="@drawable/timeresize"
                     android:text="Date"/>
@@ -406,5 +382,5 @@
         </LinearLayout>
 
     </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 </RelativeLayout>

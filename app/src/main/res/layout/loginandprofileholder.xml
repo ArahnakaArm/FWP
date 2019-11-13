@@ -1,13 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
     <FrameLayout
         android:id="@+id/fragmentcontainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="55dp"
+
         >
 
-    </FrameLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-</LinearLayout>
+
+
+
+
+        </LinearLayout>
+    </FrameLayout>
+    <RelativeLayout
+        android:id="@+id/ree"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        >
+        <ImageView
+            android:layout_marginTop="10dp"
+            android:layout_width="85dp"
+            android:layout_height="62dp"
+            android:translationZ="10dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/orangebutton"/>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_above="@id/bottomNavigationView"
+            android:background="@drawable/shadow"/>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigationView"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/shadow"
+            app:itemBackground="@color/White"
+            app:itemIconSize="24dp"
+            app:itemIconTint="@color/bottom_nav_color"
+            app:itemTextColor="@color/bottom_nav_color"
+            app:labelVisibilityMode="unlabeled"
+            app:itemHorizontalTranslationEnabled="false"
+            app:menu="@menu/menutest" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
+

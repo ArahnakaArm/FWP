@@ -7,13 +7,13 @@
     android:background="@drawable/bottom_border"
     android:layout_height="wrap_content">
 <TextView
-    android:layout_width="75dp"
+    android:layout_width="60dp"
     android:textSize="16dp"
     android:text="title"
     android:padding="3dp"
     android:layout_gravity="center"
     android:layout_marginLeft="10dp"
-    android:fontFamily="@font/kanit"
+    android:fontFamily="@font/anakotmai"
     android:layout_weight="1.5"
     android:textColor="@color/battleshipgrey"
     android:id="@+id/titlecomplain"
@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:textSize="16dp"
         android:padding="3dp"
-        android:fontFamily="@font/kanit"
+        android:fontFamily="@font/anakotmai"
         android:textColor="@color/battleshipgrey"
         android:text="date"
 
@@ -41,7 +41,7 @@
         android:layout_weight="1"
         android:layout_gravity="center_vertical"
         android:text="status"
-        android:fontFamily="@font/kanit"
+        android:fontFamily="@font/anakotmai"
         android:textColor="@color/battleshipgrey"
         android:padding="3dp"
         android:id="@+id/statuscomplain"

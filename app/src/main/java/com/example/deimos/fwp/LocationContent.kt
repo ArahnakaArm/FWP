@@ -3,8 +3,13 @@ package com.example.deimos.fwp
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import androidx.recyclerview.widget.LinearLayoutManager
+import android.text.TextUtils.split
+import android.util.Log
+import android.util.Log.d
 import android.view.View
 import android.widget.Toast
+import com.bumptech.glide.Glide
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
@@ -13,76 +18,130 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import kotlinx.android.synthetic.main.galleryinfo.*
+import kotlinx.android.synthetic.main.bookmarkfragment.*
+import kotlinx.android.synthetic.main.articleinfo.*
 import kotlinx.android.synthetic.main.homefragment.*
 import kotlinx.android.synthetic.main.locationcontent.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.lang.Exception
+import java.text.SimpleDateFormat
+import java.util.*
+data class LocationById(var resultCode : String,var developerMessage : String ,var resultData : resultLoca,var rowCount :Number)
+data class resultLoca(var locationName : namelocation , var address : addresslocation, var subDistrict : subDistrictlocation , var city : citylocation,
+                      var province : provincelocation , var region : regionlocation ,var map : maplocation ,var image : imagelocation ,var email : String,var mobileNo :String,var postalCode :String)
+data class namelocation(var en : String,var th : String)
+data class addresslocation(var en : String,var th : String)
+data class  subDistrictlocation(var en: String,var th: String)
+data class citylocation(var en : String,var th : String)
+data class provincelocation(var en : String,var th : String)
+data class regionlocation(var en : String,var th : String)
+data class maplocation(var lat: Number , var long : Number)
+data class imagelocation(var path : String)
+
 
 class LocationContent : Activity(){
+    private val IMAGE_URL = "http://206.189.41.105:1210/"
     internal var mMapView: MapView?=null
     private var googleMap: GoogleMap? = null
+    private var latlng:String?=null
+    private var location: LatLng?=null
+    private var Name : String?=null
+    var mAPIService: ApiService? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.locationcontent)
         var bundle: Bundle? = intent.extras
-        var Name = bundle!!.getString("Name")
-        var Info = bundle!!.getString("Info")
-        var Tel = bundle!!.getString("Tel")
-        var Email = bundle!!.getString("Email")
+        var _id = bundle!!.getString("ID")
 
-        locationname.setText(Name)
-        locationinfo.setText(Info)
-        telinfo.setText(Tel)
-        emailinfo.setText(Email)
 
+        mAPIService = ApiUtils.apiService
+        val partnerId = "5dbfe99c776a690010deb237"
+        val sdf = SimpleDateFormat("yyMMdd")
+        val currentDate = sdf.format(Date())
+        val r = (10..12).shuffled().first()
+        mAPIService!!.getLocationById(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),_id!!,partnerId).enqueue(object : Callback<LocationById> {
+
+            override fun onResponse(call: Call<LocationById>, response: Response<LocationById>) {
+                d("location",response.body()!!.resultData!!.locationName.toString())
+                latlng = response.body()!!.resultData.map.lat.toString()+","+response.body()!!.resultData.map.long.toString()
+
+                Name = response.body()!!.resultData.locationName.th
+                var gpsVal = latlng!!.split(",")
+                var lat = java.lang.Double.parseDouble(gpsVal[0])
+                var lon = java.lang.Double.parseDouble(gpsVal[1])
+                location = LatLng(lat, lon)
+
+                locationname.setText(response.body()!!.resultData.locationName.th)
+                locationinfo.setText(response.body()!!.resultData.address.th+" "+response.body()!!.resultData.province.th+
+                        " "+response.body()!!.resultData.city.th+" "+response.body()!!.resultData.subDistrict.th+" "+response.body()!!.resultData.postalCode)
+                telinfo.setText(response.body()!!.resultData.mobileNo)
+                emailinfo.setText(response.body()!!.resultData.email)
+                var Url = IMAGE_URL+response.body()!!.resultData.image.path
+                Glide.with(this@LocationContent)
+                        .load(Url)
+                        .into(locationimage)
+
+                mMapView =findViewById<View>(R.id.mapViewContent) as MapView
+                mMapView?.onCreate(savedInstanceState)
+                mMapView?.onResume()
+
+                try {
+                    MapsInitializer.initialize(this@LocationContent!!.applicationContext)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+
+                mMapView?.getMapAsync { mMap ->
+                    googleMap = mMap
+
+                    val zoomLevel = 17f
+
+                    val icon = BitmapDescriptorFactory.fromResource(R.drawable.marker)
+                    try {
+
+                        googleMap!!.addMarker(MarkerOptions().position(location!!).title(Name!!).icon(icon))
+                        googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(location, zoomLevel))
+                    }catch (e :Exception){
+                        d("Ex",e.toString())
+                    }
+
+                }
+
+
+
+            }
+
+
+            override fun onFailure(call: Call<LocationById>, t: Throwable) {
+                d("arm","onFailure")
+            }
+
+        })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       /*
+*/
         backlocation.setOnClickListener {
             onBackPressed()
         }
 
-        mMapView =findViewById<View>(R.id.mapViewContent) as MapView
-        mMapView?.onCreate(savedInstanceState)
-        mMapView?.onResume()
 
-        try {
-            MapsInitializer.initialize(this@LocationContent!!.applicationContext)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-        mMapView?.getMapAsync { mMap ->
-            googleMap = mMap
-            /*LatLng sydney = new LatLng(-34, 151);
-                googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker Title").snippet("Marker Description"));
-
-                // For zooming automatically to the location of the marker
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
-                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-*/
-            val zoomLevel = 17f
-
-            val center = LatLng(13.7245601, 100.4930241)
-            val bankok = LatLng(13.748106, 100.5650711)
-            val thonburi = LatLng(13.7060328, 100.3491375)
-            val cheangmai = LatLng(18.8831375, 98.8991867)
-            val samhud = LatLng(13.5843948, 100.7934578)
-            val chonburi = LatLng(13.0884603, 100.9145203)
-            val nakornsawhun = LatLng(15.7077635, 100.131218)
-            val phuket = LatLng(7.9070511, 98.4014075)
-            val yala = LatLng(6.550913, 101.2844168)
-            val ubon = LatLng(15.1961968, 104.8437812)
-            val salaburi = LatLng(14.6087801, 100.9783937)
-            val icon = BitmapDescriptorFactory.fromResource(R.drawable.marker)
-
-            var mcenter: Marker? = null
-            var mbankok: Marker? = null
-            var mthonburi: Marker? = null
-
-
-            googleMap!!.addMarker(MarkerOptions().position(center).title("สาขากรุงเทพ").icon(icon))
-            googleMap!!.addMarker(MarkerOptions().position(thonburi).title("สาขาฝั่งธนบุรี").icon(icon))
-            googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(center, zoomLevel))
-
-
-        }
     }
     override fun onBackPressed()
     {

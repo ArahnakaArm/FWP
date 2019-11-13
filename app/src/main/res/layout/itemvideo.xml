@@ -16,10 +16,11 @@
             android:translationZ="3dp"
             android:src="@drawable/videoplayer"/>
     <ImageView
+        android:id="@+id/videoholder"
         android:layout_width="match_parent"
-        android:layout_height="170dp"
-       android:src="@drawable/homepic1"
-        android:scaleType="fitXY"/>
+        android:layout_height="200dp"
+       android:src="@color/backgroundgrey"
+        android:scaleType="centerCrop"/>
 
     </RelativeLayout>
     <TextView
@@ -31,34 +32,34 @@
         android:text="“ธนาธร” ชี้ปัญหา รัฐราชการรวมศูนย์ทำประเทศไม่พัฒนา"
         android:textColor="@color/colorPrimary"
         android:layout_marginRight="10dp"
-        android:fontFamily="@font/kanit"
-        android:layout_marginLeft="10pt"/>
+        android:fontFamily="@font/anakotmai"
+        android:layout_marginLeft="5pt"/>
     <TextView
-        android:layout_marginLeft="10pt"
-        android:layout_width="40dp"
+        android:layout_marginLeft="5pt"
+        android:layout_width="70dp"
         android:elevation="0dp"
         android:layout_marginTop="10dp"
         android:textColor="@color/White"
         android:translationZ="3dp"
         android:layout_marginBottom="10dp"
-        android:id="@+id/gallery"
+        android:id="@+id/category"
         android:textAlignment="center"
         android:background="@color/backgroundgreydark"
         android:textSize="8dp"
-        android:fontFamily="@font/kanit"
+        android:fontFamily="@font/anakotmai"
         android:layout_below="@id/videotopic"
         android:layout_height="wrap_content"
         android:text="Category"
         />
     <ImageView
-        android:layout_marginLeft="4dp"
+        android:layout_marginLeft="6dp"
         android:layout_width="15dp"
         android:id="@+id/clockdate"
         android:elevation="0dp"
         android:layout_marginTop="10dp"
         android:textColor="@color/White"
         android:translationZ="3dp"
-        android:layout_toRightOf="@+id/gallery"
+        android:layout_toRightOf="@+id/category"
         android:layout_below="@id/videotopic"
         android:layout_height="15dp"
         android:src="@drawable/time"
@@ -75,7 +76,7 @@
         android:id="@+id/date"
         android:textAlignment="center"
         android:textSize="10dp"
-        android:fontFamily="@font/kanit"
+        android:fontFamily="@font/anakotmai"
         android:layout_below="@id/videotopic"
         android:layout_height="wrap_content"
         android:text="Date"
