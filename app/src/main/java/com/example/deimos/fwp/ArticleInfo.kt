@@ -10,6 +10,7 @@ import kotlinx.android.synthetic.main.articleinfo.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.Exception
 import java.text.SimpleDateFormat
 data class ArticleById(var resultCode: String,var developerMessage : String,var resultData: ArticledataById)
 data class ArticledataById(var _id : String,var articleName: articledataName,var shortDescription : articledataDescription,var categoryId : categoryArticle,
@@ -22,17 +23,23 @@ data class articledataName(var en:String,var th:String)
 data class articledataDescription(var en : String,var th :String)
 data class categoryArticle(var categoryName : categoryNameArticledata)
 data class categoryNameArticledata(var en:String,var th : String)
-class GalleryInfo : Activity(){
+class ArticleInfo : Activity(){
     private val URLImage : String ="http://206.189.41.105:1210/"
     var mAPIService: ApiService? = null
+
     var ContentInfoArray = ArrayList<Content>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.articleinfo)
         var bundle : Bundle ? =intent.extras
 
         var _id = bundle!!.getString("ID")
-
+    try {
         getContent(_id)
+    }catch (e : Exception){
+
+    }
+
       //  Toast.makeText(this@GalleryInfo,_id,Toast.LENGTH_SHORT).show()
         setContentView(R.layout.articleinfo)
         sharebuttoninfo.setOnClickListener {
@@ -41,9 +48,9 @@ class GalleryInfo : Activity(){
         bookmarkbutton.setOnClickListener {
            // Toast.makeText(this@GalleryInfo,"Bookmarked",Toast.LENGTH_SHORT).show()
         }
-        backprees.setOnClickListener {
+       /* backprees.setOnClickListener {
             onBackPressed()
-        }
+        }*/
     }
 
     override fun onBackPressed()
@@ -61,31 +68,35 @@ class GalleryInfo : Activity(){
 
             override fun onResponse(call: Call<ArticleById>, response: Response<ArticleById>) {
                     if(response.isSuccessful){
+
+                        try {
                         var data  = response.body()!!.resultData
                         topicinfo.setText(data.articleName.th)
                         gallery.setText(data.categoryId.categoryName.th)
                         dateContent.setText(data.updatedAt.substring(0..9))
-                        descriptiongallery.setText(data.shortDescription.th)
-
+                       // descriptiongallery.setText(data.shortDescription.th)
+                       // d("OrderTest",data.updatedAt.substring(0..9))
 
                        /* descriptiongallery.setTextSize(TypedValue.COMPLEX_UNIT_SP,
                                 getResources().getDimension(R.dimen.result_font))*/
-                        Glide.with(this@GalleryInfo)
+                        Glide.with(this@ArticleInfo)
                                 .load(URLImage+data.imageThumbnail.path)
                                 .into(imageinfo)
                     for (i in 0 until data.contentInfo.size){
                         ContentInfoArray.add(data.contentInfo[i])
+
                     }
                         ContentInfoArray.sortBy { it.orderBy }
-                    for (i in 0 until ContentInfoArray.size){
-                        if(ContentInfoArray[i].messageType == "Image"){
-                            d("ImageDetect",ContentInfoArray[i].image.path)
-                        }
-                        else{
-                            d("ImageDetect",ContentInfoArray[i].articleDescription.th)
-                        }
-                    }
 
+                    d("TestInfo2",ContentInfoArray.size.toString())
+                        list_recycler_view_article.apply {
+                            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this@ArticleInfo)
+                            adapter = ArticleInfoAdapter(this@ArticleInfo,ContentInfoArray)
+                        }
+
+                    }catch (e : Exception){
+
+                        }
                     }
                 else{
 

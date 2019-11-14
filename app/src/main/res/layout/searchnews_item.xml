@@ -2,8 +2,8 @@
 
 <androidx.cardview.widget.CardView android:layout_width="match_parent"
     android:elevation="50dp"
-    android:layout_marginTop="5dp"
-    android:layout_marginBottom="5dp"
+    android:layout_marginTop="1dp"
+    android:layout_marginBottom="2dp"
     android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <RelativeLayout
@@ -17,7 +17,7 @@
             android:layout_width="70dp"
             android:layout_marginBottom="20dp"
             android:layout_marginLeft="15dp"
-            android:src="@drawable/picturehome1"
+            android:src="@drawable/logo"
             android:scaleType="centerCrop"
             app:riv_corner_radius="7dp"
             app:riv_mutate_background="true"

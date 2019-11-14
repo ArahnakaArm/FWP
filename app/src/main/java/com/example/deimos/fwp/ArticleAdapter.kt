@@ -61,7 +61,7 @@ class ArticleAdapter(ctx: Context, private val imageModelArrayList: ArrayList<Ar
         holder.itemView.setOnClickListener {
 
 
-            val intent=Intent(holder.itemView.context,GalleryInfo::class.java)
+            val intent=Intent(holder.itemView.context,ArticleInfo::class.java)
             intent.putExtra("ID",imageModelArrayList[position]._id)
             holder.itemView.context?.startActivity(intent)
 

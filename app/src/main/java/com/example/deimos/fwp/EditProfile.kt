@@ -153,7 +153,7 @@ class EditProfile : AppCompatActivity() {
                             mAlert.setMessage("แก้ไขข้อมูลเรียบร้อยแล้ว")
                             mAlert.setPositiveButton("ปิด") { dialog, which ->
                                 dialog.dismiss()
-                                fragmentManager?.popBackStack()
+                                finish()
                             }
                             mAlert.show()
 

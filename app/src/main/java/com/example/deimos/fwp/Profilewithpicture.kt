@@ -371,16 +371,18 @@ class Profilewithpicture : androidx.fragment.app.Fragment() {
             override fun onResponse(call: Call<UserProfile>, response: Response<UserProfile>) {
 
                 if (response.isSuccessful()) {
-                    val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+                    val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale("th", "TH"))
+                    d("DateCheck",inputFormat.format(Date()))
                     val date = inputFormat.parse(response.body()!!.resultData.birthDate)
                     val dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM).format(date)
+
                    try {
                        textEmail.text = response.body()!!.resultData.email
                       // memberid.text = response.body()!!.resultData._id
                        userIdTest = response.body()!!.resultData._id
                        firstName.text = response.body()!!.resultData.firstName
                        lastName.text = response.body()!!.resultData.lastName
-                       birthday.text = dateFormat
+                      birthday.text = dateFormat
                        genderForChange = response.body()!!.resultData.gender
                        imageUrl = IMAGE_URL+response.body()!!.resultData.image.path
                        val editor = sp?.edit()

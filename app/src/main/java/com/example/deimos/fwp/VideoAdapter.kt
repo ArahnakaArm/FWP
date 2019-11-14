@@ -11,9 +11,7 @@ import com.bumptech.glide.Glide
 
 import java.util.ArrayList
 
-/**
- * Created by Parsania Hardik on 26-Jun-17.
- */
+
 class VideoAdapter(ctx: Context, private val imageModelArrayList: ArrayList<resultData3>) :
         androidx.recyclerview.widget.RecyclerView.Adapter<VideoAdapter.MyViewHolder>() {
 
@@ -24,7 +22,7 @@ class VideoAdapter(ctx: Context, private val imageModelArrayList: ArrayList<resu
 
         inflater = LayoutInflater.from(ctx)
         this.arraylist = ArrayList<resultData3>()
-       // this.arraylist.addAll(Search.movieNamesArrayList)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VideoAdapter.MyViewHolder {

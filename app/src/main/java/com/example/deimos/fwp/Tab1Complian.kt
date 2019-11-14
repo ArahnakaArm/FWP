@@ -215,31 +215,52 @@ class Tab1Complian  : androidx.fragment.app.Fragment() {
 
 
         closebut!!.setOnClickListener {
-            if (subjectInput.text.toString() == "" && Type == "" && detailInput.text.toString() == "" && nameComplian.text.toString() == ""
-                    && surnameInputComplian.text.toString() == "" && telcomplian.text.toString() == ""){
-                activity!!.finish()
-            }else{
-                val mAlert = AlertDialog.Builder(requireContext())
+            val mAlert = AlertDialog.Builder(requireContext())
+            try {
+
+                if (subjectInput.text.toString() == "" && Type == "" && detailInput.text.toString() == "" && nameComplian.text.toString() == ""
+                        && surnameInputComplian.text.toString() == "" && telcomplian.text.toString() == "") {
+                    activity!!.finish()
+                } else {
+
+                    mAlert.setTitle("คุณยังไม่ได้บันทึกการร้องเรียน")
+                    mAlert.setMessage("คุณต้องการที่จะปิดโดยไม่บันทึกใช่หรือไหม่?")
+                    mAlert.setNegativeButton("ไม่ใช่") { dialog, which ->
+                        dialog.dismiss()
+
+                    }
+                    mAlert.setPositiveButton("ใช่,ปิด") { dialog, which ->
+                        dialog.dismiss()
+                        sp = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+                        var edditor = sp!!.edit()
+                        edditor.putString("Subject", "")
+                        edditor.putString("Detail", "")
+                        edditor.putInt("spin", 0)
+                        edditor.commit()
+                        activity!!.finish()
+                    }
+                    mAlert.show()
+                }
+            }catch (e : Exception){
                 mAlert.setTitle("คุณยังไม่ได้บันทึกการร้องเรียน")
                 mAlert.setMessage("คุณต้องการที่จะปิดโดยไม่บันทึกใช่หรือไหม่?")
                 mAlert.setNegativeButton("ไม่ใช่") { dialog, which ->
                     dialog.dismiss()
 
                 }
-                mAlert.setPositiveButton("ใช่,ปิด") { dialog, which ->
+                     mAlert.setPositiveButton("ใช่,ปิด") { dialog, which ->
                     dialog.dismiss()
                     sp = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
                     var edditor = sp!!.edit()
-                    edditor.putString("Subject","")
-                    edditor.putString("Detail","")
-                    edditor.putInt("spin",0)
+                    edditor.putString("Subject", "")
+                    edditor.putString("Detail", "")
+                    edditor.putInt("spin", 0)
                     edditor.commit()
                     activity!!.finish()
                 }
                 mAlert.show()
             }
-            }
-
+        }
 
 
         Next!!.setOnClickListener {

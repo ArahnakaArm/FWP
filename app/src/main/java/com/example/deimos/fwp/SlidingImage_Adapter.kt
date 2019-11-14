@@ -38,7 +38,7 @@ class SlidingImage_Adapter(private val context: Context, private val urls: Array
         imageView.setOnClickListener {
            //d("Sli",urls[position])
             val newArray = urls2[position].toString()
-            val intent = Intent(context, GalleryInfo::class.java)
+            val intent = Intent(context, ArticleInfo::class.java)
             intent.putExtra("ID",newArray)
             context?.startActivity(intent)
         }

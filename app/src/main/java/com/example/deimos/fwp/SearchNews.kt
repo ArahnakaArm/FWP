@@ -15,15 +15,22 @@ import android.view.*
 import android.widget.EditText
 import android.widget.ListAdapter
 import kotlinx.android.synthetic.main.bookmarkfragment.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.lang.Exception
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.zip.Inflater
 class SearchNews : androidx.fragment.app.Fragment() {
     private var etsearch: EditText? = null
     internal var textlength = 0
+    var mAPIService: ApiService? = null
     private val adaptertest: CustomAdapter? = null
     var usr : Userstate = Userstate()
-    var array_sort = java.util.ArrayList<NewsModel>()
-
-    var news = ArrayList<NewsModel>()
+    var array_sort = java.util.ArrayList<ArticleData>()
+    private var CategoriesId: String?=null
+    var news = ArrayList<ArticleData>()
 
 
 
@@ -43,32 +50,21 @@ class SearchNews : androidx.fragment.app.Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        news.add(NewsModel("dawr","14/12/61"))
-        news.add(NewsModel("hgjg","14/12/61"))
-        news.add(NewsModel("agewwcxvs","14/12/61"))
-        news.add(NewsModel("agrtrcs","14/12/61"))
-        news.add(NewsModel("agsadths","14/12/61"))
-        news.add(NewsModel("agsadths","14/12/61"))
-        news.add(NewsModel("agsadths","14/12/61"))
-        news.add(NewsModel("agsadths","14/12/61"))
-        news.add(NewsModel("agsadths","14/12/61"))
-        news.add(NewsModel("agsadths","14/12/61"))
-        news.add(NewsModel("agsadths","14/12/61"))
-        news.add(NewsModel("agsadths","14/12/61"))
-        news.add(NewsModel("agsadths","14/12/61"))
-        news.add(NewsModel("agsadths","14/12/61"))
+/*
+        news.add(NewsModel("Topic 1","14/12/61"))
+        news.add(NewsModel("Topic 2","14/12/61"))
+        news.add(NewsModel("Topic 3","14/12/61"))
+        news.add(NewsModel("Topic 4","14/12/61"))
+        news.add(NewsModel("Topic 5","14/12/61"))
 
 
 
-        list_recycler_view.apply {
-            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
-            adapter = NewsAdapter(context,news)
-        }
+*/
+       getCategories()
 
         ///// Searching /////
         etsearch = view.findViewById(R.id.searchbookmark) as EditText
-        array_sort = java.util.ArrayList<NewsModel>()
+        array_sort = java.util.ArrayList<ArticleData>()
         array_sort = populateList()
         etsearch!!.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
@@ -77,9 +73,9 @@ class SearchNews : androidx.fragment.app.Fragment() {
                 textlength = etsearch!!.text.length
                 array_sort.clear()
                 for (i in news.indices) {
-                    if (textlength <= news[i].getNames().length) {
-                        Log.d("ertyyy", news[i].getNames().toLowerCase().trim())
-                        if (news[i].getNames().toLowerCase().trim().contains(
+                    if (textlength <= news[i].articleName.th.length) {
+                        Log.d("ertyyy", news[i].articleName.th.toLowerCase().trim())
+                        if (news[i].articleName.th.toLowerCase().trim().contains(
                                         etsearch!!.text.toString().toLowerCase().trim { it <= ' ' })
                         ) {
                             array_sort.add(news[i])
@@ -120,13 +116,13 @@ class SearchNews : androidx.fragment.app.Fragment() {
     companion object {
         fun newInstance(): SearchNews = SearchNews()
     }
-    private fun populateList(): java.util.ArrayList<NewsModel> {
+    private fun populateList(): java.util.ArrayList<ArticleData> {
 
-        val list = java.util.ArrayList<NewsModel>()
+        val list = java.util.ArrayList<ArticleData>()
 
         for (i in 0..7) {
 
-            list.add(NewsModel("",""))
+           // list.add(ArticleData("",""))
         }
 
         return list
@@ -183,5 +179,63 @@ class SearchNews : androidx.fragment.app.Fragment() {
         view.menu.getItem(2).isChecked=true
         super.onResume()
     }
+    private fun getArticle(id : String?){
+        mAPIService = ApiUtils.apiService
+        val partnerId = "5dbfe99c776a690010deb237"
+        val sdf = SimpleDateFormat("yyMMdd")
+        val currentDate = sdf.format(Date())
+        val r = (10..12).shuffled().first()
+        mAPIService!!.getArticles(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId,id!!).enqueue(object : Callback<ArticleModel> {
+
+            override fun onResponse(call: Call<ArticleModel>, response: Response<ArticleModel>) {
+                //  d("Article",response.body()!!.developerMessage)
+                try {
+                    if(response.body()!!.resultData[0] != null){
+                        upDateUi(response.body()!!.resultData,response.body()!!.rowCount)
+                    }
+                }catch (e : Exception){}
+
+
+            }
+
+            override fun onFailure(call: Call<ArticleModel>, t: Throwable) {
+                d("arm","onFailure")
+            }
+        })
+    }
+    private fun upDateUi(data : ArrayList<ArticleData>,Count : Int){
+        list_recycler_view.apply {
+            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
+            adapter = NewsAdapter(context,data)
+        }
+    }
+    private fun getCategories(){
+        mAPIService = ApiUtils.apiService
+        val partnerId = "5dbfe99c776a690010deb237"
+        val sdf = SimpleDateFormat("yyMMdd")
+        val currentDate = sdf.format(Date())
+        val r = (10..12).shuffled().first()
+        mAPIService!!.getCategories(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId).enqueue(object : Callback<CateModel> {
+
+            override fun onResponse(call: Call<CateModel>, response: Response<CateModel>) {
+                //   d("Video",response.body()!!.resultData[0]._id)
+                try {
+                    CategoriesId = response.body()!!.resultData[0]._id
+                    if(CategoriesId != null){
+                        getArticle(CategoriesId)
+                    }
+                }catch (e : Exception){
+
+                }
+
+
+            }
+
+            override fun onFailure(call: Call<CateModel>, t: Throwable) {
+                d("arm","onFailure")
+            }
+        })
+    }
+
 
 }

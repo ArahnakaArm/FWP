@@ -28,13 +28,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.main)
 
 
-           var  info : PackageInfo = packageManager.getPackageInfo("com.example.deimos.fwp", PackageManager.GET_SIGNATURES)
+       /*    var  info : PackageInfo = packageManager.getPackageInfo("com.example.deimos.fwp", PackageManager.GET_SIGNATURES)
           for(signature:Signature in info.signatures) {
               var md: MessageDigest = MessageDigest.getInstance("SHA")
               md.update(signature.toByteArray())
               d("KeyHash", Base64.getEncoder().encodeToString(md.digest()))
           }
-
+*/
 
 
 

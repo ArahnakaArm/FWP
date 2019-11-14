@@ -129,7 +129,7 @@ class ChangePassword : AppCompatActivity(){
                             mAlert.setMessage("เปลี่ยนรหัสผ่านเรียบร้อยแล้ว")
                             mAlert.setPositiveButton("ปิด") { dialog, which ->
                                 dialog.dismiss()
-                                fragmentManager?.popBackStack()
+                                finish()
                             }
                             mAlert.show()
                         }

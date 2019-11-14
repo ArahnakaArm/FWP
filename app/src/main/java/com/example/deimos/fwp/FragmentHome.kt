@@ -86,19 +86,19 @@ class FragmentHome : androidx.fragment.app.Fragment() {
         d("T","YEs")
         sp = activity?.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
        Topic1.setOnClickListener {
-           val intent = Intent(activity, GalleryInfo::class.java)
+           val intent = Intent(activity, ArticleInfo::class.java)
            intent.putExtra("ID",idTopic1)
            activity?.startActivity(intent)
 
        }
         Topic2.setOnClickListener {
-            val intent = Intent(activity, GalleryInfo::class.java)
+            val intent = Intent(activity, ArticleInfo::class.java)
             intent.putExtra("ID",idTopic2)
             activity?.startActivity(intent)
 
         }
         Topic3.setOnClickListener {
-            val intent = Intent(activity, GalleryInfo::class.java)
+            val intent = Intent(activity, ArticleInfo::class.java)
             intent.putExtra("ID",idTopic3)
             activity?.startActivity(intent)
 
