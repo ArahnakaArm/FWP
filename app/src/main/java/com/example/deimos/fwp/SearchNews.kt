@@ -43,7 +43,7 @@ class SearchNews : androidx.fragment.app.Fragment() {
         val view = activity!!.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         view.menu.getItem(2).isCheckable=true
         view.menu.getItem(2).isChecked=true
-        return inflater.inflate(R.layout.searchnews,container,false)    
+        return inflater.inflate(R.layout.searchnews,container,false)       
 
     }
 
