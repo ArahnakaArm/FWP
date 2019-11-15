@@ -24,7 +24,7 @@ import kotlin.collections.ArrayList
 
 data class ComplianModel(var resultCode : String,var developerMessage: String,var resultData : ArrayList<CompliansData>,var rowCount : Int)
 data class CompliansData(var map : complianMap,var _id : String,var status : String, var subject : String ,var complainType : String,
-                         var complainDesc : String,var updatedAt : String)
+                         var complainDesc : String,var updatedAt : String , var complainNumber : String)
 data class complianMap(var lat :Number,var long : Number)
 class ComplainList : androidx.fragment.app.Fragment() {
     var sp: SharedPreferences? = null
@@ -57,7 +57,7 @@ class ComplainList : androidx.fragment.app.Fragment() {
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
 
-        mAPIService!!.getComplianList(token!!,Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId,user_ID!!).enqueue(object : Callback <ComplianModel> {
+        mAPIService!!.getComplianList(token!!,Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId).enqueue(object : Callback <ComplianModel> {
 
             override fun onResponse(call: Call <ComplianModel>, response: Response <ComplianModel>) {
               //  Log.d("Complain", response.body()!!.resultData[0].toString())

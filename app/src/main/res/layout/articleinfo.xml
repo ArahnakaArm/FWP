@@ -1,12 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/linear4bar"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <RelativeLayout
+                android:id="@+id/linearbar"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="?attr/colorPrimary"
+                >
 
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="0dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="124dp"
+                        android:layout_height="35dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/logoparty" />
+
+                </LinearLayout>
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/backarrow"
+                        android:layout_width="33dp"
+                        android:layout_height="31dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginLeft="10dp"
+                        android:src="@drawable/backarrow" />
+
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_height="wrap_content">
+
+
+                    </RelativeLayout>
+                    />
+
+                </RelativeLayout>
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+    </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -24,12 +86,23 @@
                     android:layout_marginTop="10dp"
                     android:gravity="end"
                     android:orientation="horizontal">
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
                     <ImageView
                         android:id="@+id/bookmarkbutton"
                         android:layout_width="35dp"
                         android:layout_marginEnd="5dp"
                         android:layout_height="35dp"
                         android:src="@drawable/bookmark2"/>
+                        <ImageView
+                            android:id="@+id/bookmarkbuttonorange"
+                            android:layout_width="35dp"
+                            android:layout_marginEnd="5dp"
+                            android:visibility="invisible"
+                            android:layout_height="35dp"
+                            android:src="@drawable/bookmarkorange"/>
+                    </RelativeLayout>
                     <ImageView
                         android:id="@+id/sharebuttoninfo"
                         android:layout_width="35dp"
@@ -121,5 +194,5 @@
 
     </androidx.core.widget.NestedScrollView>
 
-</RelativeLayout>
+</LinearLayout>
 

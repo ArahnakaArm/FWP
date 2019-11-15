@@ -181,7 +181,7 @@ interface ApiService {
 
    @Headers("Content-Type: application/json")
    @GET("complians")
-   fun getComplianList(@Header("Authorization") auth: String,@Header ("x-session-id") header : String,@Header ("x-tid") header2 : String,@Query("partnerId") partnerId : String,@Query("createdBy") createdBy : String): Call <ComplianModel>
+   fun getComplianList(@Header("Authorization") auth: String,@Header ("x-session-id") header : String,@Header ("x-tid") header2 : String,@Query("partnerId") partnerId : String): Call <ComplianModel>
 
 
 
@@ -219,6 +219,16 @@ interface ApiService {
 
 
     /////Location////////
+
+    //// Fav ////
+
+    @Headers("Content-Type: application/json")
+    @GET("favoriteItems")
+    fun getFavorite(@Header("Authorization") auth: String, @Header ("x-session-id") header : String,
+                     @Header ("x-tid") header2 : String,@Query("partnerId") partnerId : String): Call<Favorite>
+
+
+    /// Fav ////
 
 }
 

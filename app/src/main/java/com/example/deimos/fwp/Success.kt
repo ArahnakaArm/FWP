@@ -10,16 +10,19 @@ import kotlinx.android.synthetic.main.success.*
 import java.util.*
 
 class Success : AppCompatActivity(){
-
+    private var complianId : String?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.success)
+        var bundle : Bundle ? =intent.extras
+        var _id = bundle!!.getString("ComplianNumber")
+        complianId = intent.getStringExtra("ID_Complian")
         goHome.setOnClickListener {
             finish()
             finish()
         }
-        idcomplian.setText("หมายเลขคำร้องของคุณคือ "+Success.GenerateRandomString2.randomString(5))
+        idcomplian.setText("หมายเลขคำร้องของคุณคือ "+_id)
     }
 
     object GenerateRandomString2 {
