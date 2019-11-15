@@ -47,7 +47,7 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 data class responseComplian (var resultCode : String,var developerMessage : String,var resultData : DataComplian)
-data class DataComplian(var createdBy :String,var _id : String)
+data class DataComplian(var createdBy :String,var _id : String,var complainNumber : String)
 data class CompliansType(var resultCode : String, var developerMessage : String, var resultData : java.util.ArrayList<Res>, var rowCount : Int)
 data class Res(var _id : String,var typeName : String,var guideLabel : String)
 data class CompliansRequestModel(var status : String,var partnerId : String,var subject : String,
@@ -65,7 +65,7 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
     private var imagesEncodedList: MutableList<String>? = null
     private var gvGallery: GridView? = null
     var token : String?=null
-
+    private var complianNumber : String?=null
     private val SELECT_IMAGE = 1338
     private var complianrequstmap: complianRequstMap? = null
     private  val REQUEST_PICK_PHOTO = 1
@@ -87,6 +87,7 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), MY_WRITE_PERMISSION_CODE);
         }
+        d("Check",sp!!.getString("Type","-"))
         Send =activity!!.findViewById(R.id.next2)
         Send!!.setOnClickListener {
             sp = activity?.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
@@ -251,8 +252,13 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
                         edditor.putString("Detail","")
                         edditor.putInt("spin",0)
                         edditor.commit()
+                     //   d("IDTEST",response.body()!!.resultData.complainNumber)
 
-
+                        val intent = Intent(activity,Success::class.java)
+                        intent.putExtra("ComplianNumber",complianNumber)
+                        activity!!.finish()
+                        activity!!.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
+                        activity!!.startActivity(intent)
 
 
                     }else{
@@ -285,10 +291,7 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
             })
         }
 
-       val intent = Intent(activity,Success::class.java)
-       activity!!.finish()
-       activity!!.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
-       activity!!.startActivity(intent)
+
         //}
     }
     fun importPhoto(uri: Uri,id : String): Boolean {
@@ -366,6 +369,7 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
 
                 //d("Complian", "Success")
                 if (response.isSuccessful()) {
+                    complianNumber=response.body()!!.resultData.complainNumber
                     if(filePath.size != 0) {
                         d("Complian", "Success")
                         d("AB", response.body()!!.resultData._id)
@@ -388,6 +392,8 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
                             edditor.putInt("spin",0)
                             edditor.commit()
                         val intent = Intent(activity,Success::class.java)
+                        complianNumber=response.body()!!.resultData.complainNumber
+                        intent.putExtra("ComplianNumber",complianNumber)
                         activity!!.finish()
                         activity!!.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
                         activity!!.startActivity(intent)
@@ -437,6 +443,7 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
 
                 //d("Complian", "Success")
                 if (response.isSuccessful()) {
+                    complianNumber=response.body()!!.resultData.complainNumber
                     if(filePath.size != 0) {
                     d("Complian", "Success")
                     d("AB",response.body()!!.resultData._id)
@@ -457,8 +464,10 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
                         edditor.putString("Subject","")
                         edditor.putString("Detail","")
                         edditor.putInt("spin",0)
-                        edditor.commit()
+                        complianNumber=response.body()!!.resultData.complainNumber
                         val intent = Intent(activity,Success::class.java)
+                        intent.putExtra("ComplianNumber",complianNumber)
+                        edditor.commit()
                         activity!!.finish()
                         activity!!.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
                         activity!!.startActivity(intent)
@@ -521,6 +530,8 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
                     if (response.isSuccessful){
                         sp = activity?.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
                         var edditor = sp!!.edit()
+                        val intent = Intent(activity,Success::class.java)
+                        intent.putExtra("ComplianNumber",response.body()!!.resultData.complainNumber)
                         edditor.putString("Subject","")
                         edditor.putString("Detail","")
                         edditor.putInt("spin",0)
@@ -560,6 +571,7 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
         }
 
         val intent = Intent(activity,Success::class.java)
+        intent.putExtra("ComplianNumber",complianNumber)
         activity!!.finish()
         activity!!.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
         activity!!.startActivity(intent)

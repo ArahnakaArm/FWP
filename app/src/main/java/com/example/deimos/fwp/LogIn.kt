@@ -54,7 +54,7 @@ data class UserProfile(var resultData : resultData2,
         ,var developerMessage:String
 )
 data class resultData2(var _id :String,var birthDate: String ,var email: String,var firstName : String ,
-                       var gender : String,var lastName :String,var image : image)
+                       var gender : String,var lastName :String,var image : image,var complainNumber : String)
 data class image(var path : String)
 data class resultData(val access_token:String)
 data class UserMo(val resultData : resultData,

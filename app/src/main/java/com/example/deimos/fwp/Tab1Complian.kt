@@ -174,6 +174,7 @@ class Tab1Complian  : androidx.fragment.app.Fragment() {
                     // Set the hint text color gray
                     tv.setTextColor(Color.GRAY)
                 } else {
+
                     tv.setTextColor(Color.BLACK)
                 }
                 return view
@@ -199,6 +200,7 @@ class Tab1Complian  : androidx.fragment.app.Fragment() {
                     }
                     //  Toast.makeText(context, arrayAdapter.getItem(position).toString(), Toast.LENGTH_SHORT).show()
                     Type = arrayAdapter.getItem(position).toString()
+                    d("Checkspinner",arrayAdapter.getItem(position).toString())
                     sp = activity?.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
                     var edditor = sp!!.edit()
                     edditor.putInt("spin",position)
@@ -281,6 +283,8 @@ class Tab1Complian  : androidx.fragment.app.Fragment() {
                 edditor.putString("Subject",Subject)
                 edditor.putString("Detail",Detail)
                 edditor.putString("Type",Type)
+                edditor.commit()
+                d("Check",sp!!.getString("Type","-"))
                 viewp!!.setCurrentItem(Complian.Pager.getItem(+1,viewp!!))
             }
 

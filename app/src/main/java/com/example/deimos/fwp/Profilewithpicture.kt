@@ -59,6 +59,7 @@ import java.lang.Exception
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.Year
 import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.xml.xpath.XPathConstants.STRING
@@ -371,9 +372,12 @@ class Profilewithpicture : androidx.fragment.app.Fragment() {
             override fun onResponse(call: Call<UserProfile>, response: Response<UserProfile>) {
 
                 if (response.isSuccessful()) {
+                    var dataDate = response.body()!!.resultData.birthDate
                     val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale("th", "TH"))
                     d("DateCheck",inputFormat.format(Date()))
                     val date = inputFormat.parse(response.body()!!.resultData.birthDate)
+                    d("DateCheck2",response.body()!!.resultData.birthDate.substring(5,7))
+                    d("DateCheck3",ChangeFormatDate(dataDate.substring(0,4),dataDate.substring(5,7),dataDate.substring(8,10)))
                     val dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM).format(date)
 
                    try {
@@ -382,7 +386,7 @@ class Profilewithpicture : androidx.fragment.app.Fragment() {
                        userIdTest = response.body()!!.resultData._id
                        firstName.text = response.body()!!.resultData.firstName
                        lastName.text = response.body()!!.resultData.lastName
-                      birthday.text = dateFormat
+                      birthday.text = ChangeFormatDate(dataDate.substring(0,4),dataDate.substring(5,7),dataDate.substring(8,10))
                        genderForChange = response.body()!!.resultData.gender
                        imageUrl = IMAGE_URL+response.body()!!.resultData.image.path
                        val editor = sp?.edit()
@@ -749,5 +753,31 @@ class Profilewithpicture : androidx.fragment.app.Fragment() {
         layoutProgress.setVisibility(View.GONE)
     }
 */
+    private fun ChangeFormatDate(year : String,month : String , day : String):String{
+        var dayChanged : String?=null
+        var monthChanged : String?=null
+        var yearChanged : String?=null
+        var yearChangedInt : Int?=null
+        when(month) {
+            "01" -> monthChanged = "ม.ค."
+            "02" -> monthChanged = "ก.พ."
+            "03" -> monthChanged = "มี.ค."
+            "04" -> monthChanged = "เม.ย."
+            "05" -> monthChanged = "พ.ค."
+            "06" -> monthChanged = "มิ.ย."
+            "07" -> monthChanged = "ก.ค."
+            "08" -> monthChanged = "ส.ค."
+            "09" -> monthChanged = "ก.ย."
+            "10" -> monthChanged = "ต.ค."
+            "11" -> monthChanged = "พ.ย."
+            "12" -> monthChanged = "ธ.ค."
 
+        }
+        yearChangedInt = year.toInt()
+        yearChangedInt += 543
+
+           yearChanged = yearChangedInt.toString()
+        dayChanged = day
+        return monthChanged!! + " " + dayChanged + "," + yearChanged
+    }
 }

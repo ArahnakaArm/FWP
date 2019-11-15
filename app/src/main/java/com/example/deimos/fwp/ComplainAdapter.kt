@@ -44,7 +44,7 @@ class ComplainAdapter(ctx: Context, private val imageModelArrayList: ArrayList<C
 
 
         holder.date.setText(imageModelArrayList[position].updatedAt.substring(0..9))
-        holder.id.setText(imageModelArrayList[position]._id)
+        holder.id.setText(imageModelArrayList[position].complainNumber)
         holder.type.setText(imageModelArrayList[position].complainType)
         holder.title.setText(imageModelArrayList[position].subject)
         holder.itemView.setOnClickListener {
