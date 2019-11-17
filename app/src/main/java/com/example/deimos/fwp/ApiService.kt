@@ -162,10 +162,12 @@ interface ApiService {
     fun postCompliansNoToken(@Header ("x-session-id") header : String,
                       @Header ("x-tid") header2 : String,@Body compliansRequestModel: CompliansRequestModel): Call<responseComplian>
 
+
     @Multipart
     @POST("complians/{compliansId}/image")
     fun postComplianImage(@Header("Authorization") auth: String, @Header ("x-session-id") header : String,
                  @Header ("x-tid") header2 : String,@Path("compliansId") compliansId : String,@Part file: MultipartBody.Part): Call<UserProfile>
+
 
     @Multipart
     @POST("complians/{compliansId}/image")

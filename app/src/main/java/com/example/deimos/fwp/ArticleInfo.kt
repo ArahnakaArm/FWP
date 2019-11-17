@@ -32,7 +32,10 @@ data class categoryArticle(var categoryName : categoryNameArticledata)
 data class categoryNameArticledata(var en:String,var th : String)
 data class Favorite(var resultData : ArrayList<resultDataFav>,var rowCount:Int)
 data class resultDataFav(var articleId :IdArticle,var _id : String)
-data class IdArticle(var _id : String)
+data class nameArticle(var en: String,var th: String)
+
+data class IdArticle(var _id : String,var updatedAt : String,var imageThumbnail : ImageThumb,var articleName :  nameArticle )
+data class ImageThumb(var path : String)
 class ArticleInfo : Activity(){
     private val URLImage : String ="http://206.189.41.105:1210/"
     var mAPIService: ApiService? = null

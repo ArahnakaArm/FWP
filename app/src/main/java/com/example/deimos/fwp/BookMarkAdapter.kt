@@ -1,6 +1,7 @@
 package com.example.deimos.fwp
 
 import android.content.Context
+import android.content.Intent
 import androidx.recyclerview.widget.RecyclerView
 import android.util.Log.d
 import android.view.LayoutInflater
@@ -15,16 +16,16 @@ import kotlinx.android.synthetic.main.itembookmark.view.*
 
 import java.util.ArrayList
 
-class BookMarkAdapter(ctx: Context, private val imageModelArrayList: ArrayList<BookMarkModel>) :
+class BookMarkAdapter(ctx: Context, private val imageModelArrayList: ArrayList<resultDataFav>) :
         androidx.recyclerview.widget.RecyclerView.Adapter<BookMarkAdapter.MyViewHolder>() {
 
     private val inflater: LayoutInflater
-    private val arraylist: ArrayList<BookMarkModel>
+    private val arraylist: ArrayList<resultDataFav>
 
     init {
 
         inflater = LayoutInflater.from(ctx)
-        this.arraylist = ArrayList<BookMarkModel>()
+        this.arraylist = ArrayList<resultDataFav>()
         // this.arraylist.addAll(Search.movieNamesArrayList)
     }
 
@@ -37,13 +38,15 @@ class BookMarkAdapter(ctx: Context, private val imageModelArrayList: ArrayList<B
 
     override fun onBindViewHolder(holder: BookMarkAdapter.MyViewHolder, position: Int) {
 
-        holder.title.setText("  "+imageModelArrayList[position].getNames())
-        holder.date.setText(imageModelArrayList[position].getDate())
+        holder.title.setText(imageModelArrayList[position].articleId.articleName.th)
+        holder.date.setText(imageModelArrayList[position].articleId.updatedAt.substring(0..9))
         holder.itemView.setOnClickListener {
-            Toast.makeText(holder.itemView.context,imageModelArrayList[position].getNames(),Toast.LENGTH_SHORT).show()
+            val intent= Intent(holder.itemView.context,ArticleInfo::class.java)
+            intent.putExtra("ID",imageModelArrayList[position].articleId._id)
+            holder.itemView.context?.startActivity(intent)
         }
         Glide.with(holder.itemView.context)
-                .load(imageModelArrayList[position].getImageUrl())
+                .load(holder.URLImage+imageModelArrayList[position].articleId.imageThumbnail.path)
                 .into(holder.imageUrl)
 
     }
@@ -57,7 +60,7 @@ class BookMarkAdapter(ctx: Context, private val imageModelArrayList: ArrayList<B
         var title: TextView
         var date : TextView
         var imageUrl : ImageView
-
+        var URLImage : String ="http://206.189.41.105:1210/"
         init {
 
             title = itemView.findViewById(R.id.title) as TextView

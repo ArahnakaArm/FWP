@@ -122,9 +122,12 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
         when (requestCode) {
             FilePickerConst
                     .REQUEST_CODE_PHOTO -> if (resultCode == RESULT_OK && data != null) {
+
                 filePath = ArrayList()
                 filePath.addAll(data.getStringArrayListExtra(FilePickerConst.KEY_SELECTED_MEDIA))
+
                 for (i in 0 until filePath.size) {
+
                     Image1.setImageResource(R.drawable.inputboxcomplain)
                     Image1.scaleType= ImageView.ScaleType.CENTER_CROP
 
@@ -157,6 +160,7 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
 
                 for (i in 0 until filePath.size) {
                     Uris = Uri.fromFile(File(filePath[i].toString()))
+
                     Log.d("Arm", Uris.toString())
                     Log.d("Arm", filePath[0].toString())
                     Uriss.add(Uris!!)
@@ -196,7 +200,7 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
                         Image9.setImageURI(Uris)
                         Image9.scaleType= ImageView.ScaleType.CENTER_CROP
                     }
-                    //importPhoto(Uris!!)
+                 //uploadFile(File(filePath[0]),"5dcf905e05226f0010975f7b")
                 }
             }
 
@@ -220,9 +224,11 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
         }
 
     }*/
-    private fun uploadFile(file: File,id :String) {
+    private fun uploadFile(file: String,id :String) {
         // d("Testt",fileUri.toString())
         // var file = File(getPath(fileUri));
+       var fileupload =File(file)
+       d("Size",fileupload.length().toString())
         mAPIService = ApiUtils.apiService
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
@@ -230,15 +236,15 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
         // val filePath = getImageFilePath(fileUri)
         // if (filePath != null && !filePath!!.isEmpty()) {
         // val file = File(filePath)
-        if (file.exists()) {
+        if (fileupload.exists()) {
 
             val retrofit = Retrofit.Builder()
                     .baseUrl("http://206.189.41.105:1210/api/v1/")
                     .build()
             val compliansId = "5db6b397dbb3640010e21f17"
             val service = retrofit.create(ApiService::class.java!!)
-            val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
-            val body = MultipartBody.Part.createFormData("image", file.getName(), requestFile)
+            val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), fileupload)
+            val body = MultipartBody.Part.createFormData("image", fileupload.getName(), requestFile)
             val descriptionString = "Sample description"
             val description = RequestBody.create(MediaType.parse("multipart/form-data"), descriptionString)
             mAPIService!!.postComplianImage("Bearer "+token,Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),id,body).enqueue(object : Callback<UserProfile> {
@@ -341,10 +347,10 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
             val timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-kkmmss"))
             Log.d("FileName", " " + dir)
             if(sp!!.getString("user_token","-") != "-") {
-                uploadFile(File.createTempFile("IMG_$timestamp", ".jpg", dir), id)
+             //   uploadFile(File.createTempFile("IMG_$timestamp", ".jpg", dir), id)
             }
             else{
-                uploadFileNoToken(File.createTempFile("IMG_$timestamp", ".jpg", dir), id)
+               // uploadFileNoToken(File.createTempFile("IMG_$timestamp", ".jpg", dir), id)
             }
             return File.createTempFile("IMG_$timestamp", ".jpg", dir)
         }
@@ -375,7 +381,7 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
                         d("AB", response.body()!!.resultData._id)
                         try {
                             for (i in 0 until filePath.size) {
-                                importPhoto(Uriss[i], response.body()!!.resultData._id)
+                                uploadFile(filePath[i], response.body()!!.resultData._id)
 
                             }
 
@@ -449,7 +455,8 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
                     d("AB",response.body()!!.resultData._id)
                     try {
                         for (i in 0 until filePath.size) {
-                            importPhoto(Uriss[i],response.body()!!.resultData._id)
+                            uploadFileNoToken(filePath[i], response.body()!!.resultData._id)
+
 
                         }
 
@@ -502,9 +509,10 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
         })
 //textgps!!.text = "Latitude : $latitude"
     }
-    private fun uploadFileNoToken(file: File,id :String) {
+    private fun uploadFileNoToken(file: String,id :String) {
         // d("Testt",fileUri.toString())
         // var file = File(getPath(fileUri));
+        var fileupload =File(file)
         mAPIService = ApiUtils.apiService
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
@@ -512,15 +520,15 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
         // val filePath = getImageFilePath(fileUri)
         // if (filePath != null && !filePath!!.isEmpty()) {
         // val file = File(filePath)
-        if (file.exists()) {
+        if (fileupload.exists()) {
 
             val retrofit = Retrofit.Builder()
                     .baseUrl("http://206.189.41.105:1210/api/v1/")
                     .build()
             val compliansId = "5db6b397dbb3640010e21f17"
             val service = retrofit.create(ApiService::class.java!!)
-            val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
-            val body = MultipartBody.Part.createFormData("image", file.getName(), requestFile)
+            val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), fileupload)
+            val body = MultipartBody.Part.createFormData("image", fileupload.getName(), requestFile)
             val descriptionString = "Sample description"
             val description = RequestBody.create(MediaType.parse("multipart/form-data"), descriptionString)
             mAPIService!!.postComplianImageNotoken(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),id,body).enqueue(object : Callback<UserProfile> {
