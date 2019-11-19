@@ -66,6 +66,8 @@
         <activity android:name=".ChangePassword" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".LogIn" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ArticleInfo" />
+        <activity android:name=".FavoriteList"  android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".SearchNews" android:theme="@style/AppTheme.NoActionBar"/>
 
 
         <meta-data

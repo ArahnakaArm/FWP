@@ -39,7 +39,13 @@ class ForgotPassword : AppCompatActivity() {
 
                 override fun onResponse(call: Call<ResponeModel>, response: Response<ResponeModel>) {
                     if (response.isSuccessful()) {
-                        finish()
+                        mAlert.setTitle("สำเร็จ")
+                        mAlert.setMessage("กรุณาตรวจสอบอีเมล์ของท่าน")
+                        mAlert.setNegativeButton("ปิด"){dialog, which ->
+                            dialog.dismiss()
+                            finish()
+                        }
+                        mAlert.show()
                     }
                     else{
                         mAlert.setTitle("พบข้อผิดพลาด")

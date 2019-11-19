@@ -19,7 +19,7 @@ import java.util.ArrayList
 /**
  * Created by Parsania Hardik on 26-Jun-17.
  */
-class ArticleAdapter(ctx: Context, private val imageModelArrayList: ArrayList<ArticleData>) :
+class ArticleAdapter(ctx: Context, private val ModelArrayList: ArrayList<ArticleData>) :
         androidx.recyclerview.widget.RecyclerView.Adapter<ArticleAdapter.MyViewHolder>() {
 
     private val inflater: LayoutInflater
@@ -41,13 +41,13 @@ class ArticleAdapter(ctx: Context, private val imageModelArrayList: ArrayList<Ar
 
     override fun onBindViewHolder(holder: ArticleAdapter.MyViewHolder, position: Int) {
 
-
-        holder.date.setText(imageModelArrayList[position].updatedAt.substring(range = 0..9))
-        holder.title.setText(imageModelArrayList[position].articleName.th)
-       // holder.category.setText(imageModelArrayList[position].categoryId.categoryName.th)
+        holder.cate.setText(ModelArrayList[position].categoryId.categoryName.th)
+        holder.date.setText(ModelArrayList[position].updatedAt.substring(range = 0..9))
+        holder.title.setText(ModelArrayList[position].articleName.th)
+       // holder.category.setText(ModelArrayList[position].categoryId.categoryName.th)
 /*
-        val titleExtra: String = imageModelArrayList[position].videoName.th
-        val dateExtra : String = imageModelArrayList[position].updatedAt.substring(range = 0..9)
+        val titleExtra: String = ModelArrayList[position].videoName.th
+        val dateExtra : String = ModelArrayList[position].updatedAt.substring(range = 0..9)
 
         */
 
@@ -55,21 +55,21 @@ class ArticleAdapter(ctx: Context, private val imageModelArrayList: ArrayList<Ar
 
 
         Glide.with(holder.itemView.context)
-                .load(holder.URLImage+imageModelArrayList[position].imageThumbnail.path)
+                .load(holder.URLImage+ModelArrayList[position].imageThumbnail.path)
                 .into(holder.image)
 
         holder.itemView.setOnClickListener {
 
 
             val intent=Intent(holder.itemView.context,ArticleInfo::class.java)
-            intent.putExtra("ID",imageModelArrayList[position]._id)
+            intent.putExtra("ID",ModelArrayList[position]._id)
             holder.itemView.context?.startActivity(intent)
 
         }
     }
 
     override fun getItemCount(): Int {
-        return imageModelArrayList.size
+        return ModelArrayList.size
     }
 
     inner class MyViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
@@ -77,9 +77,10 @@ class ArticleAdapter(ctx: Context, private val imageModelArrayList: ArrayList<Ar
         var title: TextView
         var date : TextView
         var image : ImageView
+        var cate : TextView
          var URLImage : String ="http://206.189.41.105:1210/"
         init {
-
+            cate = itemView.findViewById(R.id.category) as TextView
             title = itemView.findViewById(R.id.articleTopic) as TextView
             date = itemView.findViewById(R.id.articleDate) as TextView
             image=itemView.findViewById(R.id.articleImage) as ImageView

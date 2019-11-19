@@ -245,7 +245,7 @@
                         android:textSize="18dp"
                         android:textAlignment="center"
                         android:textColor="@color/Primary2"
-                        android:text="สร้างบัญชีผู้ใช้"/>
+                        android:text="สร้างบัญชี"/>
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout

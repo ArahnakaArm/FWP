@@ -198,10 +198,10 @@ class LogIn :AppCompatActivity() {
 
 
                         }
-                        else if(response.code()==401){
+                        else{
                             val mAlert = AlertDialog.Builder(this@LogIn)
                             mAlert.setTitle("พบข้อผิดพลาด")
-                            mAlert.setMessage("รหัสผ่านของท่านผิด")
+                            mAlert.setMessage("โปรดกรอกอีเมล์หรือรหัสผ่านให้ถูกต้อง")
                             mAlert.setNegativeButton("ตกลง"){dialog, which ->
                                 dialog.dismiss()
                             }
@@ -215,7 +215,7 @@ class LogIn :AppCompatActivity() {
                         d("ss",t.toString())
                         val mAlert = AlertDialog.Builder(this@LogIn)
                         mAlert.setTitle("พบข้อผิดพลาด")
-                        mAlert.setMessage("ท่านไม่ได้เชื่อมต่ออินเตอร์เน็ต")
+                        mAlert.setMessage("โปรดกรอกอีเมล์หรือรหัสผ่านให้ถูกต้อง")
                         mAlert.setNegativeButton("ตกลง"){dialog, which ->
                             dialog.dismiss()
                         }

@@ -14,7 +14,7 @@ import android.util.Log.d
 import android.view.*
 import android.widget.EditText
 import com.google.android.gms.maps.model.LatLng
-import kotlinx.android.synthetic.main.bookmarkfragment.*
+import kotlinx.android.synthetic.main.bookmark.*
 
 import kotlinx.android.synthetic.main.loacationlist.*
 import retrofit2.Call
@@ -228,9 +228,9 @@ try {
 
 
     var adapter = ProductAdapter(companies)
-    for (i in adapter.groups.size - 1 downTo 0) {
+   /* for (i in adapter.groups.size - 1 downTo 0) {
         adapter.toggleGroup(i)
-    }
+    }*/
     recyclerView.adapter = adapter
     }catch (e : Exception){
 

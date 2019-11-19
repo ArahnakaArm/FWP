@@ -14,7 +14,8 @@ import android.util.Log.d
 import android.view.*
 import android.widget.EditText
 import android.widget.ListAdapter
-import kotlinx.android.synthetic.main.bookmarkfragment.*
+import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.bookmark.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,7 +23,7 @@ import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.zip.Inflater
-class SearchNews : androidx.fragment.app.Fragment() {
+class SearchNews : AppCompatActivity(){
     private var etsearch: EditText? = null
     internal var textlength = 0
     var mAPIService: ApiService? = null
@@ -36,34 +37,11 @@ class SearchNews : androidx.fragment.app.Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        retainInstance= true
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = activity!!.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        view.menu.getItem(2).isCheckable=true
-        view.menu.getItem(2).isChecked=true
-        return inflater.inflate(R.layout.searchnews,container,false)       
-
-    }
-
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-/*
-        news.add(NewsModel("Topic 1","14/12/61"))
-        news.add(NewsModel("Topic 2","14/12/61"))
-        news.add(NewsModel("Topic 3","14/12/61"))
-        news.add(NewsModel("Topic 4","14/12/61"))
-        news.add(NewsModel("Topic 5","14/12/61"))
-
-
-
-*/
-       getCategories()
+        setContentView(R.layout.searchnews)
+        getCategories()
 
         ///// Searching /////
-        etsearch = view.findViewById(R.id.searchbookmark) as EditText
+        etsearch = findViewById(R.id.searchbookmark) as EditText
         array_sort = java.util.ArrayList<ArticleData>()
         array_sort = populateList()
         etsearch!!.addTextChangedListener(object : TextWatcher {
@@ -83,7 +61,7 @@ class SearchNews : androidx.fragment.app.Fragment() {
                     }
                 }
                 list_recycler_view.apply {
-                    layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
+                    layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this@SearchNews)
                     adapter = NewsAdapter(context,array_sort)
 
                 }
@@ -93,7 +71,9 @@ class SearchNews : androidx.fragment.app.Fragment() {
 ///// Searching /////
 
         backprees.setOnClickListener {
-            fragmentManager?.popBackStack()
+            finish()
+            this.overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_right)
+
         }
 
         searchbookmark.addTextChangedListener(object : TextWatcher{
@@ -112,6 +92,9 @@ class SearchNews : androidx.fragment.app.Fragment() {
 
         })
     }
+
+
+
 
     companion object {
         fun newInstance(): SearchNews = SearchNews()
@@ -173,12 +156,6 @@ class SearchNews : androidx.fragment.app.Fragment() {
 
     }
 
-    override fun onResume() {
-        val view = activity!!.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        view.menu.getItem(2).isCheckable=true
-        view.menu.getItem(2).isChecked=true
-        super.onResume()
-    }
     private fun getArticle(id : String?){
         mAPIService = ApiUtils.apiService
         val partnerId = "5dbfe99c776a690010deb237"
@@ -205,7 +182,7 @@ class SearchNews : androidx.fragment.app.Fragment() {
     }
     private fun upDateUi(data : ArrayList<ArticleData>,Count : Int){
         list_recycler_view.apply {
-            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
+            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this@SearchNews)
             adapter = NewsAdapter(context,data)
         }
     }
@@ -235,6 +212,12 @@ class SearchNews : androidx.fragment.app.Fragment() {
                 d("arm","onFailure")
             }
         })
+    }
+
+    override fun onBackPressed() {
+        finish()
+        this.overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_right)
+        super.onBackPressed()
     }
 
 

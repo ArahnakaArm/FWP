@@ -65,6 +65,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="60dp"
+        android:overScrollMode="never"
         >
     <LinearLayout
         android:layout_width="match_parent"
@@ -202,7 +203,6 @@
 
                 />
             <TextView
-
                 android:layout_width="wrap_content"
                 android:layout_marginTop="4dp"
                 android:textColor="@color/LightNavi"
@@ -210,21 +210,25 @@
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:layout_marginLeft="10dp"
-                android:autoSizeTextType="uniform"
                 android:fontFamily="@font/anakotmai"
                 android:layout_below="@+id/newsImage1"
                 android:layout_height="wrap_content"
-                android:text=" 'ธนาธร' ชี้ปัญหา รัฐราชกาลร่วมทำประเทศไม่พัฒนา  "/>
+                android:text=""/>
+                    <LinearLayout
+
+                        android:layout_marginLeft="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_below="@id/newsTopic1"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="5dp"
+                        android:layout_height="wrap_content">
             <TextView
-                android:layout_marginLeft="10dp"
                 android:layout_width="70dp"
                 app:layout_widthPercent="17%"
                 android:elevation="0dp"
-
-                android:layout_marginTop="10dp"
                 android:textColor="@color/White"
+                android:layout_gravity="center"
                 android:id="@+id/category1"
-                android:layout_marginBottom="5dp"
                 android:textAlignment="center"
                 android:background="@color/backgroundgreydark"
                 android:textSize="12dp"
@@ -235,28 +239,19 @@
                 />
             <ImageView
                 android:layout_marginLeft="2dp"
-                android:layout_width="wrap_content"
+                android:layout_width="30dp"
                 android:id="@+id/clockdate"
                 android:elevation="0dp"
-                android:layout_marginTop="11dp"
+                android:layout_gravity="center"
                 android:textColor="@color/White"
-
-                android:layout_toRightOf="@+id/category1"
-                android:layout_below="@id/newsTopic1"
-                android:layout_height="20dp"
+                android:layout_height="15dp"
                 android:src="@drawable/time"
-
-
-
                 />
             <TextView
                 android:layout_marginLeft="1dp"
                 android:layout_width="wrap_content"
-                android:layout_toRightOf="@+id/clockdate"
-                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
                 android:textColor="@color/battleshipgrey"
-
-
                 android:id="@+id/textdate1"
                 android:textAlignment="center"
                 android:textSize="12dp"
@@ -264,9 +259,9 @@
                 android:fontFamily="@font/anakotmai"
                 android:layout_below="@id/newsTopic1"
                 android:layout_height="wrap_content"
-                android:text="Date"
+                android:text=""
                 />
-
+                    </LinearLayout>
                 </RelativeLayout>
            </LinearLayout>
 
@@ -282,8 +277,6 @@
             android:weightSum="2"
             android:layout_marginTop="7dp"
             android:orientation="horizontal">
-
-
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

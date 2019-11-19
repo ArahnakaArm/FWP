@@ -85,17 +85,17 @@
             android:fontFamily="@font/anakotmai"
             android:layout_marginBottom="20dp"
             android:id="@+id/title"
-            android:text=" “ธนาธร” ชี้ปัญหา “รัฐราชการรวมศูนย์”
-ทำประเทศไม่พัฒนา "
-            android:layout_marginLeft="5dp"
+            android:text=""
+            android:layout_marginLeft="10dp"
             >
 
         </TextView>
         <ImageView
-            android:layout_width="22dp"
-            android:layout_height="21dp"
+            android:layout_width="32dp"
+            android:layout_height="30dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="7dp"
+            android:layout_marginTop="2dp"
+            android:id="@+id/bookmarkicon"
             android:layout_alignParentEnd="true"
             android:src="@drawable/bookmarkorange"
             />

@@ -103,12 +103,7 @@
                             android:layout_height="35dp"
                             android:src="@drawable/bookmarkorange"/>
                     </RelativeLayout>
-                    <ImageView
-                        android:id="@+id/sharebuttoninfo"
-                        android:layout_width="35dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_height="35dp"
-                        android:src="@drawable/share2"/>
+
 
 
                 </LinearLayout>
@@ -120,18 +115,61 @@
                     android:layout_height="200dp" />
                     <TextView
                         android:id="@+id/topicinfo"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="10dp"
                         android:layout_marginTop="10dp"
                         android:textSize="18dp"
                         android:justificationMode="inter_word"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/imageinfo"
-
                         android:fontFamily="@font/anakotmai"
                         android:textColor="@color/Primary2"
                         android:text="'ธนาธน' ชี้ปัญหา รัฐราชการรวมศูนย์ ทำประเทศไม่พัตนา"/>
+                <LinearLayout
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_below="@+id/topicinfo"
+                    android:id="@+id/viewLinear"
+                    android:layout_alignParentLeft="true"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_marginLeft="5pt"
+                        android:layout_height="20dp"
+                        android:src="@drawable/view"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ผู้เข้าชม"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginLeft="5dp"
+                        android:textColor="@color/battleshipgrey"
+                        android:textSize="11dp"
+                        android:fontFamily="@font/anakotmai_light"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:id="@+id/viewValue"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginLeft="5dp"
+                        android:textColor="@color/battleshipgrey"
+                        android:textSize="11dp"
+                        android:fontFamily="@font/anakotmai_light"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:id="@+id/shareValue"
+                        android:layout_marginLeft="5dp"
+                        android:textColor="@color/battleshipgrey"
+                        android:textSize="11dp"
+                        android:fontFamily="@font/anakotmai_light"/>
+
+                </LinearLayout>
                 <LinearLayout
                     android:layout_marginTop="10dp"
                     android:layout_width="wrap_content"
@@ -186,7 +224,8 @@
                     android:layout_marginEnd="8dp"
                     android:layout_marginStart="8dp"
                     android:layout_below="@id/bar"
-
+                    android:overScrollMode="never"
+                    android:layout_marginBottom="30dp"
                     android:id="@+id/list_recycler_view_article">
 
                 </androidx.recyclerview.widget.RecyclerView>

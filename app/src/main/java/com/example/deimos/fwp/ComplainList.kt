@@ -12,7 +12,7 @@ import android.util.Log
 import android.util.Log.d
 import android.view.*
 import android.widget.EditText
-import kotlinx.android.synthetic.main.bookmarkfragment.*
+import kotlinx.android.synthetic.main.bookmark.*
 import kotlinx.android.synthetic.main.complainlist.*
 import retrofit2.Call
 import retrofit2.Callback

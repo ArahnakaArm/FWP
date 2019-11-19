@@ -230,6 +230,18 @@ interface ApiService {
                      @Header ("x-tid") header2 : String,@Query("partnerId") partnerId : String): Call<Favorite>
 
 
+
+    @Headers("Content-Type: application/json")
+    @POST("favoriteItems")
+    fun postFavorite(@Header("Authorization") auth: String,@Header ("x-session-id") header : String,
+                      @Header ("x-tid") header2 : String,@Body PostFavoriteModel: postFavoriteModel): Call<ResponseFav>
+
+
+    @Headers("Content-Type: application/json")
+    @DELETE("favoriteItems/{favoriteId}")
+    fun deleteFavorite(@Header("Authorization") auth: String,@Header ("x-session-id") header : String,
+                     @Header ("x-tid") header2 : String,@Path("favoriteId")favoriteId:String): Call<ResponseFav>
+
     /// Fav ////
 
 }

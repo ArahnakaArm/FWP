@@ -226,7 +226,7 @@ class Tab1Complian  : androidx.fragment.app.Fragment() {
                 } else {
 
                     mAlert.setTitle("คุณยังไม่ได้บันทึกการร้องเรียน")
-                    mAlert.setMessage("คุณต้องการที่จะปิดโดยไม่บันทึกใช่หรือไหม่?")
+                    mAlert.setMessage("คุณต้องการที่จะปิดโดยไม่บันทึก ใช่ หรือ ไม่ ?")
                     mAlert.setNegativeButton("ไม่ใช่") { dialog, which ->
                         dialog.dismiss()
 

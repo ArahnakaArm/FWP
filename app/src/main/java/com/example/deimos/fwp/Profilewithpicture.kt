@@ -208,7 +208,8 @@ class Profilewithpicture : androidx.fragment.app.Fragment() {
         }
         savelist.setOnClickListener {
 
-            replaceFragmentToRight(FragmentBookmark())
+            startActivity(Intent(requireContext(), FavoriteList::class.java))
+            activity!!.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left)
         }
         changepasswordbut.setOnClickListener {
             val intent = Intent(requireContext(),ChangePassword::class.java)

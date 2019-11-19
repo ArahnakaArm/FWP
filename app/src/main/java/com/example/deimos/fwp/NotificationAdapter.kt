@@ -15,7 +15,7 @@ import java.util.ArrayList
 /**
  * Created by Parsania Hardik on 26-Jun-17.
  */
-class NotificationAdapter(ctx: Context, private val imageModelArrayList: ArrayList<NotificationModel>) :
+class NotificationAdapter(ctx: Context, private val ModelArrayList: ArrayList<NotificationModel>) :
         androidx.recyclerview.widget.RecyclerView.Adapter<NotificationAdapter.MyViewHolder>() {
 
     private val inflater: LayoutInflater
@@ -36,15 +36,15 @@ class NotificationAdapter(ctx: Context, private val imageModelArrayList: ArrayLi
     }
 
     override fun onBindViewHolder(holder: NotificationAdapter.MyViewHolder, position: Int) {
-        holder.info.setText(imageModelArrayList[position].getInfo())
-        holder.title.setText(imageModelArrayList[position].getNames())
+        holder.info.setText(ModelArrayList[position].getInfo())
+        holder.title.setText(ModelArrayList[position].getNames())
         holder.itemView.setOnClickListener {
-            Toast.makeText(holder.itemView.context,imageModelArrayList[position].getNames(),Toast.LENGTH_SHORT).show()
+            Toast.makeText(holder.itemView.context,ModelArrayList[position].getNames(),Toast.LENGTH_SHORT).show()
         }
     }
 
     override fun getItemCount(): Int {
-        return imageModelArrayList.size
+        return ModelArrayList.size
     }
 
     inner class MyViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {

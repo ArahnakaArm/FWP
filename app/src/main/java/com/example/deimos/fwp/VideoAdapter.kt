@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide
 import java.util.ArrayList
 
 
-class VideoAdapter(ctx: Context, private val imageModelArrayList: ArrayList<resultData3>) :
+class VideoAdapter(ctx: Context, private val ModelArrayList: ArrayList<resultData3>) :
         androidx.recyclerview.widget.RecyclerView.Adapter<VideoAdapter.MyViewHolder>() {
 
     private val inflater: LayoutInflater
@@ -35,26 +35,26 @@ class VideoAdapter(ctx: Context, private val imageModelArrayList: ArrayList<resu
     override fun onBindViewHolder(holder: VideoAdapter.MyViewHolder, position: Int) {
 
 
-        holder.date.setText(imageModelArrayList[position].updatedAt.substring(range = 0..9))
-        holder.title.setText(imageModelArrayList[position].videoName.th)
-        holder.category.setText(imageModelArrayList[position].categoryId.categoryName.th)
+        holder.date.setText(ModelArrayList[position].updatedAt.substring(range = 0..9))
+        holder.title.setText(ModelArrayList[position].videoName.th)
+        holder.category.setText(ModelArrayList[position].categoryId.categoryName.th)
 /*
-        val titleExtra: String = imageModelArrayList[position].videoName.th
-        val dateExtra : String = imageModelArrayList[position].updatedAt.substring(range = 0..9)
+        val titleExtra: String = ModelArrayList[position].videoName.th
+        val dateExtra : String = ModelArrayList[position].updatedAt.substring(range = 0..9)
 
         */
 
-        val titleExtra: String = imageModelArrayList[position].videoName.th
-        val dateExtra : String = imageModelArrayList[position].updatedAt.substring(range = 0..9)
-        val describ : String = imageModelArrayList[position].videoDescription.th
-        val category : String = imageModelArrayList[position].categoryId.categoryName.th
-        val videoLink : String= imageModelArrayList[position].videoLink
-        val idExtra : String = imageModelArrayList[position]._id
+        val titleExtra: String = ModelArrayList[position].videoName.th
+        val dateExtra : String = ModelArrayList[position].updatedAt.substring(range = 0..9)
+        val describ : String = ModelArrayList[position].videoDescription.th
+        val category : String = ModelArrayList[position].categoryId.categoryName.th
+        val videoLink : String= ModelArrayList[position].videoLink
+        val idExtra : String = ModelArrayList[position]._id
         var VideoId = videoLink.substringAfterLast("=")
         val strURL = "http://img.youtube.com/vi/" + VideoId + "/0.jpg"
 
         Glide.with(holder.itemView.context)
-                .load(imageModelArrayList[position].image.path)
+                .load(ModelArrayList[position].image.path)
                 .into(holder.image)
 
         holder.itemView.setOnClickListener {
@@ -71,7 +71,7 @@ class VideoAdapter(ctx: Context, private val imageModelArrayList: ArrayList<resu
     }
 
     override fun getItemCount(): Int {
-        return imageModelArrayList.size
+        return ModelArrayList.size
     }
 
     inner class MyViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {

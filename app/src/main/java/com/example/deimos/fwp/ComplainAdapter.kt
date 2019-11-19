@@ -17,7 +17,7 @@ import java.util.ArrayList
 /**
  * Created by Parsania Hardik on 26-Jun-17.
  */
-class ComplainAdapter(ctx: Context, private val imageModelArrayList: ArrayList<CompliansData>) :
+class ComplainAdapter(ctx: Context, private val ModelArrayList: ArrayList<CompliansData>) :
         androidx.recyclerview.widget.RecyclerView.Adapter<ComplainAdapter.MyViewHolder>() {
 
     private val inflater: LayoutInflater
@@ -43,31 +43,31 @@ class ComplainAdapter(ctx: Context, private val imageModelArrayList: ArrayList<C
 
 
 
-        holder.date.setText(imageModelArrayList[position].updatedAt.substring(0..9))
-        holder.id.setText(imageModelArrayList[position].complainNumber)
-        holder.type.setText(imageModelArrayList[position].complainType)
-        holder.title.setText(imageModelArrayList[position].subject)
+        holder.date.setText(ModelArrayList[position].updatedAt.substring(0..9))
+        holder.id.setText(ModelArrayList[position].complainNumber)
+        holder.type.setText(ModelArrayList[position].complainType)
+        holder.title.setText(ModelArrayList[position].subject)
         holder.itemView.setOnClickListener {
-            Toast.makeText(holder.itemView.context,imageModelArrayList[position].subject,Toast.LENGTH_SHORT).show()
+            Toast.makeText(holder.itemView.context,ModelArrayList[position].subject,Toast.LENGTH_SHORT).show()
         }
 
-        if (imageModelArrayList[position].status=="Inprogress"){
+        if (ModelArrayList[position].status=="Inprogress"){
             holder.status.setImageResource(R.drawable.doingstatus)
         }
-        if(imageModelArrayList[position].status=="Done"){
+        if(ModelArrayList[position].status=="Done"){
             holder.status.setImageResource(R.drawable.successstatus)
         }
-        if(imageModelArrayList[position].status=="Cancle"){
+        if(ModelArrayList[position].status=="Cancle"){
             holder.status.setImageResource(R.drawable.cancelstatus)
         }
-        if(imageModelArrayList[position].status=="New"){
+        if(ModelArrayList[position].status=="New"){
             holder.status.setImageResource(R.drawable.recivedstatus)
         }
 
     }
 
     override fun getItemCount(): Int {
-        return imageModelArrayList.size
+        return ModelArrayList.size
     }
 
     inner class MyViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {

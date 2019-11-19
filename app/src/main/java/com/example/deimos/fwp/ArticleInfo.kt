@@ -21,7 +21,7 @@ import kotlin.collections.ArrayList
 
 data class ArticleById(var resultCode: String,var developerMessage : String,var resultData: ArticledataById)
 data class ArticledataById(var _id : String,var articleName: articledataName,var shortDescription : articledataDescription,var categoryId : categoryArticle,
-                           var updatedAt :String,var imageThumbnail : ImageArticleById,var contentInfo : ArrayList<Content>)
+                           var updatedAt :String,var imageThumbnail : ImageArticleById,var contentInfo : ArrayList<Content>,var viewCount : Int)
 data class ImageArticleById(var path : String)
 data class Content(var image : ArticleImage,var orderBy : Int,var messageType : String,var articleDescription : articleDescriptionInfo)
 data class articleDescriptionInfo(var th: String,var en: String)
@@ -33,6 +33,9 @@ data class categoryNameArticledata(var en:String,var th : String)
 data class Favorite(var resultData : ArrayList<resultDataFav>,var rowCount:Int)
 data class resultDataFav(var articleId :IdArticle,var _id : String)
 data class nameArticle(var en: String,var th: String)
+data class postFavoriteModel(var articleId : String , var partnerId : String)
+data class ResponseFav(var resultCode: String,var developerMessage: String,var resultData:responeFavData)
+data class responeFavData(var _id : String)
 
 data class IdArticle(var _id : String,var updatedAt : String,var imageThumbnail : ImageThumb,var articleName :  nameArticle )
 data class ImageThumb(var path : String)
@@ -41,6 +44,7 @@ class ArticleInfo : Activity(){
     var mAPIService: ApiService? = null
     private var token : String?=null
     private var articleID : String?=null
+    private var favoriteID : String?=null
     private var sp : SharedPreferences?=null
     var ContentInfoArray = ArrayList<Content>()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,36 +52,25 @@ class ArticleInfo : Activity(){
         setContentView(R.layout.articleinfo)
         var bundle : Bundle ? =intent.extras
         var _id = bundle!!.getString("ID")
-
-
         sp = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
         token = sp!!.getString("user_token","-")
-
-
-       /* if(token == "-"){
+        if(token == "-"){
             bookmarkbutton.visibility = View.INVISIBLE
             bookmarkbuttonorange.visibility = View.INVISIBLE
-        }*/
+        }
     try {
         getContent(_id)
 
     }catch (e : Exception){
 
     }
-
-      //  Toast.makeText(this@GalleryInfo,_id,Toast.LENGTH_SHORT).show()
-        setContentView(R.layout.articleinfo)
-        sharebuttoninfo.setOnClickListener {
-          //  Toast.makeText(this@GalleryInfo,"Shared",Toast.LENGTH_SHORT).show()
-        }
         bookmarkbutton.setOnClickListener {
-            bookmarkbutton.visibility = View.INVISIBLE
-            bookmarkbuttonorange.visibility = View.VISIBLE
+            postFavorite()
         }
 
         bookmarkbuttonorange.setOnClickListener {
-            bookmarkbutton.visibility = View.VISIBLE
-            bookmarkbuttonorange.visibility = View.INVISIBLE
+            deleteFavorite()
+
         }
        backarrow.setOnClickListener {
             onBackPressed()
@@ -96,27 +89,20 @@ class ArticleInfo : Activity(){
         val currentDate = sdf.format(java.util.Date())
         val r = (10..12).shuffled().first()
         mAPIService!!.getArticlesById(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),id!!,partnerId).enqueue(object : Callback<ArticleById> {
-
             override fun onResponse(call: Call<ArticleById>, response: Response<ArticleById>) {
                     if(response.isSuccessful){
-
                         try {
                         var data  = response.body()!!.resultData
                         topicinfo.setText(data.articleName.th)
                         gallery.setText(data.categoryId.categoryName.th)
                             articleID = data._id
                         dateContent.setText(data.updatedAt.substring(0..9))
-                       // descriptiongallery.setText(data.shortDescription.th)
-                       // d("OrderTest",data.updatedAt.substring(0..9))
-
-                       /* descriptiongallery.setTextSize(TypedValue.COMPLEX_UNIT_SP,
-                                getResources().getDimension(R.dimen.result_font))*/
+                        viewValue.setText(data.viewCount.toString())
                         Glide.with(this@ArticleInfo)
                                 .load(URLImage+data.imageThumbnail.path)
                                 .into(imageinfo)
                     for (i in 0 until data.contentInfo.size){
                         ContentInfoArray.add(data.contentInfo[i])
-
                     }
                         ContentInfoArray.sortBy { it.orderBy }
 
@@ -127,16 +113,11 @@ class ArticleInfo : Activity(){
                         }
                             getFavorite()
                     }catch (e : Exception){
-
                         }
                     }
                 else{
-
+                      }
                     }
-
-
-                    }
-
             override fun onFailure(call: Call<ArticleById>, t: Throwable) {
                 Log.d("arm", "onFailure")
             }
@@ -151,9 +132,7 @@ class ArticleInfo : Activity(){
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
-
         mAPIService!!.getFavorite(token!!,Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId).enqueue(object : Callback<Favorite>{
-
             override fun onResponse(call: Call<Favorite>, response: Response<Favorite>) {
                 if (response.isSuccessful) {
                     try {
@@ -161,31 +140,69 @@ class ArticleInfo : Activity(){
                             d("CheckFav",response.body()!!.resultData[i].articleId._id)
                             if(response.body()!!.resultData[i].articleId._id == articleID){
                                 d("CheckFav","Yes")
+                                favoriteID = response.body()!!.resultData[i]._id
                                 bookmarkbutton.visibility = View.INVISIBLE
                                 bookmarkbuttonorange.visibility = View.VISIBLE
                             }
                         }
 
-
                     } catch (e: Exception) {
-
-                    }
-
-
-
+                        }
                 }
-///// Searching /////
-
-
-
-
             }
-///// Searching /////
-
             override fun onFailure(call: Call<Favorite>, t: Throwable) {
                 d("arm","onFailure")
             }
 
         })
     }
+    private fun postFavorite(){
+            mAPIService = ApiUtils.apiService
+            val partnerId = "5dbfe99c776a690010deb237"
+            val sdf = SimpleDateFormat("yyMMdd")
+            val currentDate = sdf.format(Date())
+            val r = (10..12).shuffled().first()
+            mAPIService!!.postFavorite(token!!,Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),postFavoriteModel(articleID!!,partnerId)).enqueue(object : Callback<ResponseFav>{
+                override fun onResponse(call: Call<ResponseFav>, response: Response<ResponseFav>) {
+                    if (response.isSuccessful) {
+                        try {
+                            favoriteID = response.body()!!.resultData._id
+                                    bookmarkbutton.visibility = View.INVISIBLE
+                                    bookmarkbuttonorange.visibility = View.VISIBLE
+
+                        } catch (e: Exception) {
+                        }
+                    }
+                }
+                override fun onFailure(call: Call<ResponseFav>, t: Throwable) {
+                    d("arm","onFailure")
+                }
+
+            })
+        }
+    private fun deleteFavorite(){
+        mAPIService = ApiUtils.apiService
+        val partnerId = "5dbfe99c776a690010deb237"
+        val sdf = SimpleDateFormat("yyMMdd")
+        val currentDate = sdf.format(Date())
+        val r = (10..12).shuffled().first()
+        mAPIService!!.deleteFavorite(token!!,Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),favoriteID!!).enqueue(object : Callback<ResponseFav>{
+            override fun onResponse(call: Call<ResponseFav>, response: Response<ResponseFav>) {
+                if (response.isSuccessful) {
+                    try {
+                        bookmarkbutton.visibility = View.VISIBLE
+                        bookmarkbuttonorange.visibility = View.INVISIBLE
+
+                    } catch (e: Exception) {
+                    }
+                }
+            }
+            override fun onFailure(call: Call<ResponseFav>, t: Throwable) {
+                d("arm","onFailure")
+            }
+
+        })
+    }
+
+
 }

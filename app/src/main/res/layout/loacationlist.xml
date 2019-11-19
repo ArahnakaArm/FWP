@@ -90,7 +90,7 @@
                     android:drawableTint="@color/Grey"
 
                     android:layout_width="match_parent"
-                    android:hint="ค้นหา..."
+                    android:hint="ค้นหา"
                     android:layout_height="match_parent"
                     android:drawablePadding="10dp"
                     android:background="@null"/>

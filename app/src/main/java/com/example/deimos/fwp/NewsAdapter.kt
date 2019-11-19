@@ -1,6 +1,7 @@
 package com.example.deimos.fwp
 
 import android.content.Context
+import android.content.Intent
 import androidx.recyclerview.widget.RecyclerView
 import android.util.Log.d
 import android.view.LayoutInflater
@@ -14,7 +15,7 @@ import kotlinx.android.synthetic.main.itembookmark.view.*
 
 import java.util.ArrayList
 
-class NewsAdapter(ctx: Context, private val imageModelArrayList: ArrayList<ArticleData>) :
+class NewsAdapter(ctx: Context, private val ModelArrayList: ArrayList<ArticleData>) :
         androidx.recyclerview.widget.RecyclerView.Adapter<NewsAdapter.MyViewHolder>() {
     private var URLImage : String ="http://206.189.41.105:1210/"
     private val inflater: LayoutInflater
@@ -35,19 +36,25 @@ class NewsAdapter(ctx: Context, private val imageModelArrayList: ArrayList<Artic
     }
 
     override fun onBindViewHolder(holder: NewsAdapter.MyViewHolder, position: Int) {
-
-        holder.title.setText("  "+imageModelArrayList[position].articleName.th)
-        holder.date.setText(imageModelArrayList[position].updatedAt)
+        holder.cate.setText(ModelArrayList[position].categoryId.categoryName.th)
+        holder.title.setText(ModelArrayList[position].articleName.th)
+        holder.date.setText(ModelArrayList[position].updatedAt.substring(0..9))
         holder.itemView.setOnClickListener {
-            Toast.makeText(holder.itemView.context,imageModelArrayList[position].articleName.th,Toast.LENGTH_SHORT).show()
+            //notifyItemRemoved(position)
+           val intent= Intent(holder.itemView.context,ArticleInfo::class.java)
+            intent.putExtra("ID",ModelArrayList[position]._id)
+            holder.itemView.context?.startActivity(intent)
         }
         Glide.with(holder.itemView.context)
-                .load(URLImage+imageModelArrayList[position].imageThumbnail.path)
+                .load(URLImage+ModelArrayList[position].imageThumbnail.path)
                 .into(holder.image)
+
+
     }
 
+
     override fun getItemCount(): Int {
-        return imageModelArrayList.size
+        return ModelArrayList.size
     }
 
     inner class MyViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
@@ -55,8 +62,9 @@ class NewsAdapter(ctx: Context, private val imageModelArrayList: ArrayList<Artic
         var title: TextView
         var date : TextView
         var image : ImageView
+        var cate : TextView
         init {
-
+            cate = itemView.findViewById(R.id.categorysearchnews) as TextView
             title = itemView.findViewById(R.id.titlesearchnews) as TextView
             date = itemView.findViewById(R.id.datesearchnews) as TextView
             image = itemView.findViewById(R.id.imagesearchnews) as ImageView

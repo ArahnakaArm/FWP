@@ -31,7 +31,7 @@ import java.lang.Exception
 import java.text.SimpleDateFormat
 data class VideoById(var resultCode : String,var developerMessage : String ,var resultData : resultVideo)
 data class resultVideo(var videoName : nameVideo , var videoDescription : videoDescriptionId,var videoLink : String,var categoryId : category,
-                       var updatedAt : String)
+                       var updatedAt : String,var viewCount : Int)
 data class nameVideo(var en : String,var th : String)
 data class videoDescriptionId(var en : String,var th : String)
 data class category(var categoryName : cateName)
@@ -65,6 +65,7 @@ class VideoContent : YouTubeBaseActivity() {
                 videotitle.setText(response.body()!!.resultData.videoName.th)
                 date.setText(response.body()!!.resultData.updatedAt.substring(0..9))
                 descripvideo.setText(response.body()!!.resultData.videoDescription.th)
+                viewValue.setText(response.body()!!.resultData.viewCount.toString())
 
 
                 d("VideoId",VideoId)
@@ -74,7 +75,7 @@ class VideoContent : YouTubeBaseActivity() {
                 mOnInitializedListener = object : YouTubePlayer.OnInitializedListener {
                     override fun onInitializationSuccess(provider: YouTubePlayer.Provider, youTubePlayer: YouTubePlayer, b: Boolean) {
 
-                        youTubePlayer.cueVideo(VideoId)
+                        youTubePlayer.loadVideo(VideoId)
                     }
 
                     override fun onInitializationFailure(provider: YouTubePlayer.Provider, youTubeInitializationResult: YouTubeInitializationResult) {

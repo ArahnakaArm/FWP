@@ -80,7 +80,8 @@ class FragmentHome : androidx.fragment.app.Fragment() {
         getCategories()
 
         search.setOnClickListener {
-            replaceFragment(SearchNews())
+           startActivity(Intent(requireContext(),SearchNews::class.java))
+            activity!!.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left)
         }
 
         d("T","YEs")

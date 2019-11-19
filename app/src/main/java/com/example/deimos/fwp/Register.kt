@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.opengl.Visibility
@@ -158,7 +159,30 @@ class Register : androidx.fragment.app.Fragment() {
 
 
         backbuttonregister.setOnClickListener {
-            activity?.onBackPressed()
+            val mAlert = AlertDialog.Builder(requireContext())
+            if(emailinput.text.toString() != "" || passwordinput.text.toString() != "" || confirmpassinput.text.toString() != "" ||
+            nameinput.text.toString() != "" || surnameinput.text.toString() != "") {
+                mAlert.setTitle("คุณยังไม่ได้บันทึก")
+                mAlert.setMessage("คุณต้องการที่จะปิดโดยไม่บันทึก ใช่ หรือ ไม่ ?")
+                mAlert.setNegativeButton("ไม่ใช่") { dialog, which ->
+                    dialog.dismiss()
+
+                }
+                mAlert.setPositiveButton("ใช่,ปิด") { dialog, which ->
+                    dialog.dismiss()
+                    sp = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+                    var edditor = sp!!.edit()
+                    edditor.putString("Subject", "")
+                    edditor.putString("Detail", "")
+                    edditor.putInt("spin", 0)
+                    edditor.commit()
+                    activity?.onBackPressed()
+                }
+                mAlert.show()
+            }
+            else{
+                activity?.onBackPressed()
+            }
         }
         birthinput.setOnClickListener {
             val c = Calendar.getInstance()
@@ -241,7 +265,7 @@ class Register : androidx.fragment.app.Fragment() {
                             mProgressDialog.dismiss()
                             replaceFragment(SuccessRegister())
                         }
-                        if(response.code().toString()=="409"){
+                        else{
                             mProgressDialog.dismiss()
                             val mAlert = AlertDialog.Builder(requireContext())
                             mAlert.setTitle("พบข้อผิดพลาด")

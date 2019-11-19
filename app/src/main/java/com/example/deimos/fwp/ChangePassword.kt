@@ -134,6 +134,7 @@ class ChangePassword : AppCompatActivity(){
                             mAlert.show()
                         }
                         else{
+                            mProgressDialog.dismiss();
                             mAlert.setTitle("พบข้อผิดพลาด")
                             mAlert.setMessage("กรุณาลองใหม่อีกครั้ง")
                             mAlert.setNegativeButton("ตกลง"){dialog, which ->
@@ -145,6 +146,7 @@ class ChangePassword : AppCompatActivity(){
 
                     }
                     override fun onFailure(call: Call<ResponeModel>, t: Throwable) {
+                        mProgressDialog.dismiss();
                         d("ss",t.toString())
                         mAlert.setTitle("พบข้อผิดพลาด")
                         mAlert.setMessage("กรุณาลองใหม่อีกครั้ง")
@@ -153,7 +155,9 @@ class ChangePassword : AppCompatActivity(){
                         }
                         mAlert.show()
                     }
+
                 })
+
             }
             //End of Validation and PUT DATA//
         }

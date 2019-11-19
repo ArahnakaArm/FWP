@@ -23,13 +23,30 @@
         android:maxLines="2"
         android:layout_height="wrap_content"
         android:text="Title line1"/>
+    <TextView
 
+        android:layout_width="60dp"
+        android:textColor="@color/White"
+        android:id="@+id/category"
+        android:layout_marginBottom="5dp"
+        android:textAlignment="center"
+        android:background="@color/backgroundgreydark"
+        android:textSize="12dp"
+        android:layout_below="@id/articleTopic"
+        android:fontFamily="@font/anakotmai"
+        android:layout_height="wrap_content"
+        android:text="Category"
+        />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/articleTopic"
         android:paddingBottom="5dp"
+        android:fontFamily="@font/anakotmai"
+        android:textSize="12dp"
         android:id="@+id/articleDate"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="1dp"
         android:drawablePadding="4dp"
         android:drawableStart="@drawable/timeresize"
         android:text="Date"/>

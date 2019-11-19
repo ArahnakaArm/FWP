@@ -8,7 +8,7 @@ import android.util.Log
 import android.util.Log.d
 import android.view.*
 import android.widget.EditText
-import kotlinx.android.synthetic.main.bookmarkfragment.*
+import kotlinx.android.synthetic.main.bookmark.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
