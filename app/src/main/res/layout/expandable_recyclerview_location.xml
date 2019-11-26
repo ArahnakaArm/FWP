@@ -5,7 +5,7 @@
     <RelativeLayout
 
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
 
         android:background="@color/white2">
 
@@ -18,16 +18,16 @@
             android:drawableStart="@drawable/offsetlocationresize"
             android:padding="?android:listPreferredItemPaddingLeft"
             android:text="Bankok And Metropolitan Region"
-            android:autoSizeTextType="uniform"
-            android:textSize="20dp"
+            android:textSize="18dp"
             android:drawablePadding="8dp"
-
-            android:fontFamily="@font/anakotmai_light"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:fontFamily="@font/anakotmai"
             android:id="@+id/textView"
             android:textColor="@color/Grey"/>
 
         <LinearLayout
-            android:layout_marginTop="49.5dp"
+            android:layout_below="@+id/textView"
             android:layout_marginLeft="25dp"
             android:background="@color/Grey"
             android:layout_marginRight="25dp"

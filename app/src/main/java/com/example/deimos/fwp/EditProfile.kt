@@ -236,4 +236,10 @@ class EditProfile : AppCompatActivity() {
 
     }
 
+    override fun onBackPressed() {
+        finish()
+        this.overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_right)
+        super.onBackPressed()
+    }
+
 }

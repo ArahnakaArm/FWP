@@ -18,7 +18,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import kotlinx.android.synthetic.main.bookmark.*
+import kotlinx.android.synthetic.main.favorite.*
 import kotlinx.android.synthetic.main.articleinfo.*
 import kotlinx.android.synthetic.main.homefragment.*
 import kotlinx.android.synthetic.main.locationcontent.*

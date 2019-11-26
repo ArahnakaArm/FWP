@@ -3,21 +3,25 @@ package com.example.deimos.fwp
 import android.app.ProgressDialog
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import android.util.Log
 import android.util.Log.d
 import android.view.*
 import android.widget.EditText
-import kotlinx.android.synthetic.main.bookmark.*
+import com.jakewharton.rxbinding3.widget.textChanges
+import kotlinx.android.synthetic.main.favorite.*
+import kotlinx.android.synthetic.main.videofragment.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
-data class Video2(val title : String,val date : String)
 data class addrees(val street:String,val suite:String)
 data class Video(val name : String,
                  val username : String
@@ -33,33 +37,8 @@ data class categoryName(var en :String,var th : String)
 data class  videoDescription(var en : String,var th : String)
 data class  videoName(var en : String,var th : String)
 class FragmentVideo : androidx.fragment.app.Fragment() {
-    private var etsearch: EditText? = null
-    internal var textlength = 0
-    private var token : String?=null
     var mAPIService: ApiService? = null
-    private var adapter: VideoAdapter? = null
 
-    var array_sort = java.util.ArrayList<SearchModel>()
-    var usr : Userstate = Userstate()
-   /* private  val VideoList = listOf(
-            Video("“ธนาธร” ชี้ปัญหา “รัฐราชการรวมศูนย์”\n" +
-                    "ทำประเทศไม่พัฒนา","14/12/61"),
-            Video("“ธนาธร” ชี้ปัญหา “รัฐราชการรวมศูนย์”\n" +
-                    "ทำประเทศไม่พัฒนา","15/8/61"),
-            Video("“ธนาธร” ชี้ปัญหา “รัฐราชการรวมศูนย์”\n" +
-                    "ทำประเทศไม่พัฒนา","14/9/60"),
-            Video("“ธนาธร” ชี้ปัญหา “รัฐราชการรวมศูนย์”\n" +
-                    "ทำประเทศไม่พัฒนา","1/5/60"),
-            Video("“ธนาธร” ชี้ปัญหา “รัฐราชการรวมศูนย์”\n" +
-                    "ทำประเทศไม่พัฒนา","4/7/60"),
-            Video("“ธนาธร” ชี้ปัญหา “รัฐราชการรวมศูนย์”\n" +
-                    "ทำประเทศไม่พัฒนา","8/7/60"),
-            Video("“ธนาธร” ชี้ปัญหา “รัฐราชการรวมศูนย์”\n" +
-                    "ทำประเทศไม่พัฒนา","19/7/60"),
-            Video("“ธนาธร” ชี้ปัญหา “รัฐราชการรวมศูนย์”\n" +
-                    "ทำประเทศไม่พัฒนา","23/7/60")
-    )
-*/
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance= true
@@ -78,9 +57,7 @@ class FragmentVideo : androidx.fragment.app.Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mAPIService = ApiUtils.apiService
-        usr.setState(true)
         val partnerId = "5dbfe99c776a690010deb237"
-        Log.d("arm", usr.state.toString())
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
@@ -93,23 +70,16 @@ class FragmentVideo : androidx.fragment.app.Fragment() {
 
             override fun onResponse(call: Call<VideosModel>, response: Response<VideosModel>) {
 
-             try {
-                 d("Video",response.body()!!.resultData[0]!!.videoName.th.toString())
-                 showData(response.body()!!.resultData)
-             }catch (e : Exception){
+                try {
+                    d("Video", response.body()!!.resultData[0]!!.videoName.th.toString())
+                    showData(response.body()!!.resultData)
+                } catch (e: Exception) {
 
-             }
+                }
 
 
                 mProgressDialog.dismiss();
-
-///// Searching /////
-
-
-
-
             }
-///// Searching /////
 
             override fun onFailure(call: Call<VideosModel>, t: Throwable) {
                 d("arm","onFailure")
@@ -117,7 +87,27 @@ class FragmentVideo : androidx.fragment.app.Fragment() {
 
         })
 
+        /*searchvideo.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
 
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                searchvideoList(s.toString())
+            }
+        })*/
+        searchvideo.textChanges().debounce(300, TimeUnit.MILLISECONDS).subscribe({ it ->
+            try {
+                d("SEARCH", it.toString())
+                searchvideoList(it.toString())
+            }catch (e : Exception){
+
+            }
+        },{ throwable -> d("Error",throwable.message)})
     }
 
     companion object {
@@ -127,7 +117,7 @@ class FragmentVideo : androidx.fragment.app.Fragment() {
         try {
             users.sortBy{it.updatedAt}
             users.reverse()
-            list_recycler_view.apply {
+            list_recycler_view_video.apply {
                 layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
                adapter = VideoAdapter(context,users)
 
@@ -213,6 +203,30 @@ class FragmentVideo : androidx.fragment.app.Fragment() {
         view.menu.getItem(1).isCheckable=true
         view.menu.getItem(1).isChecked=true
         super.onResume()
+    }
+    private fun searchvideoList(text : String){
+        mAPIService = ApiUtils.apiService
+        val partnerId = "5dbfe99c776a690010deb237"
+        val sdf = SimpleDateFormat("yyMMdd")
+        val currentDate = sdf.format(Date())
+        val r = (10..12).shuffled().first()
+        mAPIService!!.getSearchVideo(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId,text).enqueue(object : Callback<VideosModel>{
+
+            override fun onResponse(call: Call<VideosModel>, response: Response<VideosModel>) {
+
+                try {
+                    showData(response.body()!!.resultData)
+                } catch (e: Exception) {
+
+                }
+
+            }
+
+            override fun onFailure(call: Call<VideosModel>, t: Throwable) {
+                d("arm","onFailure")
+            }
+
+        })
     }
 
 

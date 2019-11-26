@@ -1,12 +1,10 @@
 package com.example.deimos.fwp
 
 import android.content.Context
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import java.util.ArrayList
 
 
@@ -25,7 +23,7 @@ class LocationChildAdapter(ctx: Context, private val ModelArrayList: ArrayList<L
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocationChildAdapter.MyViewHolder {
 
-        val view = inflater.inflate(R.layout.expandable_recyclerview_product, parent, false)
+        val view = inflater.inflate(R.layout.expandable_recyclerview_location, parent, false)
 
         return MyViewHolder(view)
     }

@@ -28,7 +28,7 @@ import android.widget.ImageView
 import droidninja.filepicker.FilePickerBuilder
 import droidninja.filepicker.FilePickerConst
 import kotlinx.android.synthetic.main.complianviewpager.*
-
+import id.zelory.compressor.Compressor
 import kotlinx.android.synthetic.main.compliantab3.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -228,12 +228,16 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
         // d("Testt",fileUri.toString())
         // var file = File(getPath(fileUri));
        var fileupload =File(file)
+       var compressedImageFile = Compressor(requireContext()).setMaxHeight(640).setMaxWidth(640).setQuality(100).compressToFile(fileupload);
+       d("Size","Compressed : "+compressedImageFile.length().toString())
        d("Size",fileupload.length().toString())
         mAPIService = ApiUtils.apiService
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
         // val filePath = getImageFilePath(fileUri)
+
+
         // if (filePath != null && !filePath!!.isEmpty()) {
         // val file = File(filePath)
         if (fileupload.exists()) {
@@ -243,8 +247,8 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
                     .build()
             val compliansId = "5db6b397dbb3640010e21f17"
             val service = retrofit.create(ApiService::class.java!!)
-            val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), fileupload)
-            val body = MultipartBody.Part.createFormData("image", fileupload.getName(), requestFile)
+            val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), compressedImageFile)
+            val body = MultipartBody.Part.createFormData("image", compressedImageFile.getName(), requestFile)
             val descriptionString = "Sample description"
             val description = RequestBody.create(MediaType.parse("multipart/form-data"), descriptionString)
             mAPIService!!.postComplianImage("Bearer "+token,Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),id,body).enqueue(object : Callback<UserProfile> {
@@ -252,29 +256,20 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
                                         response: Response<UserProfile>) {
 
                     if (response.isSuccessful){
-                        sp = activity?.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
-                        var edditor = sp!!.edit()
-                        edditor.putString("Subject","")
-                        edditor.putString("Detail","")
-                        edditor.putInt("spin",0)
-                        edditor.commit()
-                     //   d("IDTEST",response.body()!!.resultData.complainNumber)
+                       try {
 
-                        val intent = Intent(activity,Success::class.java)
-                        intent.putExtra("ComplianNumber",complianNumber)
-                        activity!!.finish()
-                        activity!!.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
-                        activity!!.startActivity(intent)
+                           //   d("IDTEST",response.body()!!.resultData.complainNumber)
 
+                         /*  val intent = Intent(activity, Success::class.java)
+                           intent.putExtra("ComplianNumber", complianNumber)
+                           activity!!.finish()
+                           activity!!.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
+                           activity!!.startActivity(intent)*/
+                       }catch (e : Exception){
+
+                       }
 
                     }else{
-                        val mAlert = AlertDialog.Builder(view!!.context)
-                        mAlert.setTitle("พบข้อผิดพลาด")
-                        mAlert.setMessage("กรุณาลองใหม่อีกครั้ง")
-                        mAlert.setNegativeButton("ตกลง") { dialog, which ->
-                            dialog.dismiss()
-                        }
-                        mAlert.show()
                     }
                     /* d("Pic",response.body()!!.resultData.image.path)
                      imageUrl = IMAGE_URL+response.body()!!.resultData.image.path
@@ -382,6 +377,21 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
                         try {
                             for (i in 0 until filePath.size) {
                                 uploadFile(filePath[i], response.body()!!.resultData._id)
+                                when(i){
+                                    filePath.size-1 -> {
+                                        sp = activity?.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+                                        var edditor = sp!!.edit()
+                                        edditor.putString("Subject", "")
+                                        edditor.putString("Detail", "")
+                                        edditor.putInt("spin", 0)
+                                        edditor.commit()
+                                        val intent = Intent(activity, Success::class.java)
+                                        intent.putExtra("ComplianNumber", complianNumber)
+                                        activity!!.finish()
+                                        activity!!.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
+                                        activity!!.startActivity(intent)
+                                    }
+                                }
 
                             }
 
@@ -456,7 +466,21 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
                     try {
                         for (i in 0 until filePath.size) {
                             uploadFileNoToken(filePath[i], response.body()!!.resultData._id)
-
+                            when(i){
+                                filePath.size-1 -> {
+                                    sp = activity?.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+                                    var edditor = sp!!.edit()
+                                    edditor.putString("Subject", "")
+                                    edditor.putString("Detail", "")
+                                    edditor.putInt("spin", 0)
+                                    edditor.commit()
+                                    val intent = Intent(activity, Success::class.java)
+                                    intent.putExtra("ComplianNumber", complianNumber)
+                                    activity!!.finish()
+                                    activity!!.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
+                                    activity!!.startActivity(intent)
+                                }
+                            }
 
                         }
 
@@ -514,6 +538,7 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
         // var file = File(getPath(fileUri));
         var fileupload =File(file)
         mAPIService = ApiUtils.apiService
+        var compressedImageFile = Compressor(requireContext()).setMaxHeight(640).setMaxWidth(640).setQuality(100).compressToFile(fileupload);
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
@@ -527,8 +552,8 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
                     .build()
             val compliansId = "5db6b397dbb3640010e21f17"
             val service = retrofit.create(ApiService::class.java!!)
-            val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), fileupload)
-            val body = MultipartBody.Part.createFormData("image", fileupload.getName(), requestFile)
+            val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), compressedImageFile)
+            val body = MultipartBody.Part.createFormData("image", compressedImageFile.getName(), requestFile)
             val descriptionString = "Sample description"
             val description = RequestBody.create(MediaType.parse("multipart/form-data"), descriptionString)
             mAPIService!!.postComplianImageNotoken(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),id,body).enqueue(object : Callback<UserProfile> {
@@ -536,7 +561,7 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
                                         response: Response<UserProfile>) {
 
                     if (response.isSuccessful){
-                        sp = activity?.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+                       /* sp = activity?.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
                         var edditor = sp!!.edit()
                         val intent = Intent(activity,Success::class.java)
                         intent.putExtra("ComplianNumber",response.body()!!.resultData.complainNumber)
@@ -545,17 +570,17 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
                         edditor.putInt("spin",0)
                         edditor.commit()
 
-
+*/
 
 
                     }else{
-                        val mAlert = AlertDialog.Builder(view!!.context)
+                     /*   val mAlert = AlertDialog.Builder(view!!.context)
                         mAlert.setTitle("พบข้อผิดพลาด")
                         mAlert.setMessage("กรุณาลองใหม่อีกครั้ง")
                         mAlert.setNegativeButton("ตกลง") { dialog, which ->
                             dialog.dismiss()
                         }
-                        mAlert.show()
+                        mAlert.show()*/
                     }
                     /* d("Pic",response.body()!!.resultData.image.path)
                      imageUrl = IMAGE_URL+response.body()!!.resultData.image.path

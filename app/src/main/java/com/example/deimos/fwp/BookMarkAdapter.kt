@@ -3,18 +3,13 @@ package com.example.deimos.fwp
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import androidx.recyclerview.widget.RecyclerView
 import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextClock
 import android.widget.TextView
-import android.widget.Toast
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.articleinfo.*
-import kotlinx.android.synthetic.main.itembookmark.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -39,7 +34,7 @@ class BookMarkAdapter(ctx: Context, private val ModelArrayList: ArrayList<result
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookMarkAdapter.MyViewHolder {
 
-        val view = inflater.inflate(R.layout.itembookmark, parent, false)
+        val view = inflater.inflate(R.layout.item_bookmark, parent, false)
 
         return MyViewHolder(view)
     }
@@ -104,10 +99,6 @@ class BookMarkAdapter(ctx: Context, private val ModelArrayList: ArrayList<result
 
 
     }
-    private fun deleteItem(){
 
-
-
-    }
 
 }

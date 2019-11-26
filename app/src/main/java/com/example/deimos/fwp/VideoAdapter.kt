@@ -27,27 +27,19 @@ class VideoAdapter(ctx: Context, private val ModelArrayList: ArrayList<resultDat
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VideoAdapter.MyViewHolder {
 
-        val view = inflater.inflate(R.layout.itemvideo, parent, false)
+        val view = inflater.inflate(R.layout.item_video, parent, false)
 
         return MyViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: VideoAdapter.MyViewHolder, position: Int) {
-
-
-        holder.date.setText(ModelArrayList[position].updatedAt.substring(range = 0..9))
+        var dateFormate = ModelArrayList[position].updatedAt.substring(range = 0..10)
+        var dateOutput =Profilewithpicture.ConvertDate.ChangeFormatDate(dateFormate.substring(0..3),dateFormate.substring(5..6),dateFormate.substring(8..9))
+        holder.date.setText(dateOutput)
         holder.title.setText(ModelArrayList[position].videoName.th)
         holder.category.setText(ModelArrayList[position].categoryId.categoryName.th)
-/*
-        val titleExtra: String = ModelArrayList[position].videoName.th
-        val dateExtra : String = ModelArrayList[position].updatedAt.substring(range = 0..9)
 
-        */
 
-        val titleExtra: String = ModelArrayList[position].videoName.th
-        val dateExtra : String = ModelArrayList[position].updatedAt.substring(range = 0..9)
-        val describ : String = ModelArrayList[position].videoDescription.th
-        val category : String = ModelArrayList[position].categoryId.categoryName.th
         val videoLink : String= ModelArrayList[position].videoLink
         val idExtra : String = ModelArrayList[position]._id
         var VideoId = videoLink.substringAfterLast("=")

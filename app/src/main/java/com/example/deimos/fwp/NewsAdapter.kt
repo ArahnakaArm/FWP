@@ -11,7 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.itembookmark.view.*
+import kotlinx.android.synthetic.main.item_bookmark.view.*
 
 import java.util.ArrayList
 
@@ -25,7 +25,7 @@ class NewsAdapter(ctx: Context, private val ModelArrayList: ArrayList<ArticleDat
 
         inflater = LayoutInflater.from(ctx)
         this.arraylist = ArrayList<ArticleData>()
-        // this.arraylist.addAll(Search.movieNamesArrayList)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsAdapter.MyViewHolder {

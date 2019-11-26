@@ -37,6 +37,33 @@ interface ApiService {
    fun getArticles(@Header ("x-session-id") header : String,@Header ("x-tid") header2 : String,
                      @Query ("partnerId") partnerId : String,@Query("categoryId")categoryId:String):Call<ArticleModel>
 
+    @Headers("Content-Type: application/json")
+    @GET("articles")
+    fun getArticlesLimit(@Header ("x-session-id") header : String,@Header ("x-tid") header2 : String,
+                    @Query ("partnerId") partnerId : String,@Query("categoryId")categoryId:String,@Query ("offset") offset : Int, @Query ("limit") limit : Int,@Query ("isSlideNew") isSlideNew : Boolean,@Query ("orderby") orderby : String):Call<ArticleModel>
+
+    @Headers("Content-Type: application/json")
+    @GET("articles")
+    fun getArticlesBigImage(@Header ("x-session-id") header : String,@Header ("x-tid") header2 : String,
+                         @Query ("partnerId") partnerId : String,@Query("categoryId")categoryId:String, @Query ("limit") limit : Int,@Query ("isSlideNew") isSlideNew : Boolean,@Query ("orderby") orderby : String):Call<ArticleModel>
+
+
+
+    @Headers("Content-Type: application/json")
+    @GET("articles")
+    fun getArticlesSlide(@Header ("x-session-id") header : String,@Header ("x-tid") header2 : String,
+                         @Query ("partnerId") partnerId : String,@Query("categoryId")categoryId:String,@Query ("isSlideNew") isSlideNew : Boolean = true):Call<ArticleModel>
+
+
+
+
+
+    @Headers("Content-Type: application/json")
+    @GET("articles")
+    fun getSearchArticles(@Header ("x-session-id") header : String,@Header ("x-tid") header2 : String,
+                    @Query ("partnerId") partnerId : String,@Query("categoryId")categoryId:String,@Query("searchAll")searchAll:String):Call<ArticleModel>
+
+
 
  @Headers("Content-Type: application/json")
  @GET("articles/{articleId}")
@@ -130,6 +157,10 @@ interface ApiService {
     fun getVideo( @Header ("x-session-id") header : String,
                    @Header ("x-tid") header2 : String,@Query("partnerId") partnerId : String): Call<VideosModel>
 
+    @Headers("Content-Type: application/json")
+    @GET("videos")
+    fun getSearchVideo( @Header ("x-session-id") header : String,
+                  @Header ("x-tid") header2 : String,@Query("partnerId") partnerId : String,@Query("searchAll") searchAll : String): Call<VideosModel>
 
 
     @Headers("Content-Type: application/json")
@@ -187,6 +218,11 @@ interface ApiService {
 
 
 
+    @Headers("Content-Type: application/json")
+    @GET("complians")
+    fun getSearchComplianList(@Header("Authorization") auth: String,@Header ("x-session-id") header : String,@Header ("x-tid") header2 : String,@Query("partnerId") partnerId : String,@Query("searchAll") searchAll : String): Call <ComplianModel>
+
+
     //////Complaian //////
 
     /////Location////////
@@ -198,6 +234,10 @@ interface ApiService {
                   @Header ("x-tid") header2 : String,@Query("partnerId") partnerId : String): Call<LocationModel>
 
 
+    @Headers("Content-Type: application/json")
+    @GET("locations")
+    fun getSearchLocation( @Header ("x-session-id") header : String,
+                     @Header ("x-tid") header2 : String,@Query("partnerId") partnerId : String,@Query("searchAll") searchAll : String): Call<LocationModel>
 
 
 

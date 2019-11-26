@@ -21,7 +21,6 @@ class MainActivity : AppCompatActivity() {
     var sharedPreferences : SharedPreferences?=null
     var sp: SharedPreferences? = null
 
-    var usr : Userstate = Userstate()
     val stack = Stack<Int>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

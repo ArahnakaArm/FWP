@@ -10,13 +10,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import kotlinx.android.synthetic.main.itembookmark.view.*
+import kotlinx.android.synthetic.main.item_bookmark.view.*
 
 import java.util.ArrayList
-
-/**
- * Created by Parsania Hardik on 26-Jun-17.
- */
 class ComplainAdapter(ctx: Context, private val ModelArrayList: ArrayList<CompliansData>) :
         androidx.recyclerview.widget.RecyclerView.Adapter<ComplainAdapter.MyViewHolder>() {
 

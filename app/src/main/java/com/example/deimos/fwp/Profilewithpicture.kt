@@ -84,13 +84,11 @@ class Profilewithpicture : androidx.fragment.app.Fragment() {
     private val IMAGE_URL = "http://206.189.41.105:1210/"
     var genderForChange : String?=null
     var userIdTest : String?=null
-    var usr : Userstate = Userstate()
-    var usra : UserProfile?=null
     private var mGoogleSignInClient: GoogleSignInClient? = null
     var userType : String?=null
     var token : String?=null
     var web: WebView? = null
-    var imagePath : String?=null
+
 
     var image_name : String?=null
     var sp: SharedPreferences? = null
@@ -156,10 +154,8 @@ class Profilewithpicture : androidx.fragment.app.Fragment() {
 
         getData()
         FWP.setOnClickListener {
-            val intent =Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse("https://futureforwardparty.org/join"));
-
-                    startActivity(intent);
+            startActivity(Intent(requireContext(),com.example.deimos.fwp.WebView::class.java))
+            activity!!.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left)
         }
         service_image_on_orderpage.setOnClickListener {
             createBottomSheet()
@@ -181,21 +177,13 @@ class Profilewithpicture : androidx.fragment.app.Fragment() {
         logoutbut.setOnClickListener {
             val sp = activity?.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE)
             val editor = sp?.edit()
-
-
-
              signOutGoogle()
             LoginManager.getInstance().logOut()
-
-
             editor?.putString("user_token","-")
             editor?.putBoolean("LogIn_State",false)
             editor?.putBoolean("LogIn_StateFacebook", false)
             editor?.putBoolean("LogIn_StateGoogle", false)
             editor?.commit()
-
-
-
             replaceFragment(FragmentHome())
 
          //   activity?.finish()
@@ -219,14 +207,17 @@ class Profilewithpicture : androidx.fragment.app.Fragment() {
         editprofile.setOnClickListener {
             val intent = Intent(requireContext(),EditProfile::class.java)
             activity?.startActivity(intent)
+            activity!!.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left)
         }
         editprofilewithsocial.setOnClickListener {
             val intent = Intent(requireContext(),EditProfile::class.java)
             activity?.startActivity(intent)
+            activity!!.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left)
         }
 
-        setting.setOnClickListener {
-            replaceFragmentToRight(ComplainList())
+        complianlist.setOnClickListener {
+           startActivity(Intent(requireContext(),ComplainList::class.java))
+            activity!!.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left)
         }
 
 
@@ -373,21 +364,20 @@ class Profilewithpicture : androidx.fragment.app.Fragment() {
             override fun onResponse(call: Call<UserProfile>, response: Response<UserProfile>) {
 
                 if (response.isSuccessful()) {
+                    try {
                     var dataDate = response.body()!!.resultData.birthDate
                     val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale("th", "TH"))
                     d("DateCheck",inputFormat.format(Date()))
                     val date = inputFormat.parse(response.body()!!.resultData.birthDate)
                     d("DateCheck2",response.body()!!.resultData.birthDate.substring(5,7))
-                    d("DateCheck3",ChangeFormatDate(dataDate.substring(0,4),dataDate.substring(5,7),dataDate.substring(8,10)))
+                    d("DateCheck3",Profilewithpicture.ConvertDate.ChangeFormatDate(dataDate.substring(0,4),dataDate.substring(5,7),dataDate.substring(8,10)))
                     val dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM).format(date)
-
-                   try {
                        textEmail.text = response.body()!!.resultData.email
                       // memberid.text = response.body()!!.resultData._id
                        userIdTest = response.body()!!.resultData._id
                        firstName.text = response.body()!!.resultData.firstName
                        lastName.text = response.body()!!.resultData.lastName
-                      birthday.text = ChangeFormatDate(dataDate.substring(0,4),dataDate.substring(5,7),dataDate.substring(8,10))
+                      birthday.text = Profilewithpicture.ConvertDate.ChangeFormatDate(dataDate.substring(0,4),dataDate.substring(5,7),dataDate.substring(8,10))
                        genderForChange = response.body()!!.resultData.gender
                        imageUrl = IMAGE_URL+response.body()!!.resultData.image.path
                        val editor = sp?.edit()
@@ -754,31 +744,34 @@ class Profilewithpicture : androidx.fragment.app.Fragment() {
         layoutProgress.setVisibility(View.GONE)
     }
 */
-    private fun ChangeFormatDate(year : String,month : String , day : String):String{
-        var dayChanged : String?=null
-        var monthChanged : String?=null
-        var yearChanged : String?=null
-        var yearChangedInt : Int?=null
-        when(month) {
-            "01" -> monthChanged = "ม.ค."
-            "02" -> monthChanged = "ก.พ."
-            "03" -> monthChanged = "มี.ค."
-            "04" -> monthChanged = "เม.ย."
-            "05" -> monthChanged = "พ.ค."
-            "06" -> monthChanged = "มิ.ย."
-            "07" -> monthChanged = "ก.ค."
-            "08" -> monthChanged = "ส.ค."
-            "09" -> monthChanged = "ก.ย."
-            "10" -> monthChanged = "ต.ค."
-            "11" -> monthChanged = "พ.ย."
-            "12" -> monthChanged = "ธ.ค."
 
+    object ConvertDate {
+         fun ChangeFormatDate(year: String, month: String, day: String): String {
+            var dayChanged: String? = null
+            var monthChanged: String? = null
+            var yearChanged: String? = null
+            var yearChangedInt: Int? = null
+            when (month) {
+                "01" -> monthChanged = "ม.ค."
+                "02" -> monthChanged = "ก.พ."
+                "03" -> monthChanged = "มี.ค."
+                "04" -> monthChanged = "เม.ย."
+                "05" -> monthChanged = "พ.ค."
+                "06" -> monthChanged = "มิ.ย."
+                "07" -> monthChanged = "ก.ค."
+                "08" -> monthChanged = "ส.ค."
+                "09" -> monthChanged = "ก.ย."
+                "10" -> monthChanged = "ต.ค."
+                "11" -> monthChanged = "พ.ย."
+                "12" -> monthChanged = "ธ.ค."
+
+            }
+            yearChangedInt = year.toInt()
+            yearChangedInt += 543
+
+            yearChanged = yearChangedInt.toString()
+            dayChanged = day
+            return monthChanged!! + " " + dayChanged + "," + yearChanged
         }
-        yearChangedInt = year.toInt()
-        yearChangedInt += 543
-
-           yearChanged = yearChangedInt.toString()
-        dayChanged = day
-        return monthChanged!! + " " + dayChanged + "," + yearChanged
     }
 }

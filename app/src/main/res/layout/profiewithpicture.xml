@@ -365,7 +365,7 @@
                 android:elevation="5dp"
                 android:orientation="vertical"
                 android:layout_marginRight="5dp"
-                android:id="@+id/setting"
+                android:id="@+id/complianlist"
                 android:gravity="center_horizontal"
                 android:layout_marginLeft="5dp"
                 android:layout_height="match_parent"

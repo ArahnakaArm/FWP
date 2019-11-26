@@ -1,8 +1,6 @@
 package com.example.deimos.fwp
 
 import android.content.Context
-import android.graphics.ColorSpace.Model
-import androidx.recyclerview.widget.RecyclerView
 import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.View
@@ -24,7 +22,7 @@ class CustomAdapter(private val context: Context, private val BookMarkList: Arra
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): CustomAdapter.MyViewHolder {
-        val view = LayoutInflater.from(viewGroup.context).inflate(R.layout.itembookmark, viewGroup, false)
+        val view = LayoutInflater.from(viewGroup.context).inflate(R.layout.item_bookmark, viewGroup, false)
         val myViewHolder = MyViewHolder(view)
 
         return myViewHolder

@@ -65,11 +65,20 @@ class ArticleInfo : Activity(){
 
     }
         bookmarkbutton.setOnClickListener {
-            postFavorite()
+            try {
+                postFavorite()
+            }catch (e : Exception){
+
+            }
+
         }
 
         bookmarkbuttonorange.setOnClickListener {
-            deleteFavorite()
+            try {
+                deleteFavorite()
+            }catch (e : Exception){
+
+            }
 
         }
        backarrow.setOnClickListener {
@@ -93,10 +102,12 @@ class ArticleInfo : Activity(){
                     if(response.isSuccessful){
                         try {
                         var data  = response.body()!!.resultData
+                            var dateFormate =data.updatedAt.substring(0..10)
+                            var dateOutput =Profilewithpicture.ConvertDate.ChangeFormatDate(dateFormate.substring(0..3),dateFormate.substring(5..6),dateFormate.substring(8..9))
                         topicinfo.setText(data.articleName.th)
                         gallery.setText(data.categoryId.categoryName.th)
                             articleID = data._id
-                        dateContent.setText(data.updatedAt.substring(0..9))
+                        dateContent.setText(dateOutput)
                         viewValue.setText(data.viewCount.toString())
                         Glide.with(this@ArticleInfo)
                                 .load(URLImage+data.imageThumbnail.path)

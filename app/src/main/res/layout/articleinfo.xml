@@ -108,8 +108,8 @@
 
                 </LinearLayout>
                 <ImageView
-                    android:background="@drawable/logo"
-                    android:scaleType="centerCrop"
+                    android:src="@drawable/logo"
+                    android:scaleType="center"
                     android:layout_width="match_parent"
                     android:id="@+id/imageinfo"
                     android:layout_height="200dp" />
@@ -125,7 +125,7 @@
                         android:layout_below="@id/imageinfo"
                         android:fontFamily="@font/anakotmai"
                         android:textColor="@color/Primary2"
-                        android:text="'ธนาธน' ชี้ปัญหา รัฐราชการรวมศูนย์ ทำประเทศไม่พัตนา"/>
+                       />
                 <LinearLayout
                     android:layout_marginTop="10dp"
                     android:layout_width="wrap_content"

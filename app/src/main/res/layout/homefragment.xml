@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/relative"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
@@ -10,6 +11,7 @@
         android:orientation="vertical"
         android:translationZ="3dp"
         android:layout_height="wrap_content">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -52,9 +54,6 @@
                     android:layout_height="wrap_content">
 
 
-
-                    />
-
                 </RelativeLayout>
             </RelativeLayout>
 
@@ -65,7 +64,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="60dp"
-        android:overScrollMode="never"
+        android:id="@+id/nest"
+
         >
     <LinearLayout
         android:layout_width="match_parent"
@@ -76,8 +76,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-
+            android:layout_height="35dp"
             android:orientation="horizontal"
             android:weightSum="3"
             android:background="@color/colorSecondary">
@@ -87,7 +86,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:layout_weight="1"
-                android:background="@drawable/black_curved_rectangle_with_border">
+                android:background="@color/Primary2">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -130,7 +129,7 @@
                 android:layout_weight="1"
                 android:id="@+id/li3"
                 android:gravity="center"
-                android:background="@drawable/black_curved_rectangle_with_border">
+                android:background="@color/Primary2">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -271,109 +270,36 @@
 
 
         </androidx.percentlayout.widget.PercentRelativeLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:weightSum="2"
-            android:layout_marginTop="7dp"
-            android:orientation="horizontal">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="7dp"
                 android:nestedScrollingEnabled="false"
                 android:id="@+id/list_recycler_view_article">
 
             </androidx.recyclerview.widget.RecyclerView>
 
-
-            <RelativeLayout
-                android:id="@+id/Topic2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/backgroundgrey"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="2dp"
-                android:layout_marginLeft="22dp">
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:id="@+id/newsImage2"
-                android:scaleType="center"
-                android:src="@drawable/logo"
-                android:background="@color/backgroundgrey"
-               />
-
-                <TextView
-                    android:id="@+id/newsTopic2"
-                    android:textColor="@color/LightNavi"
-                    android:fontFamily="@font/anakotmai"
-                    android:layout_below="@+id/newsImage2"
-                    android:layout_width="wrap_content"
-                    android:ellipsize="end"
-                    android:maxLines="2"
-                    android:layout_height="wrap_content"
-                    android:text="Title line1"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/newsTopic2"
-                    android:paddingBottom="5dp"
-                    android:id="@+id/textdate2"
-                    android:drawablePadding="4dp"
-                    android:drawableStart="@drawable/timeresize"
-                    android:text="Date"/>
-
-
-            </RelativeLayout>
-            <RelativeLayout
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="2dp"
-                android:layout_width="match_parent"
-                android:id="@+id/Topic3"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginLeft="5dp"
-                android:background="@color/backgroundgrey"
-                android:layout_marginRight="22dp">
-                <ImageView
-                    android:id="@+id/newsImage3"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:scaleType="center"
-
-                    android:src="@drawable/logo"
-                    android:background="@color/backgroundgrey"/>
-                <TextView
-                    android:id="@+id/newsTopic3"
-                    android:textColor="@color/LightNavi"
-                    android:fontFamily="@font/anakotmai"
-                    android:layout_below="@+id/newsImage3"
-                    android:layout_width="wrap_content"
-                    android:ellipsize="end"
-                    android:maxLines="2"
-                    android:layout_height="wrap_content"
-                    android:text="Title line1"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/newsTopic3"
-                    android:paddingBottom="5dp"
-                    android:id="@+id/textdate3"
-                    android:drawablePadding="4dp"
-                    android:drawableStart="@drawable/timeresize"
-                    android:text="Date"/>
-
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/arrowup"
+            android:layout_below="@+id/list_recycler_view_article"
+            android:id="@+id/testLoad"
+            android:visibility="gone"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"/>
+        />
             </RelativeLayout>
 
-
-        </LinearLayout>
 
     </LinearLayout>
+
+
+
     </androidx.core.widget.NestedScrollView>
 </RelativeLayout>

@@ -11,7 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.itembookmark.view.*
+import kotlinx.android.synthetic.main.item_bookmark.view.*
 import org.w3c.dom.Text
 import java.lang.Exception
 

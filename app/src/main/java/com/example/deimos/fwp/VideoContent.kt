@@ -36,16 +36,16 @@ data class nameVideo(var en : String,var th : String)
 data class videoDescriptionId(var en : String,var th : String)
 data class category(var categoryName : cateName)
 data class cateName(var en : String,var th :String)
-
+var mYouTubePlayerView: YouTubePlayerView?=null
+var VideoId : String?=null
+var mAPIService: ApiService? = null
+var mOnInitializedListener: YouTubePlayer.OnInitializedListener?=null
 
 class VideoContent : YouTubeBaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.videocontent)
-        var mYouTubePlayerView: YouTubePlayerView?=null
-        var VideoId : String?=null
-        var mAPIService: ApiService? = null
-        var mOnInitializedListener: YouTubePlayer.OnInitializedListener?=null
+
         var bundle : Bundle ? =intent.extras
 
         var _id = bundle!!.getString("ID")
@@ -58,39 +58,9 @@ class VideoContent : YouTubeBaseActivity() {
         mAPIService!!.getVideoById(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),_id!!,partnerId).enqueue(object : Callback<VideoById> {
 
             override fun onResponse(call: Call<VideoById>, response: Response<VideoById>) {
-//                d("location",response.body()!!.resultData!!.toString())
-                 VideoId = response.body()!!.resultData.videoLink.substringAfterLast("=")
-                categorycontent.setText(response.body()!!.resultData.categoryId.categoryName.th)
-
-                videotitle.setText(response.body()!!.resultData.videoName.th)
-                date.setText(response.body()!!.resultData.updatedAt.substring(0..9))
-                descripvideo.setText(response.body()!!.resultData.videoDescription.th)
-                viewValue.setText(response.body()!!.resultData.viewCount.toString())
-
-
-                d("VideoId",VideoId)
-
-                mYouTubePlayerView = findViewById<View>(R.id.youtubeplayer) as YouTubePlayerView
-
-                mOnInitializedListener = object : YouTubePlayer.OnInitializedListener {
-                    override fun onInitializationSuccess(provider: YouTubePlayer.Provider, youTubePlayer: YouTubePlayer, b: Boolean) {
-
-                        youTubePlayer.loadVideo(VideoId)
-                    }
-
-                    override fun onInitializationFailure(provider: YouTubePlayer.Provider, youTubeInitializationResult: YouTubeInitializationResult) {
-
-                    }
-                }
-
-                mYouTubePlayerView!!.initialize("AIzaSyAzPVSpG9bv1Wav2rld5ecRYzipe1qGnvU", mOnInitializedListener)
-
-
-
-
-
+                var data = response.body()!!.resultData
+                upDateUi(data)
             }
-
 
             override fun onFailure(call: Call<VideoById>, t: Throwable) {
                 d("arm","onFailure")
@@ -98,19 +68,30 @@ class VideoContent : YouTubeBaseActivity() {
 
         })
 
-
-
-
-
-
-
-
-
-
-
         backprees.setOnClickListener {
             onBackPressed()
         }
+    }
+    private fun upDateUi(data : resultVideo){
+        var url = data.videoLink.substringAfterLast("=")
+        categorycontent.setText(data.categoryId.categoryName.th)
+        var dateFormate =data.updatedAt.substring(0..10)
+        var dateOutput =Profilewithpicture.ConvertDate.ChangeFormatDate(dateFormate.substring(0..3),dateFormate.substring(5..6),dateFormate.substring(8..9))
+        videotitle.setText(data.videoName.th)
+        date.setText(dateOutput)
+        descripvideo.setText(data.videoDescription.th)
+        viewValue.setText(data.viewCount.toString())
+
+        mYouTubePlayerView = findViewById<View>(R.id.youtubeplayer) as YouTubePlayerView
+        mOnInitializedListener = object : YouTubePlayer.OnInitializedListener {
+            override fun onInitializationSuccess(provider: YouTubePlayer.Provider, youTubePlayer: YouTubePlayer, b: Boolean) {
+                youTubePlayer.loadVideo(url)
+            }
+            override fun onInitializationFailure(provider: YouTubePlayer.Provider, youTubeInitializationResult: YouTubeInitializationResult) {
+            }
+        }
+
+        mYouTubePlayerView!!.initialize("AIzaSyAzPVSpG9bv1Wav2rld5ecRYzipe1qGnvU", mOnInitializedListener)
 
     }
 

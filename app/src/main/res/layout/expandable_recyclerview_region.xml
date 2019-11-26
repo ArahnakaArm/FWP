@@ -35,9 +35,10 @@
             android:layout_toRightOf="@+id/gpsicon"
             android:text="Bankok And Metropolitan Region"
             android:textSize="18dp"
-            android:fontFamily="@font/anakotmai_light"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:fontFamily="@font/anakotmai"
             android:id="@+id/textView"
-
             android:textColor="@color/White"/>
         <ImageView
 
@@ -48,7 +49,7 @@
             android:layout_marginRight="10dp"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@drawable/arrowup"
+            android:src="@drawable/arrowdown"
             android:tint="@color/White"/>
         </RelativeLayout>
     </RelativeLayout>

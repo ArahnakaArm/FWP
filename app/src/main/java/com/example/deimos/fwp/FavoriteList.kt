@@ -11,7 +11,7 @@ import android.util.Log.d
 import android.view.*
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.bookmark.*
+import kotlinx.android.synthetic.main.favorite.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,143 +22,27 @@ import kotlin.collections.ArrayList
 
 data class Bookmark(val title : String,val date : String)
 class FavoriteList : AppCompatActivity() {
-    private var etsearch: EditText? = null
-    internal var textlength = 0
     private var sp : SharedPreferences?=null
     private var token : String?=null
-    private val adaptertest: CustomAdapter? = null
-    var usr : Userstate = Userstate()
     var mAPIService : ApiService?=null
-    var array_sort = java.util.ArrayList<BookMarkModel>()
-
+    var favList = ArrayList<resultDataFav>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.bookmark)
+        setContentView(R.layout.favorite)
         sp = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
         token = sp!!.getString("user_token","-")
         getBookMarkList()
-        ///// Searching /////
-        /*   etsearch = view.findViewById(R.id.searchbookmark) as EditText
-           array_sort = java.util.ArrayList<BookMarkModel>()
-           array_sort = populateList()
-           etsearch!!.addTextChangedListener(object : TextWatcher {
-               override fun afterTextChanged(s: Editable) {}
-               override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-               override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                   textlength = etsearch!!.text.length
-                   array_sort.clear()
-                   for (i in bookmarks.indices) {
-                       if (textlength <= bookmarks[i].getNames().length) {
-                           Log.d("ertyyy", bookmarks[i].getNames().toLowerCase().trim())
-                           if (bookmarks[i].getNames().toLowerCase().trim().contains(
-                                           etsearch!!.text.toString().toLowerCase().trim { it <= ' ' })
-                           ) {
-                               array_sort.add(bookmarks[i])
-                           }
-                       }
-                   }
-                   list_recycler_view.apply {
-                       layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
-                       adapter = BookMarkAdapter(context,array_sort)
-
-                   }
-
-               }
-           })
-   */
-
-///// Searching /////
 
         backprees.setOnClickListener {
             finish()
             this.overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_right)
         }
-        //d("armtesttext",Bok.toString())
-
-        searchbookmark.addTextChangedListener(object : TextWatcher{
-            override fun afterTextChanged(s: Editable?) {
-
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                adaptertest?.filter?.filter(s)
-
-            }
-
-        })
     }
 
-
-
-
-
-    private fun populateList(): java.util.ArrayList<BookMarkModel> {
-
-        val list = java.util.ArrayList<BookMarkModel>()
-
-        for (i in 0..7) {
-
-            list.add(BookMarkModel("","",""))
-        }
-
-        return list
-    }
-
-    interface ClickListener {
-        fun onClick(view: View, position: Int)
-
-        fun onLongClick(view: View?, position: Int)
-    }
-
-    internal class RecyclerTouchListener(
-            context: Context,
-            recyclerView: androidx.recyclerview.widget.RecyclerView,
-            private val clickListener: ClickListener?
-    ) : androidx.recyclerview.widget.RecyclerView.OnItemTouchListener {
-
-        private val gestureDetector: GestureDetector
-
-        init {
-            gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
-                override fun onSingleTapUp(e: MotionEvent): Boolean {
-                    return true
-                }
-
-                override fun onLongPress(e: MotionEvent) {
-                    val child = recyclerView.findChildViewUnder(e.x, e.y)
-                    if (child != null && clickListener != null) {
-                        clickListener.onLongClick(child, recyclerView.getChildPosition(child))
-                    }
-                }
-            })
-        }
-
-        override fun onInterceptTouchEvent(rv: androidx.recyclerview.widget.RecyclerView, e: MotionEvent): Boolean {
-
-            val child = rv.findChildViewUnder(e.x, e.y)
-            if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
-                clickListener.onClick(child, rv.getChildPosition(child))
-            }
-            return false
-        }
-
-        override fun onTouchEvent(rv: androidx.recyclerview.widget.RecyclerView, e: MotionEvent) {}
-
-        override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
-
-        }
-
-    }
     private fun getBookMarkList(){
         mAPIService = ApiUtils.apiService
-        usr.setState(true)
         val partnerId = "5dbfe99c776a690010deb237"
-        Log.d("arm", usr.state.toString())
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
@@ -171,8 +55,8 @@ class FavoriteList : AppCompatActivity() {
 
             override fun onResponse(call: Call<Favorite>, response: Response<Favorite>) {
                 try {
-                   // d("Video",response.body()!!.resultData[0]!!.videoName.th.toString())
                     showData(response.body()!!.resultData)
+                    favList=response.body()!!.resultData
                 }catch (e : Exception){
 
                 }
@@ -197,6 +81,11 @@ class FavoriteList : AppCompatActivity() {
         this.overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_right)
         super.onBackPressed()
 
+    }
+
+    override fun onResume() {
+        getBookMarkList()
+        super.onResume()
     }
 
 }
