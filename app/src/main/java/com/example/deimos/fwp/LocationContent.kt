@@ -1,7 +1,9 @@
 package com.example.deimos.fwp
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import android.text.TextUtils.split
@@ -42,13 +44,13 @@ data class imagelocation(var path : String)
 
 
 class LocationContent : Activity(){
-    private val IMAGE_URL = "http://206.189.41.105:1210/"
     internal var mMapView: MapView?=null
+    private var sharedPreferences:SharedPreferences?=null
     private var googleMap: GoogleMap? = null
     private var latlng:String?=null
     private var location: LatLng?=null
     private var Name : String?=null
-    var mAPIService: ApiService? = null
+    var mAPIService: ApiServiceLocation? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.locationcontent)
@@ -56,8 +58,9 @@ class LocationContent : Activity(){
         var _id = bundle!!.getString("ID")
 
 
-        mAPIService = ApiUtils.apiService
-        val partnerId = "5dbfe99c776a690010deb237"
+        mAPIService = ApiUtilsLocation.apiServiceLocation
+        sharedPreferences = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        val partnerId = sharedPreferences!!.getString("partnerId","-")
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
@@ -78,7 +81,7 @@ class LocationContent : Activity(){
                         " "+response.body()!!.resultData.city.th+" "+response.body()!!.resultData.subDistrict.th+" "+response.body()!!.resultData.postalCode)
                 telinfo.setText(response.body()!!.resultData.mobileNo)
                 emailinfo.setText(response.body()!!.resultData.email)
-                var Url = IMAGE_URL+response.body()!!.resultData.image.path
+                var Url = response.body()!!.resultData.image.path
                 Glide.with(this@LocationContent)
                         .load(Url)
                         .into(locationimage)

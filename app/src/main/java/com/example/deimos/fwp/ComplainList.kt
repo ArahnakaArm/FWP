@@ -3,18 +3,10 @@ package com.example.deimos.fwp
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.util.Log.d
-import android.view.*
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.jakewharton.rxbinding3.widget.textChanges
-import kotlinx.android.synthetic.main.favorite.*
 import kotlinx.android.synthetic.main.complainlist.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -33,12 +25,13 @@ class ComplainList : AppCompatActivity() {
     var sp: SharedPreferences? = null
     var token : String?=null
     var user_ID : String?=null
-    var mAPIService: ApiService? = null
+    private var sharedPreferences:SharedPreferences?=null
+    var mAPIService: ApiServiceComplian? = null
     var arrayComplian = ArrayList<CompliansData>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.complainlist)
-        mAPIService = ApiUtils.apiService
+        mAPIService = ApiUtilsComplian.apiServiceComplian
         sp = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
         token = sp!!.getString("user_token","-")
         user_ID = sp!!.getString("user_id","-")
@@ -48,7 +41,8 @@ class ComplainList : AppCompatActivity() {
         mockcomplains.add(ComplainModel("Complain 3", "27/8/2019", "Complete"))
         mockcomplains.add(ComplainModel("Complain 4", "7/8/2019", "In Progress"))
         Log.d("Complain", token)
-        val partnerId = "5dbfe99c776a690010deb237"
+        sharedPreferences = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        val partnerId = sharedPreferences!!.getString("partnerId","-")
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
@@ -67,7 +61,7 @@ class ComplainList : AppCompatActivity() {
                     arrayComplian.reverse()
                     list_recycler_view_complain.apply {
                         layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this@ComplainList)
-                        adapter = ComplainAdapter(context,arrayComplian)
+                        adapter = ComplianAdapter(context,arrayComplian)
 
                     }
 
@@ -106,11 +100,12 @@ class ComplainList : AppCompatActivity() {
         super.onBackPressed()
     }
     private fun searchComplianList(text : String){
-        mAPIService = ApiUtils.apiService
+        mAPIService = ApiUtilsComplian.apiServiceComplian
         sp = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
         token = sp!!.getString("user_token","-")
         user_ID = sp!!.getString("user_id","-")
-        val partnerId = "5dbfe99c776a690010deb237"
+        sharedPreferences =getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        val partnerId = sharedPreferences!!.getString("partnerId","-")
         //Log.d("arm", usr.state.toString())
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
@@ -130,7 +125,7 @@ class ComplainList : AppCompatActivity() {
                     arrayComplian.reverse()
                     list_recycler_view_complain.apply {
                         layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this@ComplainList)
-                        adapter = ComplainAdapter(context,arrayComplian)
+                        adapter = ComplianAdapter(context,arrayComplian)
 
                     }
 

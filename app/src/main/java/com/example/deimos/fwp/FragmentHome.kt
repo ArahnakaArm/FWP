@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.core.content.edit
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,15 +30,18 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
+data class PartnerModel(var resultCode: String,var developerMessage: String,var resultData: resultDataPartner)
+data class resultDataPartner(var _id : String)
 data class CateModel(var resultCode : String ,var developerMessage : String,var resultData : ArrayList<cateresult>)
 data class cateresult(var categoryName : categoryNameArticle,var _id : String)
 data class categoryNameArticle(var th : String,var en : String)
 data class ArticleModel(var resultCode : String,var developerMessage : String,var resultData : ArrayList<ArticleData>, var rowCount : Int)
-data class ArticleData(var articleName : articlename,var shortDescription : shortDescription,var imageThumbnail : ImageArticle,
+data class ArticleData(var articleName : articlename,var shortDescription : shortDescription,var imageThumbnail : String,
                        var articleDescription : articleDescription,var updatedAt : String,var _id : String,var isSlideNew : Boolean,
-                       var categoryId : cateInfo)
-data class cateInfo(var categoryName : cateNameInfo)
-data class cateNameInfo(var th : String , var en: String)
+                       var categoryInfo : ArrayList<cateInfo>)
+data class cateInfo(var _id : String,var categoryId: cateId)
+data class cateId(var categoryName:cateNameInfo)
+data class cateNameInfo(var en:String,var th:String)
 data class articlename(var en: String,var th :String)
 data class articleDescription(var en:String,var th:String)
 data class shortDescription(var en:String,var th : String)
@@ -46,31 +50,29 @@ data class ImageArray(var url : String,var id : String)
 class FragmentHome : androidx.fragment.app.Fragment() {
     var sp: SharedPreferences? = null
     private var mPager: androidx.viewpager.widget.ViewPager? = null
-    var mAPIService: ApiService? = null
+    private var mAPIServicePartner: ApiServicePartner? = null
+    private var mAPIService: ApiServiceContent? = null
     private var NUM_PAGES = 0
     lateinit var layoutManager: LinearLayoutManager
-    private var URLImage : String ="http://206.189.41.105:1210/"
     private var CategoriesId: String?=null
     private var idTopic1 : String?=null
     private var bigImageCount = 0
-    private var idTopic2 : String?=null
-    private var Page = 0
+    private var sharedPreferences : SharedPreferences?=null
     private var count =1
     private var currentPage = 1
+    private var init = true
     private var ArticleSize = 3000
-    private var idTopic3 : String?=null
     private var ImageStringUrl = ArrayList<String>()
     private var _NameImage  = ArrayList<String>()
     private var recyclerArticle = ArrayList<ArticleData>()
     private var CurrentrecyclerArticle = ArrayList<ArticleData>()
-    private var mCurrentrecyclerArticle = ArrayList<ArticleData>()
     private var mCurrentPage = 1
-    private val mItemPerRow = 4
+    private val mItemPerRow = 10
     private var _idImage = ArrayList<String>()
     val lists: ArrayList<ImageArray> = ArrayList()
     var page = 0
-    var isLoading = false
     val limit = 2
+
     lateinit var adapter: ArticleAdapter
 
 
@@ -86,7 +88,8 @@ class FragmentHome : androidx.fragment.app.Fragment() {
         super.onCreate(savedInstanceState)
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        getCategories()
+        getPartner()
+       // getCategories()
         layoutManager = androidx.recyclerview.widget.GridLayoutManager(activity,2)
         list_recycler_view_article.layoutManager =layoutManager
         search.setOnClickListener {
@@ -101,10 +104,34 @@ class FragmentHome : androidx.fragment.app.Fragment() {
            activity?.startActivity(intent)
        }
         li1.setOnClickListener {
-            Toast.makeText(context,"Fetured",Toast.LENGTH_SHORT).show()
+            init = false
+            CurrentrecyclerArticle.clear()
+            mCurrentPage = 1
+            _idImage.clear()
+            ImageStringUrl.clear()
+            _NameImage.clear()
+            sharedPreferences = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+            getCategories(sharedPreferences!!.getString("partnerId","-"),"Top")
         }
         li2.setOnClickListener {
-            Toast.makeText(context,"Article",Toast.LENGTH_SHORT).show()
+            init = false
+            CurrentrecyclerArticle.clear()
+            mCurrentPage = 1
+            _idImage.clear()
+            ImageStringUrl.clear()
+            _NameImage.clear()
+            sharedPreferences = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+            getCategories(sharedPreferences!!.getString("partnerId","-"),"ข่าวสาร")
+        }
+        li3.setOnClickListener {
+            init = false
+            CurrentrecyclerArticle.clear()
+            mCurrentPage = 1
+            _idImage.clear()
+            ImageStringUrl.clear()
+            _NameImage.clear()
+            sharedPreferences = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+            getCategories(sharedPreferences!!.getString("partnerId","-"),"กิจกรรม")
         }
     }
 
@@ -157,13 +184,12 @@ class FragmentHome : androidx.fragment.app.Fragment() {
             d("Sliding",currentPage.toString())
         }
     }
-    private fun getCategories(){
-        mAPIService = ApiUtils.apiService
-        val partnerId = "5dbfe99c776a690010deb237"
+    private fun getCategories(partnerId:String,cateName : String){
+        mAPIService = ApiUtilsContent.apiService
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
-        mAPIService!!.getCategories(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId).enqueue(object : Callback<CateModel> {
+        mAPIService!!.getCategories(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId,cateName).enqueue(object : Callback<CateModel> {
             override fun onResponse(call: Call<CateModel>, response: Response<CateModel>) {
             try {
                 CategoriesId = response.body()!!.resultData[0]._id
@@ -181,8 +207,9 @@ class FragmentHome : androidx.fragment.app.Fragment() {
         })
     }
     private fun getSlide(id : String){
-        mAPIService = ApiUtils.apiService
-        val partnerId = "5dbfe99c776a690010deb237"
+        mAPIService = ApiUtilsContent.apiService
+        sharedPreferences = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        val partnerId = sharedPreferences!!.getString("partnerId","-")
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
@@ -206,8 +233,9 @@ class FragmentHome : androidx.fragment.app.Fragment() {
     }
 
     private fun getArticle(id : String?){
-        mAPIService = ApiUtils.apiService
-        val partnerId = "5dbfe99c776a690010deb237"
+        mAPIService = ApiUtilsContent.apiService
+        sharedPreferences = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        val partnerId = sharedPreferences!!.getString("partnerId","-")
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
@@ -216,9 +244,7 @@ class FragmentHome : androidx.fragment.app.Fragment() {
             override fun onResponse(call: Call<ArticleModel>, response: Response<ArticleModel>) {
               //  d("Article",response.body()!!.developerMessage)
                 try {
-                    if(response.body()!!.resultData[0] != null){
                         upDateUi(response.body()!!.resultData,response.body()!!.rowCount)
-                    }
                 }catch (e : Exception){}
 
 
@@ -229,24 +255,33 @@ class FragmentHome : androidx.fragment.app.Fragment() {
             }
         })
     }
-    private fun upDateUiSlide(data : ArticleModel){
+    private fun upDateUiSlide(data : ArticleModel) {
         data.resultData.sortBy { it.updatedAt }
         data.resultData.reverse()
         for (i in 0 until data.rowCount) {
 
-                ImageStringUrl.add(URLImage+data.resultData[i].imageThumbnail.path)
-                _idImage.add(data.resultData[i]._id)
-                _NameImage.add(data.resultData[i].articleName.th)
+            ImageStringUrl.add(data.resultData[i].imageThumbnail)
+            _idImage.add(data.resultData[i]._id)
+            _NameImage.add(data.resultData[i].articleName.th)
 
         }
         val objects = ImageStringUrl.toArray()
         val objects2 = _idImage.toArray()
-        val objects3  = _NameImage.toArray()
+        val objects3 = _NameImage.toArray()
         _idImage.toArray(urls2)
         ImageStringUrl.toArray(urls)
-        try {
-            init(objects,objects2,objects3);
-        }catch (e : Exception){}
+
+        if (init) {
+            try {
+                init(objects, objects2, objects3);
+            } catch (e: Exception) {
+            }
+        }else {
+
+            mPager?.setAdapter(SlidingImage_Adapter(requireContext(), objects, objects2, objects3))
+        }
+
+
     }
     private fun upDateUi(data : ArrayList<ArticleData>,Count : Int) {
        try {
@@ -261,9 +296,14 @@ class FragmentHome : androidx.fragment.app.Fragment() {
            var dateOutput = Profilewithpicture.ConvertDate.ChangeFormatDate(date.substring(0..3),date.substring(5..6),date.substring(8..9))
            newsTopic1.setText(recyclerArticle[0].articleName.th)
            textdate1.setText(dateOutput)
-           category1.setText(recyclerArticle[0].categoryId.categoryName.th)
+           for (i in 0 until recyclerArticle[0].categoryInfo.size){
+               if (recyclerArticle[0].categoryInfo[i].categoryId.categoryName.th != "Top"){
+                    category1.setText(recyclerArticle[0].categoryInfo[i].categoryId.categoryName.th)
+               }
+           }
+           //category1.setText(recyclerArticle[0].categoryId.categoryName.th)
            Glide.with(requireContext())
-                   .load(URLImage + recyclerArticle[0].imageThumbnail.path)
+                   .load(recyclerArticle[0].imageThumbnail)
                    .into(newsImage1)
            newsImage1.scaleType = ImageView.ScaleType.CENTER_CROP
            idTopic1 = recyclerArticle[0]._id
@@ -307,7 +347,7 @@ class FragmentHome : androidx.fragment.app.Fragment() {
                        Handler().postDelayed({
                            getArticleLimit(CategoriesId);
                            adapter.notifyDataSetChanged();
-                       },2000)
+                       },1500)
                        testLoad.visibility = View.GONE
                    }
 
@@ -352,20 +392,23 @@ class FragmentHome : androidx.fragment.app.Fragment() {
     private fun getArticleLimit(id : String?){
        // d("Exception",(mItemPerRow*(mCurrentPage)).toString())
       d("Size",mCurrentPage.toString())
-        if (((mItemPerRow * (mCurrentPage))) >= ArticleSize+4) {
-            testLoad.visibility = View.GONE
+        if (((mItemPerRow * (mCurrentPage))) >= ArticleSize+10) {
+            try {
+                testLoad.visibility = View.GONE
+            }catch (e : Exception){}
             return
            // Toast.makeText(requireContext(), "No Data", Toast.LENGTH_SHORT).show()
         }
         else {
-            mAPIService = ApiUtils.apiService
-            val partnerId = "5dbfe99c776a690010deb237"
+            mAPIService = ApiUtilsContent.apiService
+            sharedPreferences = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+            val partnerId = sharedPreferences!!.getString("partnerId","-")
             val sdf = SimpleDateFormat("yyMMdd")
             val currentDate = sdf.format(Date())
             val r = (10..12).shuffled().first()
             d("Exception",(mCurrentPage).toString())
             d("Off",((mItemPerRow*mCurrentPage).toString()))
-            mAPIService!!.getArticlesLimit(Register.GenerateRandomString.randomString(22), "AND-" + currentDate + Register.GenerateRandomString.randomString(r), partnerId, id!!, (mItemPerRow*(mCurrentPage-1))+1, 4 ,false,"updatedAt").enqueue(object : Callback<ArticleModel> {
+            mAPIService!!.getArticlesLimit(Register.GenerateRandomString.randomString(22), "AND-" + currentDate + Register.GenerateRandomString.randomString(r), partnerId, id!!, (mItemPerRow*(mCurrentPage-1))+1, 10 ,false,"updatedAt").enqueue(object : Callback<ArticleModel> {
 
                 override fun onResponse(call: Call<ArticleModel>, response: Response<ArticleModel>) {
                     //  d("Article",response.body()!!.developerMessage)
@@ -410,8 +453,10 @@ class FragmentHome : androidx.fragment.app.Fragment() {
         }
     }
     private fun getBigImage(id : String){
-        mAPIService = ApiUtils.apiService
-        val partnerId = "5dbfe99c776a690010deb237"
+        mAPIService = ApiUtilsContent.apiService
+        sharedPreferences = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        val partnerId = sharedPreferences!!.getString("partnerId","-")
+
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
@@ -422,15 +467,17 @@ class FragmentHome : androidx.fragment.app.Fragment() {
                 //  d("Article",response.body()!!.developerMessage)
                 try {
                     var responseData = response.body()!!.resultData[0]
-
+                        d("Test",response.body()!!.resultData[0].imageThumbnail)
                         var date =responseData.updatedAt.substring(0..10)
                         var dateOutput = Profilewithpicture.ConvertDate.ChangeFormatDate(date.substring(0..3), date.substring(5..6), date.substring(8..9))
                         newsTopic1.setText(responseData.articleName.th)
                         textdate1.setText(dateOutput)
-                        category1.setText(responseData.categoryId.categoryName.th)
+
+                        //category1.setText(responseData.categoryId.categoryName.th)
                         Glide.with(requireContext())
-                                .load(URLImage + responseData.imageThumbnail.path)
+                                .load(response.body()!!.resultData[0].imageThumbnail)
                                 .into(newsImage1)
+
                         newsImage1.scaleType = ImageView.ScaleType.CENTER_CROP
                         idTopic1 = responseData._id
                         CurrentrecyclerArticle.removeAt(0)
@@ -444,7 +491,32 @@ class FragmentHome : androidx.fragment.app.Fragment() {
             }
 
             override fun onFailure(call: Call<ArticleModel>, t: Throwable) {
-                d("arm", "onFailure")
+                d("Exception", t.toString())
+            }
+        })
+    }
+    private fun getPartner(){
+        mAPIServicePartner = ApiUtilsPartner.apiServicePartner
+        val sdf = SimpleDateFormat("yyMMdd")
+        val currentDate = sdf.format(Date())
+        val r = (10..12).shuffled().first()
+        sharedPreferences = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        d("Response",sharedPreferences!!.getString("partnerId","-"))
+        mAPIServicePartner!!.getPartnerId(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),"111400").enqueue(object : Callback<PartnerModel> {
+            override fun onResponse(call: Call<PartnerModel>, response: Response<PartnerModel>) {
+                try {
+                    //d("Response",response.body()!!.resultData._id)
+                    sharedPreferences!!.edit { putString("partnerId", response.body()!!.resultData._id) }
+                    d("Response",sharedPreferences!!.getString("partnerId","-"))
+                    getCategories(response.body()!!.resultData._id,"Top")
+
+
+                }catch (e : Exception){
+                    d("Response",e.toString())
+                }
+            }
+            override fun onFailure(call: Call<PartnerModel>, t: Throwable) {
+                d("Response",t.toString())
             }
         })
     }

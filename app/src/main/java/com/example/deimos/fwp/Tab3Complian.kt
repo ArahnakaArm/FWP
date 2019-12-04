@@ -25,6 +25,15 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.GridView
 import android.widget.ImageView
+import com.amazonaws.auth.BasicAWSCredentials
+import com.amazonaws.internal.StaticCredentialsProvider
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferNetworkLossHandler
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferState
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility
+import com.amazonaws.regions.Region
+import com.amazonaws.services.s3.AmazonS3Client
+import com.amazonaws.services.s3.model.CannedAccessControlList
 import droidninja.filepicker.FilePickerBuilder
 import droidninja.filepicker.FilePickerConst
 import kotlinx.android.synthetic.main.complianviewpager.*
@@ -50,59 +59,101 @@ data class responseComplian (var resultCode : String,var developerMessage : Stri
 data class DataComplian(var createdBy :String,var _id : String,var complainNumber : String)
 data class CompliansType(var resultCode : String, var developerMessage : String, var resultData : java.util.ArrayList<Res>, var rowCount : Int)
 data class Res(var _id : String,var typeName : String,var guideLabel : String)
-data class CompliansRequestModel(var status : String,var partnerId : String,var subject : String,
-                                 var complainType : String,var complainDesc : String,var map : complianRequstMap )
+data class CompliansRequestModel(var status : String,var subject : String,
+                                 var complainType : String,var complainDesc : String,var map : complianRequstMap,var image : ArrayList<String>,var firstName : String,var lastName : String ,var partnerId : String)
 data class complianRequstMap(var lat : Double,var long : Double)
+data class CompliansRequestModelNoImage(var status : String,var subject : String,
+                                 var complainType : String,var complainDesc : String,var map : complianRequstMap,var firstName : String,var lastName : String ,var partnerId : String)
+interface SpaceRegionRepresentableComplian {
+    fun endpoint(): String
+}
+
+enum class SpaceRegionComplian: SpaceRegionRepresentableComplian {
+    SFO {
+        override fun endpoint(): String {
+            return "https://sfo2.digitaloceanspaces.com"
+        }
+    }, AMS {
+        override fun endpoint(): String {
+            return "https://ams3.digitaloceanspaces.com"
+        }
+    }, SGP {
+        override fun endpoint(): String {
+            return "https://sgp1.digitaloceanspaces.com"
+        }
+    }
+}
+
 class Tab3Complian : androidx.fragment.app.Fragment() {
     var sp: SharedPreferences? = null
-    private var btn: Button? = null
-
+    private var isImageSelect =false
+    private val accesskey = "DL7EOQXBNXRI2T7FGPHD"
+    private val secretkey = "at24/UhN+eMAY9ZCvEH3Xs0oa6Ro0sneWB9+GGYruXA"
+    private val spacename = "evolka-fwpapp-prod"
+    private val spaceregion = SpaceRegion.SGP
+    private val filename = "example_image"
+    private val filetype = "jpg"
+    var fileupload : File?=null
+    private var countUpload =0
+    private var ImageUploadPath = ArrayList<String>()
+    private var transferUtility: TransferUtility?=null
+    private var appContext: Context?=null
+    private var fileToUpload = ArrayList<File>()
+    var sharedPreferences : SharedPreferences?=null
     var Uris :Uri?=null
     var Uriss = ArrayList<Uri>()
-    private val MY_READ_PERMISSION_CODE = 200
-    private var PICK_IMAGE_MULTIPLE = 1
-    private var imageEncoded: String? = null
-    private var imagesEncodedList: MutableList<String>? = null
-    private var gvGallery: GridView? = null
     var token : String?=null
     private var complianNumber : String?=null
-    private val SELECT_IMAGE = 1338
     private var complianrequstmap: complianRequstMap? = null
-    private  val REQUEST_PICK_PHOTO = 1
     var Send : Button?=null
-    var fileUris: ArrayList<Uri> = ArrayList<Uri>()
     private var compliansrequestmodel: CompliansRequestModel? = null
     private val GALLERY_REQUEST = 1889
+    private var compliansrequestmodelNoImage: CompliansRequestModelNoImage? = null
     private val MY_WRITE_PERMISSION_CODE = 200
-    private var galleryAdapter: GalleryAdapter? = null
-    var mAPIService: ApiService? = null
+    var mAPIService: ApiServiceComplian? = null
     private var viewp : androidx.viewpager.widget.ViewPager?=null
-    internal var filePath = ArrayList<String>()
+    private var filePath = ArrayList<String>()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.compliantab3,container,false)
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        sp = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        val credentials = StaticCredentialsProvider(BasicAWSCredentials(accesskey, secretkey))
+        val client = AmazonS3Client(credentials, Region.getRegion("us-east-1"))
+        client.endpoint = spaceregion.endpoint()
+        transferUtility = TransferUtility.builder().s3Client(client).context(requireContext()).build()
+        appContext = requireContext()
+
         viewp = activity!!.findViewById(R.id.viewpager)
+
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), MY_WRITE_PERMISSION_CODE);
         }
-        d("Check",sp!!.getString("Type","-"))
+
+        sharedPreferences = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        val partnerId = sharedPreferences!!.getString("partnerId","-")
         Send =activity!!.findViewById(R.id.next2)
-        Send!!.setOnClickListener {
-            sp = activity?.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
-            token = sp!!.getString("user_token", "-")
-            complianrequstmap = complianRequstMap(sp!!.getString("LAT","-")!!.toDouble(), sp!!.getString("LONG","-")!!.toDouble())
-            compliansrequestmodel = CompliansRequestModel("New", "5dbfe99c776a690010deb237", sp!!.getString("Subject","-")!!, sp!!.getString("Type","-")!!, sp!!.getString("Description","-")!!,complianrequstmap!!)
-            if(sp!!.getString("user_token","-") != "-") {
-                SendComplian(compliansrequestmodel!!)
-            }
-            else{
-                SendComplianNoToken(compliansrequestmodel!!)
-            }
-        }
+
         sp = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
         token = sp!!.getString("user_token","-")
+
+
+        Send!!.setOnClickListener {
+            if(isImageSelect) {
+                ImageUploadPath.clear()
+                SendComplian()
+            }
+            else if(!isImageSelect && token != "-" ){
+                ImageUploadPath.clear()
+                doComplianNoImage()
+            }
+            else if(!isImageSelect && token == "-"){
+                ImageUploadPath.clear()
+                doComplianNoTokenNoImage()
+            }
+        }
+
+
+
 
 
 
@@ -125,9 +176,9 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
 
                 filePath = ArrayList()
                 filePath.addAll(data.getStringArrayListExtra(FilePickerConst.KEY_SELECTED_MEDIA))
+                isImageSelect=true
 
                 for (i in 0 until filePath.size) {
-
                     Image1.setImageResource(R.drawable.inputboxcomplain)
                     Image1.scaleType= ImageView.ScaleType.CENTER_CROP
 
@@ -157,12 +208,9 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
 
 
                 }
-
                 for (i in 0 until filePath.size) {
                     Uris = Uri.fromFile(File(filePath[i].toString()))
 
-                    Log.d("Arm", Uris.toString())
-                    Log.d("Arm", filePath[0].toString())
                     Uriss.add(Uris!!)
                     if(i == 0){
                         Image1.setImageURI(Uris)
@@ -200,89 +248,38 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
                         Image9.setImageURI(Uris)
                         Image9.scaleType= ImageView.ScaleType.CENTER_CROP
                     }
-                 //uploadFile(File(filePath[0]),"5dcf905e05226f0010975f7b")
+
                 }
             }
-
-
         }
     }
 
-   /* override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        Log.d("Arm","yes")
-        when (requestCode) {FilePickerConst.REQUEST_CODE_PHOTO -> if(resultCode == Activity.RESULT_OK && data != null) {
-                filePath = ArrayList()
-                filePath.addAll(data.getStringArrayListExtra(FilePickerConst.KEY_SELECTED_MEDIA))
-                for (i in 0 until filePath.size) {
-                    Uris = Uri.fromFile(File(filePath[i].toString()))
-                    Log.d("Arm", Uris.toString())
-                    Log.d("Arm", filePath[0].toString())
-                    //importPhoto(Uris!!)
-                }
-            }
-        }
-
-    }*/
     private fun uploadFile(file: String,id :String) {
-        // d("Testt",fileUri.toString())
-        // var file = File(getPath(fileUri));
        var fileupload =File(file)
        var compressedImageFile = Compressor(requireContext()).setMaxHeight(640).setMaxWidth(640).setQuality(100).compressToFile(fileupload);
        d("Size","Compressed : "+compressedImageFile.length().toString())
        d("Size",fileupload.length().toString())
-        mAPIService = ApiUtils.apiService
+        mAPIService = ApiUtilsComplian.apiServiceComplian
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
-        // val filePath = getImageFilePath(fileUri)
 
-
-        // if (filePath != null && !filePath!!.isEmpty()) {
-        // val file = File(filePath)
         if (fileupload.exists()) {
-
-            val retrofit = Retrofit.Builder()
-                    .baseUrl("http://206.189.41.105:1210/api/v1/")
-                    .build()
-            val compliansId = "5db6b397dbb3640010e21f17"
-            val service = retrofit.create(ApiService::class.java!!)
             val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), compressedImageFile)
             val body = MultipartBody.Part.createFormData("image", compressedImageFile.getName(), requestFile)
             val descriptionString = "Sample description"
-            val description = RequestBody.create(MediaType.parse("multipart/form-data"), descriptionString)
             mAPIService!!.postComplianImage("Bearer "+token,Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),id,body).enqueue(object : Callback<UserProfile> {
                 override fun onResponse(call: Call<UserProfile>,
                                         response: Response<UserProfile>) {
 
                     if (response.isSuccessful){
                        try {
-
-                           //   d("IDTEST",response.body()!!.resultData.complainNumber)
-
-                         /*  val intent = Intent(activity, Success::class.java)
-                           intent.putExtra("ComplianNumber", complianNumber)
-                           activity!!.finish()
-                           activity!!.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
-                           activity!!.startActivity(intent)*/
                        }catch (e : Exception){
 
                        }
 
                     }else{
                     }
-                    /* d("Pic",response.body()!!.resultData.image.path)
-                     imageUrl = IMAGE_URL+response.body()!!.resultData.image.path
-
-                     try {
-                         if (imageUrl !== null) {
-                             Glide.with(this@Profilewithpicture)
-                                     .load(imageUrl)
-                                     .into(imageset)
-                         }
-                     }catch (e : Exception){
-
-                     }*/
                 }
 
                 override fun onFailure(call: Call<UserProfile>, t: Throwable) {
@@ -293,251 +290,23 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
         }
 
 
-        //}
-    }
-    fun importPhoto(uri: Uri,id : String): Boolean {
-        if (!isImage(requireContext(),uri)) {
-            // not image
-            return false
-        }
-
-        return try {
-            val photoFile = createImageFile(requireActivity().cacheDir,null,id)
-            copyUriToFile( requireContext(),uri, photoFile)
-
-            // addImageToGallery(photoFile)
-            true
-        }
-        catch (e: IOException) {
-            e.printStackTrace()
-            // handle error
-            false
-        }
-    }
-    fun copyUriToFile(context: Context, uri: Uri, outputFile: File) {
-        val inputStream = context.contentResolver.openInputStream(uri)
-
-        // copy inputStream to file using okio
-        /*
-        val source = Okio.buffer(Okio.source(inputStream))
-        val sink = Okio.buffer(Okio.sink(outputFile))
-
-        sink.writeAll(source)
-
-        sink.close()
-        source.close()
-         */
-
-        val outputStream = FileOutputStream(outputFile)
-        inputStream.use { input ->
-            outputStream.use { output ->
-                input.copyTo(output)
-            }
-        }
     }
 
-    private fun createImageFile(dir: File, fileName: String? = null,id : String): File {
-        if (fileName == null) {
-            sp = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
-            val timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-kkmmss"))
-            Log.d("FileName", " " + dir)
-            if(sp!!.getString("user_token","-") != "-") {
-             //   uploadFile(File.createTempFile("IMG_$timestamp", ".jpg", dir), id)
-            }
-            else{
-               // uploadFileNoToken(File.createTempFile("IMG_$timestamp", ".jpg", dir), id)
-            }
-            return File.createTempFile("IMG_$timestamp", ".jpg", dir)
-        }
-        Log.d("FileName", fileName)
-        return File(dir, fileName)
-    }
-    fun isImage(context: Context, uri: Uri): Boolean {
-        val mimeType = context.contentResolver.getType(uri) ?: return true
-        return mimeType.startsWith("image/")
+    private fun SendComplian(){
+        uploadExampleFile(filePath)
     }
 
-    public fun SendComplian(model : CompliansRequestModel){
-        mAPIService = ApiUtils.apiService
-        val sdf = SimpleDateFormat("yyMMdd")
-        val currentDate = sdf.format(Date())
-        val r = (10..12).shuffled().first()
-
-        mAPIService!!.postComplians("Bearer " + token, Register.GenerateRandomString.randomString(22), "AND-" + currentDate + Register.GenerateRandomString.randomString(r),
-                model!!).enqueue(object : Callback<responseComplian> {
-
-            override fun onResponse(call: Call<responseComplian>, response: Response<responseComplian>) {
-
-                //d("Complian", "Success")
-                if (response.isSuccessful()) {
-                    complianNumber=response.body()!!.resultData.complainNumber
-                    if(filePath.size != 0) {
-                        d("Complian", "Success")
-                        d("AB", response.body()!!.resultData._id)
-                        try {
-                            for (i in 0 until filePath.size) {
-                                uploadFile(filePath[i], response.body()!!.resultData._id)
-                                when(i){
-                                    filePath.size-1 -> {
-                                        sp = activity?.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
-                                        var edditor = sp!!.edit()
-                                        edditor.putString("Subject", "")
-                                        edditor.putString("Detail", "")
-                                        edditor.putInt("spin", 0)
-                                        edditor.commit()
-                                        val intent = Intent(activity, Success::class.java)
-                                        intent.putExtra("ComplianNumber", complianNumber)
-                                        activity!!.finish()
-                                        activity!!.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
-                                        activity!!.startActivity(intent)
-                                    }
-                                }
-
-                            }
-
-                        } catch (e: Exception) {
-
-                        }
-                    }
-                        else{
-
-                            sp = activity?.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
-                            var edditor = sp!!.edit()
-                            edditor.putString("Subject","")
-                            edditor.putString("Detail","")
-                            edditor.putInt("spin",0)
-                            edditor.commit()
-                        val intent = Intent(activity,Success::class.java)
-                        complianNumber=response.body()!!.resultData.complainNumber
-                        intent.putExtra("ComplianNumber",complianNumber)
-                        activity!!.finish()
-                        activity!!.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
-                        activity!!.startActivity(intent)
-
-                        }
+    public fun SendComplianNoToken(){
+        uploadExampleFile(filePath)
 
 
 
-
-                } else if (response.code() == 401) {
-                    val mAlert = AlertDialog.Builder(view!!.context)
-                    mAlert.setTitle("พบข้อผิดพลาด")
-                    mAlert.setMessage("")
-                    mAlert.setNegativeButton("ตกลง") { dialog, which ->
-                        dialog.dismiss()
-                }
-                mAlert.show()
-
-                  }
-
-              }
-
-                override fun onFailure(call: Call<responseComplian>, t: Throwable) {
-                           d("Complian", t.toString())
-                            /*  d("ss", t.toString())
-                            val mAlert = AlertDialog.Builder(view.context)
-                            mAlert.setTitle("พบข้อผิดพลาด")
-                            mAlert.setMessage("ท่านไม่ได้เชื่อมต่ออินเตอร์เน็ต")
-                            mAlert.setNegativeButton("ตกลง") { dialog, which ->
-                              dialog.dismiss()
-                            }
-                            mAlert.show()*/
-                    }
-                    })
-//textgps!!.text = "Latitude : $latitude"
-                    }
-    public fun SendComplianNoToken(model : CompliansRequestModel){
-        mAPIService = ApiUtils.apiService
-        val sdf = SimpleDateFormat("yyMMdd")
-        val currentDate = sdf.format(Date())
-        val r = (10..12).shuffled().first()
-
-        mAPIService!!.postCompliansNoToken(Register.GenerateRandomString.randomString(22), "AND-" + currentDate + Register.GenerateRandomString.randomString(r),
-                model!!).enqueue(object : Callback<responseComplian> {
-
-            override fun onResponse(call: Call<responseComplian>, response: Response<responseComplian>) {
-
-                //d("Complian", "Success")
-                if (response.isSuccessful()) {
-                    complianNumber=response.body()!!.resultData.complainNumber
-                    if(filePath.size != 0) {
-                    d("Complian", "Success")
-                    d("AB",response.body()!!.resultData._id)
-                    try {
-                        for (i in 0 until filePath.size) {
-                            uploadFileNoToken(filePath[i], response.body()!!.resultData._id)
-                            when(i){
-                                filePath.size-1 -> {
-                                    sp = activity?.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
-                                    var edditor = sp!!.edit()
-                                    edditor.putString("Subject", "")
-                                    edditor.putString("Detail", "")
-                                    edditor.putInt("spin", 0)
-                                    edditor.commit()
-                                    val intent = Intent(activity, Success::class.java)
-                                    intent.putExtra("ComplianNumber", complianNumber)
-                                    activity!!.finish()
-                                    activity!!.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
-                                    activity!!.startActivity(intent)
-                                }
-                            }
-
-                        }
-
-                    }catch (e : Exception){
-
-                    }
-                    }
-                    else{
-
-                        sp = activity?.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
-                        var edditor = sp!!.edit()
-                        edditor.putString("Subject","")
-                        edditor.putString("Detail","")
-                        edditor.putInt("spin",0)
-                        complianNumber=response.body()!!.resultData.complainNumber
-                        val intent = Intent(activity,Success::class.java)
-                        intent.putExtra("ComplianNumber",complianNumber)
-                        edditor.commit()
-                        activity!!.finish()
-                        activity!!.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
-                        activity!!.startActivity(intent)
-
-                    }
-
-
-                } else if (response.code() == 401) {
-                    val mAlert = AlertDialog.Builder(view!!.context)
-                    mAlert.setTitle("พบข้อผิดพลาด")
-                    mAlert.setMessage("")
-                    mAlert.setNegativeButton("ตกลง") { dialog, which ->
-                        dialog.dismiss()
-                    }
-                    mAlert.show()
-
-                }
-
-            }
-
-            override fun onFailure(call: Call<responseComplian>, t: Throwable) {
-                d("Complian", t.toString())
-                /*  d("ss", t.toString())
-                val mAlert = AlertDialog.Builder(view.context)
-                mAlert.setTitle("พบข้อผิดพลาด")
-                mAlert.setMessage("ท่านไม่ได้เชื่อมต่ออินเตอร์เน็ต")
-                mAlert.setNegativeButton("ตกลง") { dialog, which ->
-                  dialog.dismiss()
-                }
-                mAlert.show()*/
-            }
-        })
-//textgps!!.text = "Latitude : $latitude"
     }
     private fun uploadFileNoToken(file: String,id :String) {
         // d("Testt",fileUri.toString())
         // var file = File(getPath(fileUri));
         var fileupload =File(file)
-        mAPIService = ApiUtils.apiService
+        mAPIService = ApiUtilsComplian.apiServiceComplian
         var compressedImageFile = Compressor(requireContext()).setMaxHeight(640).setMaxWidth(640).setQuality(100).compressToFile(fileupload);
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
@@ -561,39 +330,11 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
                                         response: Response<UserProfile>) {
 
                     if (response.isSuccessful){
-                       /* sp = activity?.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
-                        var edditor = sp!!.edit()
-                        val intent = Intent(activity,Success::class.java)
-                        intent.putExtra("ComplianNumber",response.body()!!.resultData.complainNumber)
-                        edditor.putString("Subject","")
-                        edditor.putString("Detail","")
-                        edditor.putInt("spin",0)
-                        edditor.commit()
-
-*/
-
 
                     }else{
-                     /*   val mAlert = AlertDialog.Builder(view!!.context)
-                        mAlert.setTitle("พบข้อผิดพลาด")
-                        mAlert.setMessage("กรุณาลองใหม่อีกครั้ง")
-                        mAlert.setNegativeButton("ตกลง") { dialog, which ->
-                            dialog.dismiss()
-                        }
-                        mAlert.show()*/
+
                     }
-                    /* d("Pic",response.body()!!.resultData.image.path)
-                     imageUrl = IMAGE_URL+response.body()!!.resultData.image.path
 
-                     try {
-                         if (imageUrl !== null) {
-                             Glide.with(this@Profilewithpicture)
-                                     .load(imageUrl)
-                                     .into(imageset)
-                         }
-                     }catch (e : Exception){
-
-                     }*/
                 }
 
                 override fun onFailure(call: Call<UserProfile>, t: Throwable) {
@@ -608,7 +349,346 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
         activity!!.finish()
         activity!!.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
         activity!!.startActivity(intent)
-        //}
+
+    }
+    fun uploadExampleFile(file:ArrayList<String>){
+        for (i in 0 until file.size) {
+            var fileUpLoad = File(file[i])
+            var name = randomName()
+            var listener = transferUtility!!.upload(spacename, name, fileUpLoad, CannedAccessControlList.PublicRead)
+            TransferNetworkLossHandler.getInstance(requireContext())
+            listener.setTransferListener(object : TransferListener {
+                override fun onError(id: Int, ex: Exception?) {
+                    d("S3 Upload", ex.toString())
+                }
+
+                override fun onProgressChanged(id: Int, bytesCurrent: Long, bytesTotal: Long) {
+                    d("S3 Upload", "Progress ${((bytesCurrent / bytesTotal) * 100)}")
+                }
+
+                override fun onStateChanged(id: Int, state: TransferState?) {
+                    if (state == TransferState.COMPLETED) {
+                      //  d("Num", "Completed")
+                       d("Num",i.toString())
+                        d("Num",fileUpLoad.toString())
+                        ImageUploadPath.add("https://evolka-fwpapp-prod.sgp1.digitaloceanspaces.com/"+name)
+
+                        countUpload++
+                        when(countUpload){
+
+                            file.size -> {
+                                d("Num", "Finish")
+                                sp = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+                                if(sp!!.getString("user_token","-") != "-") {
+
+                                    doComplian()
+                                }
+                                else{
+
+                                    doComplianNoToken()
+                                }
+                                countUpload = 0
+                            }
+
+                        }
+                    }
+                }
+            })
+        }
+
+    }
+    fun randomName():String{
+        val sdf = SimpleDateFormat("ddMMYY")
+        val currentDate = sdf.format(Date())
+
+        var stringName = currentDate+randomString(6)
+
+
+        return stringName
     }
 
+    fun randomString(len: Int): String {
+        val DATA = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        var RANDOM = Random()
+        val sb = StringBuilder(len)
+        for (i in 0 until len) {
+            sb.append(DATA[RANDOM.nextInt(DATA.length)])
+        }
+        return sb.toString()
+    }
+    private fun doComplian(){
+        sharedPreferences = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        val partnerId = sharedPreferences!!.getString("partnerId", "-")
+        val firstName =  sharedPreferences!!.getString("firstName", "-")
+        val lastName =  sharedPreferences!!.getString("lastName", "-")
+        complianrequstmap = complianRequstMap(sp!!.getString("LAT","-")!!.toDouble(), sp!!.getString("LONG","-")!!.toDouble())
+        compliansrequestmodel = CompliansRequestModel("New", sp!!.getString("Subject", "-")!!, sp!!.getString("Type", "-")!!, sp!!.getString("Description", "-")!!, complianrequstmap!!, ImageUploadPath
+                    , firstName, lastName, partnerId)
+        compliansrequestmodelNoImage = CompliansRequestModelNoImage("New", sp!!.getString("Subject", "-")!!, sp!!.getString("Type", "-")!!, sp!!.getString("Description", "-")!!, complianrequstmap!!
+                , firstName, lastName, partnerId)
+
+            mAPIService = ApiUtilsComplian.apiServiceComplian
+            val sdf = SimpleDateFormat("yyMMdd")
+            val currentDate = sdf.format(Date())
+            val r = (10..12).shuffled().first()
+            mAPIService!!.postComplians("Bearer " + token, Register.GenerateRandomString.randomString(22), "AND-" + currentDate + Register.GenerateRandomString.randomString(r),
+                    compliansrequestmodel!!, partnerId).enqueue(object : Callback<responseComplian> {
+                override fun onResponse(call: Call<responseComplian>, response: Response<responseComplian>) {
+                    if (response.isSuccessful()) {
+                        complianNumber = response.body()!!.resultData.complainNumber
+                        if (filePath.size != 0) {
+                            d("Complian", "Success")
+                            d("AB", response.body()!!.resultData._id)
+                            try {
+                                sp = activity?.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+                                var edditor = sp!!.edit()
+                                edditor.putString("Subject", "")
+                                edditor.putString("Detail", "")
+                                edditor.putInt("spin", 0)
+                                edditor.commit()
+                                val intent = Intent(activity, Success::class.java)
+                                intent.putExtra("ComplianNumber", complianNumber)
+                                activity!!.finish()
+                                activity!!.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
+                                activity!!.startActivity(intent)
+
+                            } catch (e: Exception) {
+
+                            }
+                        } else {
+
+                            sp = activity?.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+                            var edditor = sp!!.edit()
+                            edditor.putString("Subject", "")
+                            edditor.putString("Detail", "")
+                            edditor.putInt("spin", 0)
+                            edditor.commit()
+                            val intent = Intent(activity, Success::class.java)
+                            complianNumber = response.body()!!.resultData.complainNumber
+                            intent.putExtra("ComplianNumber", complianNumber)
+                            activity!!.finish()
+                            activity!!.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
+                            activity!!.startActivity(intent)
+
+                        }
+
+                    } else if (response.code() == 401) {
+                        val mAlert = AlertDialog.Builder(view!!.context)
+                        mAlert.setTitle("พบข้อผิดพลาด")
+                        mAlert.setMessage("")
+
+                        mAlert.setNegativeButton("ตกลง") { dialog, which ->
+                            dialog.dismiss()
+                        }
+                        mAlert.show()
+
+                    }
+
+                }
+
+                override fun onFailure(call: Call<responseComplian>, t: Throwable) {
+                    d("Complian", t.toString())
+
+                }
+            })
+
+
+
+
+
+}
+    private fun doComplianNoToken(){
+        sharedPreferences = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        val partnerId = sharedPreferences!!.getString("partnerId", "-")
+        val firstName =  sharedPreferences!!.getString("firstName", "-")
+        val lastName =  sharedPreferences!!.getString("lastName", "-")
+        complianrequstmap = complianRequstMap(sp!!.getString("LAT","-")!!.toDouble(), sp!!.getString("LONG","-")!!.toDouble())
+        compliansrequestmodel = CompliansRequestModel("New", sp!!.getString("Subject","-")!!, sp!!.getString("Type","-")!!, sp!!.getString("Description","-")!!,complianrequstmap!!,ImageUploadPath
+                ,firstName,lastName,partnerId)
+        mAPIService = ApiUtilsComplian.apiServiceComplian
+        val sdf = SimpleDateFormat("yyMMdd")
+        val currentDate = sdf.format(Date())
+        val r = (10..12).shuffled().first()
+        mAPIService!!.postCompliansNoToken(Register.GenerateRandomString.randomString(22), "AND-" + currentDate + Register.GenerateRandomString.randomString(r),
+                compliansrequestmodel!!,partnerId).enqueue(object : Callback<responseComplian> {
+
+            override fun onResponse(call: Call<responseComplian>, response: Response<responseComplian>) {
+
+                if (response.isSuccessful()) {
+                    complianNumber=response.body()!!.resultData.complainNumber
+                    if(filePath.size != 0) {
+                        d("Complian", "Success")
+                        d("AB",response.body()!!.resultData._id)
+                        try {
+
+                                        sp = activity?.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+                                        var edditor = sp!!.edit()
+                                        edditor.putString("Subject", "")
+                                        edditor.putString("Detail", "")
+                                        edditor.putInt("spin", 0)
+                                        edditor.commit()
+                                        val intent = Intent(activity, Success::class.java)
+                                        intent.putExtra("ComplianNumber", complianNumber)
+                                        activity!!.finish()
+                                        activity!!.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
+                                        activity!!.startActivity(intent)
+                        }catch (e : Exception){
+
+                        }
+                    }
+                    else{
+
+                    }
+
+
+                } else {
+                    val mAlert = AlertDialog.Builder(view!!.context)
+                    mAlert.setTitle("พบข้อผิดพลาด")
+                    mAlert.setMessage("")
+                    mAlert.setNegativeButton("ตกลง") { dialog, which ->
+                        dialog.dismiss()
+                    }
+                    mAlert.show()
+
+                }
+
+            }
+
+            override fun onFailure(call: Call<responseComplian>, t: Throwable) {
+                d("Complian", t.toString())
+
+            }
+        })
+    }
+    private fun doComplianNoImage(){
+        sharedPreferences = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        val partnerId = sharedPreferences!!.getString("partnerId", "-")
+        val firstName =  sharedPreferences!!.getString("firstName", "-")
+        val lastName =  sharedPreferences!!.getString("lastName", "-")
+        complianrequstmap = complianRequstMap(sp!!.getString("LAT","-")!!.toDouble(), sp!!.getString("LONG","-")!!.toDouble())
+        compliansrequestmodelNoImage = CompliansRequestModelNoImage("New", sp!!.getString("Subject","-")!!, sp!!.getString("Type","-")!!, sp!!.getString("Description","-")!!,complianrequstmap!!
+                ,firstName,lastName,partnerId)
+        mAPIService = ApiUtilsComplian.apiServiceComplian
+        val sdf = SimpleDateFormat("yyMMdd")
+        val currentDate = sdf.format(Date())
+        val r = (10..12).shuffled().first()
+        mAPIService!!.postCompliansNoImage("Bearer " + token, Register.GenerateRandomString.randomString(22), "AND-" + currentDate + Register.GenerateRandomString.randomString(r),
+                compliansrequestmodelNoImage!!,partnerId).enqueue(object : Callback<responseComplian> {
+            override fun onResponse(call: Call<responseComplian>, response: Response<responseComplian>) {
+                if (response.isSuccessful()) {
+                    complianNumber=response.body()!!.resultData.complainNumber
+                    if(filePath.size != 0) {
+                        d("Complian", "Success")
+                        d("AB", response.body()!!.resultData._id)
+                        try {
+                            sp = activity?.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+                            var edditor = sp!!.edit()
+                            edditor.putString("Subject", "")
+                            edditor.putString("Detail", "")
+                            edditor.putInt("spin", 0)
+                            edditor.commit()
+                            val intent = Intent(activity, Success::class.java)
+                            intent.putExtra("ComplianNumber", complianNumber)
+                            activity!!.finish()
+                            activity!!.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
+                            activity!!.startActivity(intent)
+
+                        } catch (e: Exception) {
+
+                        }
+                    }
+                    else{
+
+                        sp = activity?.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+                        var edditor = sp!!.edit()
+                        edditor.putString("Subject","")
+                        edditor.putString("Detail","")
+                        edditor.putInt("spin",0)
+                        edditor.commit()
+                        val intent = Intent(activity,Success::class.java)
+                        complianNumber=response.body()!!.resultData.complainNumber
+                        intent.putExtra("ComplianNumber",complianNumber)
+                        activity!!.finish()
+                        activity!!.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
+                        activity!!.startActivity(intent)
+
+                    }
+
+                } else if (response.code() == 401) {
+                    val mAlert = AlertDialog.Builder(view!!.context)
+                    mAlert.setTitle("พบข้อผิดพลาด")
+                    mAlert.setMessage("")
+
+                    mAlert.setNegativeButton("ตกลง") { dialog, which ->
+                        dialog.dismiss()
+                    }
+                    mAlert.show()
+
+                }
+
+            }
+
+            override fun onFailure(call: Call<responseComplian>, t: Throwable) {
+                d("Complian", t.toString())
+
+            }
+        })
+    }
+    private fun doComplianNoTokenNoImage(){
+        sharedPreferences = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        val partnerId = sharedPreferences!!.getString("partnerId", "-")
+        val firstName =  sharedPreferences!!.getString("firstName", "-")
+        val lastName =  sharedPreferences!!.getString("lastName", "-")
+        complianrequstmap = complianRequstMap(sp!!.getString("LAT","-")!!.toDouble(), sp!!.getString("LONG","-")!!.toDouble())
+        compliansrequestmodelNoImage = CompliansRequestModelNoImage("New", sp!!.getString("Subject","-")!!, sp!!.getString("Type","-")!!, sp!!.getString("Description","-")!!,complianrequstmap!!
+                ,firstName,lastName,partnerId)
+        mAPIService = ApiUtilsComplian.apiServiceComplian
+        val sdf = SimpleDateFormat("yyMMdd")
+        val currentDate = sdf.format(Date())
+        val r = (10..12).shuffled().first()
+        mAPIService!!.postCompliansNoTokenNoImage(Register.GenerateRandomString.randomString(22), "AND-" + currentDate + Register.GenerateRandomString.randomString(r),
+                compliansrequestmodelNoImage!!,partnerId).enqueue(object : Callback<responseComplian> {
+
+            override fun onResponse(call: Call<responseComplian>, response: Response<responseComplian>) {
+
+                if (response.isSuccessful()) {
+                    complianNumber=response.body()!!.resultData.complainNumber
+                        d("Complian", "Success")
+                        d("AB",response.body()!!.resultData._id)
+                        try {
+                            sp = activity?.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+                            var edditor = sp!!.edit()
+                            edditor.putString("Subject", "")
+                            edditor.putString("Detail", "")
+                            edditor.putInt("spin", 0)
+                            edditor.commit()
+                            val intent = Intent(activity, Success::class.java)
+                            intent.putExtra("ComplianNumber", complianNumber)
+                            activity!!.finish()
+                            activity!!.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
+                            activity!!.startActivity(intent)
+                        }catch (e : Exception){
+                         d("VVV",e.toString())
+                        }
+
+
+                } else {
+                    val mAlert = AlertDialog.Builder(view!!.context)
+                    mAlert.setTitle("พบข้อผิดพลาด")
+                    mAlert.setMessage("")
+                    mAlert.setNegativeButton("ตกลง") { dialog, which ->
+                        dialog.dismiss()
+                    }
+                    mAlert.show()
+
+                }
+
+            }
+
+            override fun onFailure(call: Call<responseComplian>, t: Throwable) {
+                d("Complian", t.toString())
+
+            }
+        })
+    }
 }

@@ -16,6 +16,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.content.edit
 import com.example.deimos.fwp.R.layout.spinner_item
 import kotlinx.android.synthetic.main.complianviewpager.*
 import kotlinx.android.synthetic.main.compliantab1.*
@@ -31,7 +32,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class Tab1Complian  : androidx.fragment.app.Fragment() {
-    var mAPIService: ApiService? = null
+    var mAPIService: ApiServiceComplian? = null
     var sp: SharedPreferences? = null
     private var Subject : String?=null
     private var Detail : String?=null
@@ -39,7 +40,7 @@ class Tab1Complian  : androidx.fragment.app.Fragment() {
     private var closebut : ImageView?=null
     private var Next : Button?=null
     private var viewp : androidx.viewpager.widget.ViewPager?=null
-
+    private var sharedPreferences:SharedPreferences?=null
     private var arrayList : ArrayList<String>?=null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.compliantab1,container,false)
@@ -91,12 +92,14 @@ class Tab1Complian  : androidx.fragment.app.Fragment() {
 
 
 
-        mAPIService = ApiUtils.apiService
+        mAPIService = ApiUtilsComplian.apiServiceComplian
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
+        sharedPreferences = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        val partnerId = sharedPreferences!!.getString("partnerId","-")
         //token = sp!!.getString("user_token", "-")
-        mAPIService!!.getType( Register.GenerateRandomString.randomString(22), "AND-" + currentDate + Register.GenerateRandomString.randomString(r),"5dbfe99c776a690010deb237").enqueue(object : Callback<CompliansType> {
+        mAPIService!!.getType( Register.GenerateRandomString.randomString(22), "AND-" + currentDate + Register.GenerateRandomString.randomString(r),partnerId).enqueue(object : Callback<CompliansType> {
 
             override fun onResponse(call: Call<CompliansType>, response: Response<CompliansType>) {
                 if (response.isSuccessful()) {
@@ -268,6 +271,7 @@ class Tab1Complian  : androidx.fragment.app.Fragment() {
         Next!!.setOnClickListener {
             Subject = subjectInput.text.toString()
             Detail = detailInput.text.toString()
+
             if(!isValidate(Type,Subject,Detail)){
                 val mAlert = AlertDialog.Builder(view!!.context)
                 mAlert.setTitle("ลองใหม่อีกครั้ง")
@@ -280,10 +284,14 @@ class Tab1Complian  : androidx.fragment.app.Fragment() {
             }else{
                 sp = activity?.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
                 var edditor = sp!!.edit()
-                edditor.putString("Subject",Subject)
-                edditor.putString("Detail",Detail)
-                edditor.putString("Type",Type)
-                edditor.commit()
+                sp!!.edit {
+                    putString("Subject",Subject)
+                    putString("Detail",Detail)
+                    putString("firstName",nameComplian.text.toString())
+                    putString("lastName",surnameInputComplian.text.toString())
+
+                }
+
                 d("Check",sp!!.getString("Type","-"))
                 viewp!!.setCurrentItem(Complian.Pager.getItem(+1,viewp!!))
             }

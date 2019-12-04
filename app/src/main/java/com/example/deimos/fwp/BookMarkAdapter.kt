@@ -18,12 +18,17 @@ import java.util.*
 
 class BookMarkAdapter(ctx: Context, private val ModelArrayList: ArrayList<resultDataFav>) :
         androidx.recyclerview.widget.RecyclerView.Adapter<BookMarkAdapter.MyViewHolder>() {
-    var mAPIService: ApiService? = null
+    private var sharedPreferences:SharedPreferences?=null
+    var mAPIService: ApiServiceMember? = null
     private var token : String?=null
     private val inflater: LayoutInflater
+    private var partnerId : String?=null
     private val arraylist: ArrayList<resultDataFav>
     private var sp : SharedPreferences?=null
     init {
+        sharedPreferences = ctx.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        partnerId = sharedPreferences!!.getString("partnerId","-")
+
 
         sp = ctx.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
         token = sp!!.getString("user_token","-")
@@ -41,6 +46,7 @@ class BookMarkAdapter(ctx: Context, private val ModelArrayList: ArrayList<result
 
     override fun onBindViewHolder(holder: BookMarkAdapter.MyViewHolder, position: Int) {
         try {
+
             holder.title.setText(ModelArrayList[position].articleId.articleName.th)
             holder.date.setText(ModelArrayList[position].articleId.updatedAt.substring(0..9))
             holder.itemView.setOnClickListener {
@@ -49,17 +55,18 @@ class BookMarkAdapter(ctx: Context, private val ModelArrayList: ArrayList<result
                 holder.itemView.context?.startActivity(intent)
             }
             holder.bookmark.setOnClickListener {
-                mAPIService = ApiUtils.apiService
-                val partnerId = "5dbfe99c776a690010deb237"
+                mAPIService = ApiUtilsMember.apiServiceMember
+
                 val sdf = SimpleDateFormat("yyMMdd")
                 val currentDate = sdf.format(Date())
                 val r = (10..12).shuffled().first()
-                mAPIService!!.deleteFavorite(token!!,Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),ModelArrayList[position]._id).enqueue(object : Callback<ResponseFav> {
+                mAPIService!!.deleteFavorite(token!!,Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),ModelArrayList[position]._id,partnerId!!).enqueue(object : Callback<ResponseFav> {
                     override fun onResponse(call: Call<ResponseFav>, response: Response<ResponseFav>) {
                         if (response.isSuccessful) {
                             try {
                                 ModelArrayList.removeAt(position)
-                                notifyItemRemoved(position)
+                                //notifyItemRemoved(position)
+                                notifyDataSetChanged()
                             } catch (e: java.lang.Exception) {
                             }
                         }

@@ -46,7 +46,8 @@ class Register : androidx.fragment.app.Fragment() {
     private var sp : SharedPreferences?=null
     private var password : String?=null
     private var confirmpassword : String?=null
-    var mAPIService: ApiService? = null
+    var mAPIService: ApiServiceMember? = null
+    private var sharedPreferences:SharedPreferences?=null
 
 
 
@@ -57,8 +58,7 @@ class Register : androidx.fragment.app.Fragment() {
 }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-        mAPIService = ApiUtils.apiService
+        mAPIService = ApiUtilsMember.apiServiceMember
         emailinput!!.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
@@ -244,6 +244,8 @@ class Register : androidx.fragment.app.Fragment() {
                 mAlertDialog.show()
             }
             else{
+                sharedPreferences = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+                val partnerId = sharedPreferences!!.getString("partnerId","-")
                 name = nameinput.text.trim().toString()
                 surname = surnameinput.text.trim().toString()
                 email = emailinput.text.trim().toString()
@@ -258,7 +260,7 @@ class Register : androidx.fragment.app.Fragment() {
                 mProgressDialog.setCancelable(false)
                 mProgressDialog.setMessage("Loading...")
                 mProgressDialog.show()
-                mAPIService!!.createSignup(GenerateRandomString.randomString(22),"AND-"+currentDate+GenerateRandomString.randomString(r),registermodel).enqueue(object : Callback<RegisterModel> {
+                mAPIService!!.createSignup(GenerateRandomString.randomString(22),"AND-"+currentDate+GenerateRandomString.randomString(r),registermodel,partnerId).enqueue(object : Callback<RegisterModel> {
 
                     override fun onResponse(call: Call<RegisterModel>, response: Response<RegisterModel>) {
                         if (response.isSuccessful()) {
@@ -269,7 +271,7 @@ class Register : androidx.fragment.app.Fragment() {
                             mProgressDialog.dismiss()
                             val mAlert = AlertDialog.Builder(requireContext())
                             mAlert.setTitle("พบข้อผิดพลาด")
-                            mAlert.setMessage("ท่านไม่ได้เชื่อมต่ออินเตอร์เน็ต")
+                            mAlert.setMessage("กรุณาลองใหม่อีกครั้ง")
                             mAlert.setNegativeButton("ตกลง"){dialog, which ->
                                 dialog.dismiss()
                             }

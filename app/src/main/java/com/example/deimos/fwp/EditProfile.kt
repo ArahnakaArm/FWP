@@ -32,9 +32,10 @@ class EditProfile : AppCompatActivity() {
     private var surname: String? = null
     private var birthday: String? = null
     private var email: String? = null
-    var mAPIService: ApiService? = null
+    var mAPIService: ApiServiceMember? = null
     private var gender: String? = "Male"
     var token : String?=null
+    private var sharedPreferences:SharedPreferences?=null
     private var changeprofilemodel: ChangeProfileModel? = null
     private var userId: String? = null
 
@@ -56,7 +57,7 @@ class EditProfile : AppCompatActivity() {
         backbuttonedit.setOnClickListener {
             onBackPressed()
         }
-        mAPIService = ApiUtils.apiService
+        mAPIService = ApiUtilsMember.apiServiceMember
         butedit1.setOnClickListener {
             butedit1.setBackgroundResource(R.drawable.buttonround)
             butedit1.setTextColor(resources.getColor(R.color.White))
@@ -193,12 +194,14 @@ class EditProfile : AppCompatActivity() {
 
 
     private fun setField(){
+        sharedPreferences = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        val partnerId = sharedPreferences!!.getString("partnerId","-")
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
-        mAPIService = ApiUtils.apiService
+        mAPIService = ApiUtilsMember.apiServiceMember
 
-        mAPIService!!.getUser("Bearer "+token,Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r)).enqueue(object : Callback<UserProfile> {
+        mAPIService!!.getUser("Bearer "+token,Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId).enqueue(object : Callback<UserProfile> {
             override fun onResponse(call: Call<UserProfile>, response: Response<UserProfile>) {
 
                 if (response.isSuccessful()) {

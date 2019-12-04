@@ -1,6 +1,8 @@
 package com.example.deimos.fwp
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.util.Log
@@ -26,10 +28,11 @@ data class mapPinmap(var lat : Number,var long : Number)
 class MapsActivity : AppCompatActivity(){
 
     var pinCount : Int?=null
-    var mAPIService: ApiService? = null
+    var mAPIService: ApiServiceLocation? = null
     var latlng : String?=null
     var icon : BitmapDescriptor?=null
     var Pins : LatLng?=null
+    private var sharedPreferences:SharedPreferences?=null
     internal var mMapView: MapView?=null
     private var googleMap: GoogleMap? = null
 
@@ -58,8 +61,9 @@ class MapsActivity : AppCompatActivity(){
             icon = BitmapDescriptorFactory.fromResource(R.drawable.marker)
 
 
-            mAPIService = ApiUtils.apiService
-            val partnerId = "5dbfe99c776a690010deb237"
+            mAPIService = ApiUtilsLocation.apiServiceLocation
+            sharedPreferences = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+            val partnerId = sharedPreferences!!.getString("partnerId","-")
             val sdf = SimpleDateFormat("yyMMdd")
             val currentDate = sdf.format(Date())
             val r = (10..12).shuffled().first()

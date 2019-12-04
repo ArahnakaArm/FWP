@@ -39,7 +39,7 @@ import androidx.core.content.ContextCompat
 
 
 import androidx.appcompat.app.AppCompatActivity
-import com.example.deimos.fwp.TestGoogle.TAG
+
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.*
@@ -65,7 +65,7 @@ class FragmentComplain : androidx.fragment.app.Fragment(), GoogleApiClient.Conne
     private var hasGps = false
     private var compliansrequestmodel: CompliansRequestModel? = null
     private val REQUEST_LOCATION = 1
-    var mAPIService: ApiService? = null
+    var mAPIService: ApiServiceComplian? = null
     var token: String? = null
     private var latitude : Double?=null
     private var longitude : Double?=null
@@ -115,7 +115,7 @@ class FragmentComplain : androidx.fragment.app.Fragment(), GoogleApiClient.Conne
 
         ///Get Type List ///
 
-        mAPIService = ApiUtils.apiService
+        mAPIService = ApiUtilsComplian.apiServiceComplian
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
@@ -218,14 +218,14 @@ class FragmentComplain : androidx.fragment.app.Fragment(), GoogleApiClient.Conne
 
         }
 
-        sendcomplainbutton.setOnClickListener {
+      /*  sendcomplainbutton.setOnClickListener {
 
             if (googleApiClient == null || googleApiClient!!.isConnected()==false) {
              //   setUpGClient()
             }
             Subject = subjectInput.text.toString()
             Detail = detailInput.text.toString()
-            mAPIService = ApiUtils.apiService
+            mAPIService = ApiUtilsComplian.apiServiceComplian
             val sdf = SimpleDateFormat("yyMMdd")
             val currentDate = sdf.format(Date())
             val r = (10..12).shuffled().first()
@@ -278,7 +278,7 @@ class FragmentComplain : androidx.fragment.app.Fragment(), GoogleApiClient.Conne
             //textgps!!.text = "Latitude : $latitude"
         }
         ////POST /////
-
+*/
 
 
 

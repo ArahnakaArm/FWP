@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.marginTop
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.item_bookmark.view.*
 import org.w3c.dom.Text
@@ -41,18 +42,22 @@ class ArticleInfoAdapter(ctx: Context, private val ModelArrayList: ArrayList<Con
     override fun onBindViewHolder(holder: ArticleInfoAdapter.MyViewHolder, position: Int) {
 
                   if (ModelArrayList[position].messageType == "Image") {
-               holder.des.visibility = View.GONE
-               holder.image.visibility = View.VISIBLE
-                Glide.with(holder.itemView.context)
-                        .load(holder.URLImage + ModelArrayList[position].image.path)
+                         holder.image.requestLayout()
+                         holder.des.visibility = View.GONE
+                         holder.image.visibility = View.VISIBLE
+                         Glide.with(holder.itemView.context)
+                        .load(ModelArrayList[position].image)
                         .into(holder.image)
 
-                d("TestInfo", ModelArrayList[position].image.path)
+                      holder.image.layoutParams.height = 600
+                      holder.image.scaleType = ImageView.ScaleType.CENTER_CROP
+//                d("TestInfo", ModelArrayList[position].image)
 
                 } else if(ModelArrayList[position].messageType == "Text"){
                holder.des.visibility = View.VISIBLE
                holder.image.visibility = View.GONE
-                holder.des.text = ModelArrayList[position].articleDescription.th
+                holder.des.text = "  "+ModelArrayList[position].articleDescription.th
+
                 d("TestInfo", ModelArrayList[position].articleDescription.th)
                 }
         holder.image.setOnClickListener {

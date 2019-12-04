@@ -9,7 +9,7 @@ import android.widget.Filter
 import android.widget.Filterable
 import android.widget.TextView
 
-import com.example.deimos.fwp.User
+
 
 import java.util.ArrayList
 

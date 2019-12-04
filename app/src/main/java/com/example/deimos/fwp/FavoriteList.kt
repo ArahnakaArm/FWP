@@ -24,8 +24,9 @@ data class Bookmark(val title : String,val date : String)
 class FavoriteList : AppCompatActivity() {
     private var sp : SharedPreferences?=null
     private var token : String?=null
-    var mAPIService : ApiService?=null
+    var mAPIService : ApiServiceMember?=null
     var favList = ArrayList<resultDataFav>()
+    var sharedPreferences:SharedPreferences?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,8 +42,9 @@ class FavoriteList : AppCompatActivity() {
     }
 
     private fun getBookMarkList(){
-        mAPIService = ApiUtils.apiService
-        val partnerId = "5dbfe99c776a690010deb237"
+        mAPIService = ApiUtilsMember.apiServiceMember
+        sharedPreferences = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        val partnerId = sharedPreferences!!.getString("partnerId","-")
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()

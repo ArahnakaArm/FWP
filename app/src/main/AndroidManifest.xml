@@ -18,7 +18,6 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:screenOrientation="portrait"
-
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity" android:theme="@style/AppTheme.NoActionBar" android:screenOrientation="portrait" android:windowSoftInputMode="adjustPan" >
@@ -59,16 +58,17 @@
         <activity android:name=".LogInWithSkip" android:screenOrientation="portrait"  android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".Success" android:screenOrientation="portrait" android:theme="@style/AppTheme.NoActionBar" android:launchMode='singleTask'/>
         <activity android:name=".RegisterHolder" android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".ForgotPassword" android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".EditProfile" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ChangePassword" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".LogIn" android:theme="@style/AppTheme.NoActionBar" android:screenOrientation="portrait"/>
+        <activity android:name=".ForgotPassword" android:theme="@style/AppTheme.NoActionBar" android:launchMode='singleTask'/>
+        <activity android:name=".EditProfile" android:theme="@style/AppTheme.NoActionBar" android:launchMode='singleTask'/>
+        <activity android:name=".ChangePassword" android:theme="@style/AppTheme.NoActionBar" android:launchMode='singleTask'/>
+        <activity android:name=".LogIn" android:theme="@style/AppTheme.NoActionBar" android:screenOrientation="portrait" android:launchMode='singleTask'/>
         <activity android:name=".ArticleInfo" android:screenOrientation="portrait" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".FavoriteList"  android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".SearchNews" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".FavoriteList"  android:theme="@style/AppTheme.NoActionBar" android:launchMode='singleTask'/>
+        <activity android:name=".SearchNews" android:theme="@style/AppTheme.NoActionBar" android:launchMode='singleTask'/>
         <activity android:name=".WebView" android:theme="@style/AppTheme.NoActionBar" android:screenOrientation="portrait"/>
         <activity android:name=".ComplainList" android:theme="@style/AppTheme.NoActionBar" android:screenOrientation="portrait"/>
         <activity android:name=".MapsActivity" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".TestDigitalOcean" />
 
 
         <meta-data

@@ -1,7 +1,9 @@
 package com.example.deimos.fwp
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -29,10 +31,36 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.zip.Inflater
-class SearchNews : AppCompatActivity(){
-    var mAPIService: ApiService? = null
+import kotlin.collections.ArrayList
+
+class SearchNews : AppCompatActivity(),ILoadMore{
+    lateinit var adapter: NewsAdapter
+    var mAPIService: ApiServiceContent? = null
     private var CategoriesId: String?=null
-    var news = ArrayList<ArticleData>()
+    private var news = ArrayList<ArticleData?>()
+    private var mCurrentPage =1
+    private val mItemPerRow = 10
+    private var searchState = false
+    private var searchText = ""
+    private var sharedPreferences:SharedPreferences?=null
+
+    override fun onLoadMore() {
+        try {
+            d("Detect", "YEsss")
+            news.add(null)
+            adapter.notifyItemInserted(news.size - 1)
+            Handler().postDelayed({
+                news.removeAt(news.size - 1)
+
+                LoadMore(CategoriesId!!,searchText)
+            }, 2000)
+        }catch (e:Exception){
+
+        }
+
+
+
+    }
 
 
 
@@ -42,10 +70,25 @@ class SearchNews : AppCompatActivity(){
         getCategories()
 
 
-        searchnews.textChanges().debounce(300,TimeUnit.MILLISECONDS).subscribe({it ->
+        searchnews.textChanges().debounce(450,TimeUnit.MILLISECONDS).subscribe({it ->
+            d("Text","Changed")
+
             try {
-                d("SEARCH", it.toString())
-                searchingArticle(it.toString())
+                if(searchnews.text.isEmpty()){
+                    mCurrentPage=1
+                    searchState =false
+                    news.clear()
+                    searchText = ""
+                    getArticle(CategoriesId,searchText)
+                }else{
+                    searchText=it.toString()
+                    searchState= true
+                    mCurrentPage=1
+                    news.clear()
+                    getArticle(CategoriesId,searchText)
+                }
+              //  d("SEARCH", it.toString())
+               // searchingArticle(it.toString())
             }catch (e : Exception){
 
             }
@@ -66,19 +109,26 @@ class SearchNews : AppCompatActivity(){
 
 
 
-    private fun getArticle(id : String?){
-        mAPIService = ApiUtils.apiService
-        val partnerId = "5dbfe99c776a690010deb237"
+    private fun getArticle(id : String?,text : String){
+        mAPIService = ApiUtilsContent.apiService
+        sharedPreferences = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        val partnerId = sharedPreferences!!.getString("partnerId","-")
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
-        mAPIService!!.getArticles(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId,id!!).enqueue(object : Callback<ArticleModel> {
+        mAPIService!!.getArticlesSearchLimitAll(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId,(mItemPerRow*(mCurrentPage-1)), 10,text!!,"updatedAt").enqueue(object : Callback<ArticleModel> {
 
             override fun onResponse(call: Call<ArticleModel>, response: Response<ArticleModel>) {
                 //  d("Article",response.body()!!.developerMessage)
                 try {
 
-                        upDateUi(response.body()!!.resultData,response.body()!!.rowCount)
+                    for(i in 0 until response.body()!!.resultData.size) {
+
+                        news.add(response.body()!!.resultData[i])
+
+                    }
+                    mCurrentPage++
+                    upDateUi(news)
 
                 }catch (e : Exception){}
             }
@@ -87,12 +137,14 @@ class SearchNews : AppCompatActivity(){
             }
         })
     }
-    private fun upDateUi(data : ArrayList<ArticleData>,Count : Int){
+    private fun upDateUi(data : ArrayList<ArticleData?>){
         var layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this@SearchNews)
         list_recycler_view_news.layoutManager = layoutManager
-
-        var adapter = NewsAdapter(this@SearchNews,data)
+         adapter = NewsAdapter(list_recycler_view_news,this@SearchNews,data,this@SearchNews)
         list_recycler_view_news.adapter = adapter
+        adapter.setLoadMore(this)
+
+
      /*   list_recycler_view_news.apply {
             layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this@SearchNews)
             adapter = NewsAdapter(context,data)
@@ -101,53 +153,22 @@ class SearchNews : AppCompatActivity(){
 
 */
 
-
-        list_recycler_view_news.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            var previousTotal = 0
-            var isLoading = false
-            val visibleThreshold = 10
-            var firstVisibleItem = 0
-            var visibleItemCount = 0
-            var totalItemCount = 0
-
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-
-                visibleItemCount = recyclerView.childCount
-                totalItemCount = layoutManager!!.itemCount
-                firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
-              //  d("TestScroll",firstVisibleItem.toString())
-                d("TestScroll","visibleItemCount : "+ visibleItemCount.toString())
-                d("TestScroll","totalItemCount : "+ totalItemCount.toString())
-                d("TestScroll","firstVisibleItem : "+ firstVisibleItem.toString())
-                if (!isLoading) {
-
-                    if ((visibleItemCount + firstVisibleItem) >= totalItemCount) {
-                     /*   page++
-                        getPage()*/
-                       d("TestScroll","Yes")
-                    }
-
-                }
-            }
-
-        })
-
     }
     private fun getCategories(){
-        mAPIService = ApiUtils.apiService
-        val partnerId = "5dbfe99c776a690010deb237"
+        mAPIService = ApiUtilsContent.apiService
+        sharedPreferences = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        val partnerId = sharedPreferences!!.getString("partnerId","-")
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
-        mAPIService!!.getCategories(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId).enqueue(object : Callback<CateModel> {
+        mAPIService!!.getCategoriesAll(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId).enqueue(object : Callback<CateModel> {
 
             override fun onResponse(call: Call<CateModel>, response: Response<CateModel>) {
                 //   d("Video",response.body()!!.resultData[0]._id)
                 try {
                     CategoriesId = response.body()!!.resultData[0]._id
                     if(CategoriesId != null){
-                        getArticle(CategoriesId)
+                        //getArticle(CategoriesId,searchText)
                     }
                 }catch (e : Exception){
 
@@ -168,18 +189,23 @@ class SearchNews : AppCompatActivity(){
         super.onBackPressed()
     }
     private fun searchingArticle(text : String){
-        mAPIService = ApiUtils.apiService
-        val partnerId = "5dbfe99c776a690010deb237"
+        mAPIService = ApiUtilsContent.apiService
+        sharedPreferences = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        val partnerId = sharedPreferences!!.getString("partnerId","-")
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
-        mAPIService!!.getSearchArticles(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId,CategoriesId!!,text!!).enqueue(object : Callback<ArticleModel> {
+        mAPIService!!.getArticlesSearchLimit(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId,CategoriesId!!,(mItemPerRow*(mCurrentPage-1)), 10,text!!,"updatedAt").enqueue(object : Callback<ArticleModel> {
 
             override fun onResponse(call: Call<ArticleModel>, response: Response<ArticleModel>) {
                 //  d("Article",response.body()!!.developerMessage)
                 try {
+                    for (i in 0 until response.body()!!.resultData.size){
 
-                    upDateUi(response.body()!!.resultData,response.body()!!.rowCount)
+                        news.add(response.body()!!.resultData[i])
+                    }
+
+                    upDateUi(news)
 
                 }catch (e : Exception){}
             }
@@ -188,7 +214,37 @@ class SearchNews : AppCompatActivity(){
             }
         })
     }
+    private fun LoadMore(id : String,text : String){
+        mAPIService = ApiUtilsContent.apiService
+        sharedPreferences =getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        val partnerId = sharedPreferences!!.getString("partnerId","-")
+        val sdf = SimpleDateFormat("yyMMdd")
+        val currentDate = sdf.format(Date())
+        val r = (10..12).shuffled().first()
+        mAPIService!!.getArticlesSearchLimitAll(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId,(mItemPerRow*(mCurrentPage-1)), 10,text!!,"updatedAt").enqueue(object : Callback<ArticleModel> {
 
+            override fun onResponse(call: Call<ArticleModel>, response: Response<ArticleModel>) {
+                //  d("Article",response.body()!!.developerMessage)
+                try {
+
+                    for(i in 0 until response.body()!!.resultData.size) {
+
+                        news.add(response.body()!!.resultData[i])
+
+
+                    }
+
+                     adapter.notifyDataSetChanged()
+                    adapter.setLoaded()
+                    mCurrentPage++
+
+                }catch (e : Exception){}
+            }
+            override fun onFailure(call: Call<ArticleModel>, t: Throwable) {
+                d("arm","onFailure")
+            }
+        })
+    }
 
 
 

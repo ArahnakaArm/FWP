@@ -3,6 +3,7 @@ package com.example.deimos.fwp
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.fragment.app.Fragment
@@ -36,11 +37,8 @@ data class address(var en : String ,var th : String)
 data class map(var lat: Number , var long : Number)
 data class region(var en : String, var th : String)
 class LocationList : androidx.fragment.app.Fragment() {
-    private var etsearch: EditText? = null
-    internal var textlength = 0
-    private var adapter2: LocationChildAdapter? = null
-    private val companyViewHolder: CompanyViewHolder? = null
-    var mAPIService: ApiService? = null
+    private var sharedPreferences : SharedPreferences?=null
+    private var mAPIService: ApiServiceLocation? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = activity!!.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         view.menu.getItem(0).isCheckable=true
@@ -74,9 +72,10 @@ class LocationList : androidx.fragment.app.Fragment() {
         super.onResume()
     }
     private fun getLocation(){
-        mAPIService = ApiUtils.apiService
+        mAPIService = ApiUtilsLocation.apiServiceLocation
         val companies = ArrayList<Company>()
-        val partnerId = "5dbfe99c776a690010deb237"
+        sharedPreferences = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        val partnerId = sharedPreferences!!.getString("partnerId","-")
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
@@ -228,9 +227,10 @@ class LocationList : androidx.fragment.app.Fragment() {
         }
     }
     private fun searchingLocation(text : String){
-        mAPIService = ApiUtils.apiService
+        mAPIService = ApiUtilsLocation.apiServiceLocation
         val companies = ArrayList<Company>()
-        val partnerId = "5dbfe99c776a690010deb237"
+        sharedPreferences = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        val partnerId = sharedPreferences!!.getString("partnerId","-")
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()

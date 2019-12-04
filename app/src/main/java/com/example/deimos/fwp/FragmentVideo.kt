@@ -2,7 +2,9 @@ package com.example.deimos.fwp
 
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -10,6 +12,7 @@ import android.util.Log
 import android.util.Log.d
 import android.view.*
 import android.widget.EditText
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.jakewharton.rxbinding3.widget.textChanges
 import kotlinx.android.synthetic.main.favorite.*
 import kotlinx.android.synthetic.main.videofragment.*
@@ -27,17 +30,48 @@ data class Video(val name : String,
                  val username : String
                  ,val address:addrees)
 
-data class VideosModel(var resultCode : String,var developerMessage : String , var resultData : ArrayList<resultData3>)
+data class VideosModel(var resultCode : String,var developerMessage : String , var resultData : ArrayList<resultData3?>,var rowCount : Int)
 data class resultData3(var videoName : videoName,var videoDescription : videoDescription,var keywords : ArrayList<String>,var isPublish : Boolean
-,var _id : String,var videoLink : String, var categoryType : String,var createdAt : String,var updatedAt : String,var categoryId : categoryid
-,var image : VideoImage)
+,var _id : String,var videoLink : String, var categoryType : String,var createdAt : String,var updatedAt : String,var categoryInfo : ArrayList<categoryInfoVideo>
+,var image : String)
+data class categoryInfoVideo(var categoryId : categoryid)
 data class VideoImage(var path : String)
 data class categoryid(var categoryName :categoryName)
 data class categoryName(var en :String,var th : String)
 data class  videoDescription(var en : String,var th : String)
 data class  videoName(var en : String,var th : String)
-class FragmentVideo : androidx.fragment.app.Fragment() {
+
+class FragmentVideo : androidx.fragment.app.Fragment(),ILoadMore {
+    lateinit var adapter: VideoAdapter
+    private var mCurrentPage = 1
+    private val mItemPerRow = 3
+    private var sharedPreferences:SharedPreferences?=null
+    private var searchText = ""
+    private var searchState = false
+    lateinit var layoutManager: LinearLayoutManager
+    private var videos = ArrayList<resultData3?>()
     var mAPIService: ApiService? = null
+
+
+    override fun onLoadMore() {
+        try {
+            d("Detect", "YEsss")
+            videos.add(null)
+            adapter.notifyItemInserted(videos.size - 1)
+            Handler().postDelayed({
+                videos.removeAt(videos.size - 1)
+               // adapter.notifyItemRemoved(videos.size)
+                    LoadMoreWithSearch(searchText)
+            }, 2000)
+        }catch (e:Exception){
+
+        }
+
+
+
+    }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +90,7 @@ class FragmentVideo : androidx.fragment.app.Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mAPIService = ApiUtils.apiService
+       /* mAPIService = ApiUtils.apiService
         val partnerId = "5dbfe99c776a690010deb237"
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
@@ -66,15 +100,20 @@ class FragmentVideo : androidx.fragment.app.Fragment() {
         mProgressDialog.setCancelable(false)
         mProgressDialog.setMessage("Loading...")
         mProgressDialog.show()
-        mAPIService!!.getVideo(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId).enqueue(object : Callback<VideosModel>{
+        mAPIService!!.getVideo(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId,(mItemPerRow*(mCurrentPage-1)), 3).enqueue(object : Callback<VideosModel>{
 
             override fun onResponse(call: Call<VideosModel>, response: Response<VideosModel>) {
 
                 try {
-                    d("Video", response.body()!!.resultData[0]!!.videoName.th.toString())
-                    showData(response.body()!!.resultData)
-                } catch (e: Exception) {
+                    for (i in 0 until response.body()!!.resultData.size){
+                        videos.add(response.body()!!.resultData[i])
 
+                    }
+                    d("Video", videos[0]!!._id)
+                    mCurrentPage++
+                    showData(videos)
+                } catch (e: Exception) {
+                    d("Video", e.toString())
                 }
 
 
@@ -85,7 +124,7 @@ class FragmentVideo : androidx.fragment.app.Fragment() {
                 d("arm","onFailure")
             }
 
-        })
+        })*/
 
         /*searchvideo.addTextChangedListener(object : TextWatcher{
             override fun afterTextChanged(s: Editable?) {
@@ -103,7 +142,22 @@ class FragmentVideo : androidx.fragment.app.Fragment() {
         searchvideo.textChanges().debounce(300, TimeUnit.MILLISECONDS).subscribe({ it ->
             try {
                 d("SEARCH", it.toString())
-                searchvideoList(it.toString())
+                if(searchvideo.text.isEmpty()){
+                    mCurrentPage=1
+                    searchState =false
+                    videos.clear()
+                    searchText = ""
+                    searchvideoList("")
+
+                }
+                else{
+                    searchText=it.toString()
+                    searchState= true
+                    mCurrentPage=1
+                    videos.clear()
+                    searchvideoList(it.toString())
+                }
+               //
             }catch (e : Exception){
 
             }
@@ -113,15 +167,25 @@ class FragmentVideo : androidx.fragment.app.Fragment() {
     companion object {
         fun newInstance(): FragmentVideo = FragmentVideo()
     }
-    private fun  showData(users :ArrayList<resultData3> ){
+    private fun  showData(users :ArrayList<resultData3?> ){
         try {
-            users.sortBy{it.updatedAt}
+            users.sortBy{it?.updatedAt}
             users.reverse()
-            list_recycler_view_video.apply {
-                layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
-               adapter = VideoAdapter(context,users)
 
-            }
+
+
+            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
+            list_recycler_view_video.layoutManager = layoutManager
+            adapter = VideoAdapter(list_recycler_view_video,context!!,users,requireActivity())
+            list_recycler_view_video.adapter = adapter
+            adapter.setLoadMore(this)
+
+
+          /*  list_recycler_view_video.apply {
+                layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
+               adapter = VideoAdapter(list_recycler_view_video,context,users,requireActivity())
+
+            }*/
 
        }catch (e:Exception){
 
@@ -139,65 +203,6 @@ class FragmentVideo : androidx.fragment.app.Fragment() {
 
     }
 
-
-    private fun populateList(): java.util.ArrayList<SearchModel> {
-
-        val list = java.util.ArrayList<SearchModel>()
-
-        for (i in 0..7) {
-
-            list.add(SearchModel("","",""))
-        }
-
-        return list
-    }
-
-    interface ClickListener {
-        fun onClick(view: View, position: Int)
-
-        fun onLongClick(view: View?, position: Int)
-    }
-
-    internal class RecyclerTouchListener(
-            context: Context,
-            recyclerView: androidx.recyclerview.widget.RecyclerView,
-            private val clickListener: ClickListener?
-    ) : androidx.recyclerview.widget.RecyclerView.OnItemTouchListener {
-
-        private val gestureDetector: GestureDetector
-
-        init {
-            gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
-                override fun onSingleTapUp(e: MotionEvent): Boolean {
-                    return true
-                }
-
-                override fun onLongPress(e: MotionEvent) {
-                    val child = recyclerView.findChildViewUnder(e.x, e.y)
-                    if (child != null && clickListener != null) {
-                        clickListener.onLongClick(child, recyclerView.getChildPosition(child))
-                    }
-                }
-            })
-        }
-
-        override fun onInterceptTouchEvent(rv: androidx.recyclerview.widget.RecyclerView, e: MotionEvent): Boolean {
-
-            val child = rv.findChildViewUnder(e.x, e.y)
-            if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
-                clickListener.onClick(child, rv.getChildPosition(child))
-            }
-            return false
-        }
-
-        override fun onTouchEvent(rv: androidx.recyclerview.widget.RecyclerView, e: MotionEvent) {}
-
-        override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
-
-        }
-    }
-
-
     override fun onResume() {
         val view = activity!!.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         view.menu.getItem(1).isCheckable=true
@@ -206,29 +211,102 @@ class FragmentVideo : androidx.fragment.app.Fragment() {
     }
     private fun searchvideoList(text : String){
         mAPIService = ApiUtils.apiService
-        val partnerId = "5dbfe99c776a690010deb237"
+        sharedPreferences = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        val partnerId = sharedPreferences!!.getString("partnerId","-")
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
-        mAPIService!!.getSearchVideo(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId,text).enqueue(object : Callback<VideosModel>{
+        mAPIService!!.getSearchVideo(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId,text,(mItemPerRow*(mCurrentPage-1)), 3,"updatedAt").enqueue(object : Callback<VideosModel?>{
 
-            override fun onResponse(call: Call<VideosModel>, response: Response<VideosModel>) {
+            override fun onResponse(call: Call<VideosModel?>, response: Response<VideosModel?>) {
 
                 try {
-                    showData(response.body()!!.resultData)
+                    for (i in 0 until response.body()!!.resultData.size){
+                        videos.add(response.body()!!.resultData[i])
+
+                    }
+                    mCurrentPage++
+                    showData(videos)
                 } catch (e: Exception) {
 
                 }
 
             }
 
-            override fun onFailure(call: Call<VideosModel>, t: Throwable) {
-                d("arm","onFailure")
+            override fun onFailure(call: Call<VideosModel?>, t: Throwable) {
+                d("arm",t.toString())
             }
 
         })
     }
 
+    private fun LoadMore(){
+        mAPIService = ApiUtils.apiService
+        sharedPreferences = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        val partnerId = sharedPreferences!!.getString("partnerId","-")
+        val sdf = SimpleDateFormat("yyMMdd")
+        val currentDate = sdf.format(Date())
+        val r = (10..12).shuffled().first()
+        mAPIService!!.getVideo(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId,(mItemPerRow*(mCurrentPage-1)), 3).enqueue(object : Callback<VideosModel>{
 
+            override fun onResponse(call: Call<VideosModel>, response: Response<VideosModel>) {
+
+                try {
+                    for (i in 0 until response.body()!!.resultData.size){
+                        videos.add(response.body()!!.resultData[i])
+
+                    }
+                    adapter.notifyDataSetChanged()
+                    adapter.setLoaded()
+                    d("Video", videos[0]!!._id)
+                     mCurrentPage++
+                } catch (e: Exception) {
+                    d("Video", e.toString())
+                }
+
+
+            }
+
+            override fun onFailure(call: Call<VideosModel>, t: Throwable) {
+                d("arm",t.toString())
+            }
+
+        })
+
+    }
+    private fun LoadMoreWithSearch(text : String){
+        mAPIService = ApiUtils.apiService
+        sharedPreferences = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        val partnerId = sharedPreferences!!.getString("partnerId","-")
+        val sdf = SimpleDateFormat("yyMMdd")
+        val currentDate = sdf.format(Date())
+        val r = (10..12).shuffled().first()
+        mAPIService!!.getSearchVideo(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId,text,(mItemPerRow*(mCurrentPage-1)), 3,"updatedAt").enqueue(object : Callback<VideosModel?>{
+
+            override fun onResponse(call: Call<VideosModel?>, response: Response<VideosModel?>) {
+
+                try {
+                    for (i in 0 until response.body()!!.resultData.size){
+                        videos.add(response.body()!!.resultData[i])
+
+                    }
+                    adapter.notifyDataSetChanged()
+                    adapter.setLoaded()
+                    d("Video", videos[0]!!._id)
+                    mCurrentPage++
+                } catch (e: Exception) {
+                    d("Video", e.toString())
+                }
+
+
+            }
+
+            override fun onFailure(call: Call<VideosModel?>, t: Throwable) {
+                d("arm",t.toString())
+            }
+
+        })
+
+    }
 
 }

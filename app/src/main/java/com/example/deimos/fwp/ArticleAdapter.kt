@@ -88,13 +88,17 @@ class ArticleAdapter(recyclerView: RecyclerView,ctx: Context,var activity: Activ
             d("DateChange",dateFormat)
             var dateOutput = Profilewithpicture.ConvertDate.ChangeFormatDate(dateFormat.substring(0..3),dateFormat.substring(5..6),dateFormat.substring(8..9))
             d("DateChange",dateOutput)
-
-
-            holder.cate.setText(ModelArrayList[position].categoryId.categoryName.th)
+            for (i in 0 until ModelArrayList[position].categoryInfo.size) {
+                d("TestArray",i.toString())
+                if (ModelArrayList[position].categoryInfo[i].categoryId.categoryName.th != "Top") {
+                    holder.cate.setText(ModelArrayList[position].categoryInfo[i].categoryId.categoryName.th)
+                }
+            }
+            //holder.cate.setText(ModelArrayList[position].categoryId.categoryName.th)
             holder.date.setText(dateOutput)
             holder.title.setText(ModelArrayList[position].articleName.th)
             Glide.with(holder.itemView.context)
-                    .load(holder.URLImage+ModelArrayList[position].imageThumbnail.path)
+                    .load(ModelArrayList[position].imageThumbnail)
                     .into(holder.image)
 
             holder.itemView.setOnClickListener {
@@ -136,7 +140,7 @@ class ArticleAdapter(recyclerView: RecyclerView,ctx: Context,var activity: Activ
         var date = itemView.articleDate
         var image = itemView.articleImage
         var cate = itemView.category
-        var URLImage : String ="http://206.189.41.105:1210/"
+
         /*
            var date : TextView
            var image : ImageView

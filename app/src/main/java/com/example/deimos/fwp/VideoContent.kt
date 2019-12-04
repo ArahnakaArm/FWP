@@ -1,6 +1,8 @@
 package com.example.deimos.fwp
 
 import android.app.Activity
+import android.content.Context
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.os.PersistableBundle
@@ -30,18 +32,19 @@ import retrofit2.Response
 import java.lang.Exception
 import java.text.SimpleDateFormat
 data class VideoById(var resultCode : String,var developerMessage : String ,var resultData : resultVideo)
-data class resultVideo(var videoName : nameVideo , var videoDescription : videoDescriptionId,var videoLink : String,var categoryId : category,
+data class resultVideo(var videoName : nameVideo , var videoDescription : videoDescriptionId,var videoLink : String,var categoryInfo : ArrayList<categoryInfoVideoContent>,
                        var updatedAt : String,var viewCount : Int)
 data class nameVideo(var en : String,var th : String)
 data class videoDescriptionId(var en : String,var th : String)
-data class category(var categoryName : cateName)
-data class cateName(var en : String,var th :String)
+data class categoryInfoVideoContent(var categoryId : categoryIdVideoContent)
+data class categoryIdVideoContent(var categoryName : categoryNameVideoContent)
+data class categoryNameVideoContent(var en: String,var th: String)
 var mYouTubePlayerView: YouTubePlayerView?=null
-var VideoId : String?=null
 var mAPIService: ApiService? = null
 var mOnInitializedListener: YouTubePlayer.OnInitializedListener?=null
 
 class VideoContent : YouTubeBaseActivity() {
+    private var sharedPreferences:SharedPreferences?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.videocontent)
@@ -51,7 +54,8 @@ class VideoContent : YouTubeBaseActivity() {
         var _id = bundle!!.getString("ID")
 
         mAPIService = ApiUtils.apiService
-        val partnerId = "5dbfe99c776a690010deb237"
+        sharedPreferences = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        val partnerId = sharedPreferences!!.getString("partnerId","-")
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(java.util.Date())
         val r = (10..12).shuffled().first()
@@ -63,7 +67,7 @@ class VideoContent : YouTubeBaseActivity() {
             }
 
             override fun onFailure(call: Call<VideoById>, t: Throwable) {
-                d("arm","onFailure")
+                d("arm",t.toString())
             }
 
         })
@@ -74,7 +78,8 @@ class VideoContent : YouTubeBaseActivity() {
     }
     private fun upDateUi(data : resultVideo){
         var url = data.videoLink.substringAfterLast("=")
-        categorycontent.setText(data.categoryId.categoryName.th)
+
+         categorycontent.setText(data.categoryInfo[0].categoryId.categoryName.th)
         var dateFormate =data.updatedAt.substring(0..10)
         var dateOutput =Profilewithpicture.ConvertDate.ChangeFormatDate(dateFormate.substring(0..3),dateFormate.substring(5..6),dateFormate.substring(8..9))
         videotitle.setText(data.videoName.th)
