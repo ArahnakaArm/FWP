@@ -142,7 +142,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="View"
+            android:text="ผู้เข้าชม"
+            android:layout_marginTop="3dp"
+            android:id="@+id/viewCount"
             android:layout_marginLeft="5dp"
             android:textColor="@color/battleshipgrey"
             android:textSize="11dp"
@@ -151,24 +153,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
+            android:layout_marginTop="3dp"
             android:id="@+id/viewValue"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="3dp"
             android:textColor="@color/battleshipgrey"
             android:textSize="11dp"
             android:fontFamily="@font/anakotmai_light"/>
-        <ImageView
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:layout_marginLeft="15dp"
-            android:src="@drawable/sharesmall"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Shared"
-            android:layout_marginLeft="5dp"
-            android:textColor="@color/battleshipgrey"
-            android:textSize="11dp"
-            android:fontFamily="@font/anakotmai_light"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -198,7 +189,6 @@
             android:layout_margin="15dp"
             android:id="@+id/descripvideo"
             android:fontFamily="@font/anakotmai"
-            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
             android:textSize="12dp"
             android:textColor="@color/Black"/>
 

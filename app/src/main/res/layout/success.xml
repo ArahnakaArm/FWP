@@ -84,21 +84,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="หมายเลขคำร้องของคุณคือ"
-
                 android:textColor="@color/White"
                 android:fontFamily="@font/anakotmai_light"
                 android:textSize="18dp"
-
                 android:layout_centerHorizontal="true"
                 android:id="@+id/idcomplian"
 
                 android:layout_below="@+id/successtext"
                 />
             <Button
+                android:layout_centerHorizontal="true"
                 android:layout_width="300dp"
                 android:layout_height="60dp"
                 android:background="@drawable/buttonround2"
                 android:layout_marginTop="50dp"
+                android:gravity="center"
                 android:textSize="26dp"
                 android:text="ปิด"
                 android:id="@+id/goHome"

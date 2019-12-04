@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.opengl.Visibility
@@ -45,7 +46,8 @@ class Register : androidx.fragment.app.Fragment() {
     private var sp : SharedPreferences?=null
     private var password : String?=null
     private var confirmpassword : String?=null
-    var mAPIService: ApiService? = null
+    var mAPIService: ApiServiceMember? = null
+    private var sharedPreferences:SharedPreferences?=null
 
 
 
@@ -56,8 +58,7 @@ class Register : androidx.fragment.app.Fragment() {
 }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-        mAPIService = ApiUtils.apiService
+        mAPIService = ApiUtilsMember.apiServiceMember
         emailinput!!.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
@@ -158,7 +159,30 @@ class Register : androidx.fragment.app.Fragment() {
 
 
         backbuttonregister.setOnClickListener {
-            activity?.onBackPressed()
+            val mAlert = AlertDialog.Builder(requireContext())
+            if(emailinput.text.toString() != "" || passwordinput.text.toString() != "" || confirmpassinput.text.toString() != "" ||
+            nameinput.text.toString() != "" || surnameinput.text.toString() != "") {
+                mAlert.setTitle("คุณยังไม่ได้บันทึก")
+                mAlert.setMessage("คุณต้องการที่จะปิดโดยไม่บันทึก ใช่ หรือ ไม่ ?")
+                mAlert.setNegativeButton("ไม่ใช่") { dialog, which ->
+                    dialog.dismiss()
+
+                }
+                mAlert.setPositiveButton("ใช่,ปิด") { dialog, which ->
+                    dialog.dismiss()
+                    sp = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+                    var edditor = sp!!.edit()
+                    edditor.putString("Subject", "")
+                    edditor.putString("Detail", "")
+                    edditor.putInt("spin", 0)
+                    edditor.commit()
+                    activity?.onBackPressed()
+                }
+                mAlert.show()
+            }
+            else{
+                activity?.onBackPressed()
+            }
         }
         birthinput.setOnClickListener {
             val c = Calendar.getInstance()
@@ -220,6 +244,8 @@ class Register : androidx.fragment.app.Fragment() {
                 mAlertDialog.show()
             }
             else{
+                sharedPreferences = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+                val partnerId = sharedPreferences!!.getString("partnerId","-")
                 name = nameinput.text.trim().toString()
                 surname = surnameinput.text.trim().toString()
                 email = emailinput.text.trim().toString()
@@ -234,18 +260,18 @@ class Register : androidx.fragment.app.Fragment() {
                 mProgressDialog.setCancelable(false)
                 mProgressDialog.setMessage("Loading...")
                 mProgressDialog.show()
-                mAPIService!!.createSignup(GenerateRandomString.randomString(22),"AND-"+currentDate+GenerateRandomString.randomString(r),registermodel).enqueue(object : Callback<RegisterModel> {
+                mAPIService!!.createSignup(GenerateRandomString.randomString(22),"AND-"+currentDate+GenerateRandomString.randomString(r),registermodel,partnerId).enqueue(object : Callback<RegisterModel> {
 
                     override fun onResponse(call: Call<RegisterModel>, response: Response<RegisterModel>) {
                         if (response.isSuccessful()) {
                             mProgressDialog.dismiss()
                             replaceFragment(SuccessRegister())
                         }
-                        if(response.code().toString()=="409"){
+                        else{
                             mProgressDialog.dismiss()
                             val mAlert = AlertDialog.Builder(requireContext())
                             mAlert.setTitle("พบข้อผิดพลาด")
-                            mAlert.setMessage("ท่านไม่ได้เชื่อมต่ออินเตอร์เน็ต")
+                            mAlert.setMessage("กรุณาลองใหม่อีกครั้ง")
                             mAlert.setNegativeButton("ตกลง"){dialog, which ->
                                 dialog.dismiss()
                             }

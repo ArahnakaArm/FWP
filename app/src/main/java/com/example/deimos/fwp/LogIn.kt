@@ -54,7 +54,7 @@ data class UserProfile(var resultData : resultData2,
         ,var developerMessage:String
 )
 data class resultData2(var _id :String,var birthDate: String ,var email: String,var firstName : String ,
-                       var gender : String,var lastName :String,var image : image,var complainNumber : String)
+                       var gender : String,var lastName :String,var image : String,var complainNumber : String)
 data class image(var path : String)
 data class resultData(val access_token:String)
 data class UserMo(val resultData : resultData,
@@ -66,7 +66,7 @@ class LogIn :AppCompatActivity() {
     var sp: SharedPreferences? = null
     var loginButton : LoginButton?=null
     var mainActivity : MainActivity= MainActivity()
-    var mAPIService: ApiService? = null
+    var mAPIService: ApiServiceAuth? = null
     private var token :String?=null
     private var tokenFacebook : String?=null
     private var tokenGoogle : String?=null
@@ -74,7 +74,7 @@ class LogIn :AppCompatActivity() {
     private var authCodeGoogle: String? = null
     val TAG = "ServerAuthCodeActivity"
     private var acc : AccessToken?=null
-
+    private var sharedPreferences:SharedPreferences?=null
     private val RC_GET_AUTH_CODE = 9003
     private var mGoogleSignInClient: GoogleSignInClient? = null
     private var mAuthCodeTextView: TextView? = null
@@ -154,7 +154,7 @@ class LogIn :AppCompatActivity() {
 
 
 
-        mAPIService = ApiUtils.apiService
+        mAPIService = ApiUtilsAuth.apiServiceAuth
         sp = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
         val editor = sp?.edit()
 
@@ -172,11 +172,13 @@ class LogIn :AppCompatActivity() {
             }
 
             else{
+                sharedPreferences = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+                val partnerId = sharedPreferences!!.getString("partnerId","-")
                 var userLogin = UserModel(emailinput.text.toString(),passwordinput.text.toString())
                 val sdf = SimpleDateFormat("yyMMdd")
                 val currentDate = sdf.format(Date())
                 val r = (10..12).shuffled().first()
-                mAPIService!!.userLogin(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),userLogin).enqueue(object : Callback<UserMo> {
+                mAPIService!!.userLogin(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),userLogin,partnerId).enqueue(object : Callback<UserMo> {
 
                     override fun onResponse(call: Call<UserMo>, response: Response<UserMo>) {
 
@@ -198,10 +200,10 @@ class LogIn :AppCompatActivity() {
 
 
                         }
-                        else if(response.code()==401){
+                        else{
                             val mAlert = AlertDialog.Builder(this@LogIn)
                             mAlert.setTitle("พบข้อผิดพลาด")
-                            mAlert.setMessage("รหัสผ่านของท่านผิด")
+                            mAlert.setMessage("โปรดกรอกอีเมล์หรือรหัสผ่านให้ถูกต้อง")
                             mAlert.setNegativeButton("ตกลง"){dialog, which ->
                                 dialog.dismiss()
                             }
@@ -215,7 +217,7 @@ class LogIn :AppCompatActivity() {
                         d("ss",t.toString())
                         val mAlert = AlertDialog.Builder(this@LogIn)
                         mAlert.setTitle("พบข้อผิดพลาด")
-                        mAlert.setMessage("ท่านไม่ได้เชื่อมต่ออินเตอร์เน็ต")
+                        mAlert.setMessage("โปรดกรอกอีเมล์หรือรหัสผ่านให้ถูกต้อง")
                         mAlert.setNegativeButton("ตกลง"){dialog, which ->
                             dialog.dismiss()
                         }
@@ -249,24 +251,7 @@ class LogIn :AppCompatActivity() {
 
 
     }
-    fun getTest(){
-        val sdf = SimpleDateFormat("yyMMdd")
-        val currentDate = sdf.format(Date())
-        val r = (10..12).shuffled().first()
-        mAPIService = ApiUtils.apiService
-        mAPIService!!.getUser("Bearer "+token,Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r)).enqueue(object : Callback<UserProfile> {
-            override fun onResponse(call: Call<UserProfile>, response: Response<UserProfile>) {
-                if (response.isSuccessful()) {
-                    d("ss",response.body()!!.resultData.firstName)
 
-                }
-            }
-            override fun onFailure(call: Call<UserProfile>, t: Throwable) {
-
-            }
-        })
-
-    }
 
 
      override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -362,13 +347,15 @@ class LogIn :AppCompatActivity() {
         })
     }
     private fun getLocalTokenGoogle(){
-        mAPIService = ApiUtils.apiService
+        sharedPreferences = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        val partnerId = sharedPreferences!!.getString("partnerId","-")
+        mAPIService = ApiUtilsAuth.apiServiceAuth
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
         val editor = sp?.edit()
 
-        mAPIService!!.userLoginGoogle(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),tokenGoogle!!).enqueue(object : Callback<UserMo> {
+        mAPIService!!.userLoginGoogle(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),tokenGoogle!!,partnerId).enqueue(object : Callback<UserMo> {
 
             override fun onResponse(call: Call<UserMo>, response: Response<UserMo>) {
 
@@ -399,11 +386,13 @@ class LogIn :AppCompatActivity() {
         d("What",sp!!.getBoolean("LogIn_State",false).toString())
     }
     private fun getLocalTokenFacebook(){
-        mAPIService = ApiUtils.apiService
+        sharedPreferences = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        val partnerId = sharedPreferences!!.getString("partnerId","-")
+        mAPIService = ApiUtilsAuth.apiServiceAuth
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
-        mAPIService!!.userLoginFacebook(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),tokenFacebook!!).enqueue(object : Callback<UserMo> {
+        mAPIService!!.userLoginFacebook(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),tokenFacebook!!,partnerId).enqueue(object : Callback<UserMo> {
 
             override fun onResponse(call: Call<UserMo>, response: Response<UserMo>) {
                 if (response.isSuccessful()) {

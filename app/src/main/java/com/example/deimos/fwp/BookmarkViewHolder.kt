@@ -1,13 +1,12 @@
 package com.example.deimos.fwp
 
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 
 class BookmarkViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
-        androidx.recyclerview.widget.RecyclerView.ViewHolder(inflater.inflate(R.layout.itembookmark, parent, false)) {
+        androidx.recyclerview.widget.RecyclerView.ViewHolder(inflater.inflate(R.layout.item_bookmark, parent, false)) {
     private var mTitleView: TextView? = null
     private var mDateView : TextView? = null
 

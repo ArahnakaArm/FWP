@@ -15,8 +15,6 @@ import kotlinx.android.synthetic.main.complianviewpager.*
 
 class Complian : AppCompatActivity(){
     var sp: SharedPreferences? = null
-    private var complianrequstmap: complianRequstMap? = null
-    private var compliansrequestmodel: CompliansRequestModel? = null
     var token : String?=null
     var textListener : String?=null
     var pg : androidx.viewpager.widget.ViewPager?=null
@@ -104,35 +102,6 @@ class Complian : AppCompatActivity(){
 
         }
         next2.setOnClickListener {
-/*
-            var ListUri: MutableList<Uri> = ArrayList()
-            sp = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
-            token = sp!!.getString("user_token", "-")
-            complianrequstmap = complianRequstMap(sp!!.getString("LAT","-")!!.toDouble(), sp!!.getString("LONG","-")!!.toDouble())
-            compliansrequestmodel = CompliansRequestModel("New", "5dbfe99c776a690010deb237", sp!!.getString("Subject","-")!!, sp!!.getString("Type","-")!!, sp!!.getString("Description","-")!!,complianrequstmap!!)
-
-            if (sp!!.getString("Subject","-")!="-") {
-
-                try {
-                    for (i in 0 until sp!!.getInt("CountUri", 0)) {
-                        ListUri!!.add(Uri.parse(sp!!.getString("URI" + i, "-")))
-                    }
-                    Log.d("AA", ListUri.toString())
-                    Tab3Complian().SendComplian(token!!, compliansrequestmodel!!, token!!, sp!!.getInt("CountUri", 0), ListUri!!, activity!!, requireContext())
-                    var edit = sp!!.edit()
-                    edit.putString("Subject","-")
-                    edit.commit()
-                }catch (e : Exception) {
-
-                    replaceFragment(Success())
-                }
-
-            }else{
-                // Toast.makeText(requireContext(),"กรุณากรอกข้อมูลให้ครบถ้วน",Toast.LENGTH_SHORT)
-                replaceFragment(Success())
-            }
-            replaceFragment(Success())
-            */
         }
 
         backcomplian.setOnClickListener {

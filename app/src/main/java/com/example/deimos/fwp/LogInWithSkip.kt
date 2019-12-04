@@ -53,14 +53,14 @@ class LogInWithSkip : AppCompatActivity() {
     var sp: SharedPreferences? = null
     var loginButton : LoginButton?=null
     var mainActivity : MainActivity= MainActivity()
-    var mAPIService: ApiService? = null
+    var mAPIService: ApiServiceAuth? = null
     private var token :String?=null
     private var tokenFacebook : String?=null
     private var tokenGoogle : String?=null
     private var authCodeGoogle: String? = null
     val TAG = "ServerAuthCodeActivity"
     private var acc : AccessToken?=null
-
+    private var sharedPreferences:SharedPreferences?=null
     private val RC_GET_AUTH_CODE = 9003
     private var mGoogleSignInClient: GoogleSignInClient? = null
     private var mAuthCodeTextView: TextView? = null
@@ -139,7 +139,7 @@ class LogInWithSkip : AppCompatActivity() {
 
 
 
-        mAPIService = ApiUtils.apiService
+        mAPIService = ApiUtilsAuth.apiServiceAuth
         sp = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
 
 
@@ -158,11 +158,13 @@ class LogInWithSkip : AppCompatActivity() {
             }
 
             else{
+                sharedPreferences = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+                val partnerId = sharedPreferences!!.getString("partnerId","-")
                 var userLogin = UserModel(emailinput.text.toString(),passwordinput.text.toString())
                 val sdf = SimpleDateFormat("yyMMdd")
                 val currentDate = sdf.format(Date())
                 val r = (10..12).shuffled().first()
-                mAPIService!!.userLogin(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),userLogin).enqueue(object : Callback<UserMo> {
+                mAPIService!!.userLogin(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),userLogin,partnerId).enqueue(object : Callback<UserMo> {
 
                     override fun onResponse(call: Call<UserMo>, response: Response<UserMo>) {
 
@@ -182,7 +184,7 @@ class LogInWithSkip : AppCompatActivity() {
                             val intent = Intent(this@LogInWithSkip, Complian::class.java)
                             startActivity(intent)
                             finish()
-                            getTest()
+
 
                         }
                         else{
@@ -251,26 +253,7 @@ class LogInWithSkip : AppCompatActivity() {
     }
 
 
-    fun getTest(){
-        val sdf = SimpleDateFormat("yyMMdd")
-        val currentDate = sdf.format(Date())
-        val r = (10..12).shuffled().first()
-        mAPIService = ApiUtils.apiService
 
-        mAPIService!!.getUser("Bearer "+token,Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r)).enqueue(object : Callback<UserProfile> {
-            override fun onResponse(call: Call<UserProfile>, response: Response<UserProfile>) {
-
-                if (response.isSuccessful()) {
-                    d("ss",response.body()!!.resultData.firstName)
-
-                }
-            }
-            override fun onFailure(call: Call<UserProfile>, t: Throwable) {
-
-            }
-        })
-
-    }
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -360,17 +343,18 @@ class LogInWithSkip : AppCompatActivity() {
         })
     }
     private fun getLocalTokenGoogle(){
-        mAPIService = ApiUtils.apiService
+        sharedPreferences = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        val partnerId = sharedPreferences!!.getString("partnerId","-")
+        mAPIService = ApiUtilsAuth.apiServiceAuth
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
-
         val editor = sp?.edit()
         editor?.commit()
         editor?.putBoolean("LogIn_State", true)
         d("AA",sp?.getBoolean("LogIn_State", false).toString())
 
-        mAPIService!!.userLoginGoogle(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),tokenGoogle!!).enqueue(object : Callback<UserMo> {
+        mAPIService!!.userLoginGoogle(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),tokenGoogle!!,partnerId).enqueue(object : Callback<UserMo> {
 
             override fun onResponse(call: Call<UserMo>, response: Response<UserMo>) {
                 if (response.isSuccessful()) {
@@ -422,11 +406,13 @@ class LogInWithSkip : AppCompatActivity() {
 
     }
     private fun getLocalTokenFacebook(){
-        mAPIService = ApiUtils.apiService
+        sharedPreferences = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        val partnerId = sharedPreferences!!.getString("partnerId","-")
+        mAPIService = ApiUtilsAuth.apiServiceAuth
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
-        mAPIService!!.userLoginFacebook(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),tokenFacebook!!).enqueue(object : Callback<UserMo> {
+        mAPIService!!.userLoginFacebook(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),tokenFacebook!!,partnerId).enqueue(object : Callback<UserMo> {
 
             override fun onResponse(call: Call<UserMo>, response: Response<UserMo>) {
                 if (response.isSuccessful()) {

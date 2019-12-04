@@ -26,8 +26,9 @@ import androidx.appcompat.app.AppCompatActivity
 data class ChangePasswordModel(var oldPassword : String,var newPassword : String)
 class ChangePassword : AppCompatActivity(){
     var sp: SharedPreferences? = null
-    var mAPIService: ApiService? = null
+    var mAPIService: ApiServiceMember? = null
     private var userId: String? = null
+    private var sharedPreferences:SharedPreferences?=null
     private var changepasswordmodel: ChangePasswordModel? = null
     var token : String?=null
 
@@ -108,7 +109,9 @@ class ChangePassword : AppCompatActivity(){
             }
             else {
                 //PUT DATA//
-                mAPIService = ApiUtils.apiService
+                sharedPreferences = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+                val partnerId = sharedPreferences!!.getString("partnerId","-")
+                mAPIService = ApiUtilsMember.apiServiceMember
                 val sdf = SimpleDateFormat("yyMMdd")
                 val currentDate = sdf.format(Date())
                 val r = (10..12).shuffled().first()
@@ -120,7 +123,7 @@ class ChangePassword : AppCompatActivity(){
                 mProgressDialog.setMessage("Loading...")
                 mProgressDialog.show()
                 mAPIService!!.changePassword("Bearer "+token,Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),userId!!,
-                        changepasswordmodel!!).enqueue(object : Callback<ResponeModel> {
+                        changepasswordmodel!!,partnerId).enqueue(object : Callback<ResponeModel> {
 
                     override fun onResponse(call: Call<ResponeModel>, response: Response<ResponeModel>) {
                         if (response.isSuccessful()) {
@@ -134,6 +137,7 @@ class ChangePassword : AppCompatActivity(){
                             mAlert.show()
                         }
                         else{
+                            mProgressDialog.dismiss();
                             mAlert.setTitle("พบข้อผิดพลาด")
                             mAlert.setMessage("กรุณาลองใหม่อีกครั้ง")
                             mAlert.setNegativeButton("ตกลง"){dialog, which ->
@@ -145,6 +149,7 @@ class ChangePassword : AppCompatActivity(){
 
                     }
                     override fun onFailure(call: Call<ResponeModel>, t: Throwable) {
+                        mProgressDialog.dismiss();
                         d("ss",t.toString())
                         mAlert.setTitle("พบข้อผิดพลาด")
                         mAlert.setMessage("กรุณาลองใหม่อีกครั้ง")
@@ -153,7 +158,9 @@ class ChangePassword : AppCompatActivity(){
                         }
                         mAlert.show()
                     }
+
                 })
+
             }
             //End of Validation and PUT DATA//
         }
