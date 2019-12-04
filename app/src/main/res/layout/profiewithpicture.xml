@@ -79,7 +79,7 @@
             android:text="โปรไฟล์"
             android:layout_marginTop="25dp"
             android:layout_marginLeft="30dp"
-            android:fontFamily="@font/anakotmai_light"
+            android:fontFamily="@font/anakotmai"
             android:textColor="@color/White"
             android:textSize="28dp"/>
 
@@ -186,7 +186,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="6dp"
                         android:textSize="14dp"
-
+                        android:fontFamily="@font/anakotmai_light"
                         android:id="@+id/birthday"
                         android:textColor="@color/Grey"
                         android:layout_marginTop="8dp"
@@ -365,7 +365,7 @@
                 android:elevation="5dp"
                 android:orientation="vertical"
                 android:layout_marginRight="5dp"
-                android:id="@+id/setting"
+                android:id="@+id/complianlist"
                 android:gravity="center_horizontal"
                 android:layout_marginLeft="5dp"
                 android:layout_height="match_parent"
@@ -427,6 +427,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="20dp"
+            android:textColor="@color/White"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/linear3layer"
             android:text="เวอร์ชั่น 1.0"/>

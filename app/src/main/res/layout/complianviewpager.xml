@@ -197,12 +197,14 @@
 
     </com.example.deimos.fwp.NonSwipe>
      <RelativeLayout
-         android:layout_width="350dp"
+         android:layout_marginBottom="10dp"
+         android:layout_width="wrap_content"
          android:gravity="center"
+
          android:layout_marginLeft="10dp"
          android:layout_marginRight="10dp"
-         android:layout_marginBottom="15dp"
          android:layout_marginTop="20dp"
+
          android:layout_height="wrap_content">
          <LinearLayout
              android:layout_width="wrap_content"
@@ -211,14 +213,13 @@
              android:layout_height="match_parent">
 
 <RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_marginBottom="10dp"
-    android:layout_height="match_parent">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
     <Button
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/sendcomplainbutton"
         android:textSize="20dp"
+        android:background="@drawable/sendcomplainbutton"
         android:fontFamily="@font/anakotmai_light"
         android:textColor="@color/White"
         android:visibility="invisible"
@@ -229,7 +230,6 @@
              android:layout_height="wrap_content"
              android:background="@drawable/sendcomplainbutton"
              android:textSize="20dp"
-
              android:fontFamily="@font/anakotmai_light"
              android:textColor="@color/White"
              android:id="@+id/next"

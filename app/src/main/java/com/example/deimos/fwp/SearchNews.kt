@@ -1,7 +1,9 @@
 package com.example.deimos.fwp
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -14,215 +16,159 @@ import android.util.Log.d
 import android.view.*
 import android.widget.EditText
 import android.widget.ListAdapter
-import kotlinx.android.synthetic.main.bookmarkfragment.*
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import bolts.Task.call
+import kotlinx.android.synthetic.main.favorite.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import com.jakewharton.rxbinding3.widget.textChanges;
+import kotlinx.android.synthetic.main.searchnews.*
+import rx.functions.Action1
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 import java.util.zip.Inflater
-class SearchNews : androidx.fragment.app.Fragment() {
-    private var etsearch: EditText? = null
-    internal var textlength = 0
-    var mAPIService: ApiService? = null
-    private val adaptertest: CustomAdapter? = null
-    var usr : Userstate = Userstate()
-    var array_sort = java.util.ArrayList<ArticleData>()
+import kotlin.collections.ArrayList
+
+class SearchNews : AppCompatActivity(),ILoadMore{
+    lateinit var adapter: NewsAdapter
+    var mAPIService: ApiServiceContent? = null
     private var CategoriesId: String?=null
-    var news = ArrayList<ArticleData>()
+    private var news = ArrayList<ArticleData?>()
+    private var mCurrentPage =1
+    private val mItemPerRow = 10
+    private var searchState = false
+    private var searchText = ""
+    private var sharedPreferences:SharedPreferences?=null
+
+    override fun onLoadMore() {
+        try {
+            d("Detect", "YEsss")
+            news.add(null)
+            adapter.notifyItemInserted(news.size - 1)
+            Handler().postDelayed({
+                news.removeAt(news.size - 1)
+
+                LoadMore(CategoriesId!!,searchText)
+            }, 2000)
+        }catch (e:Exception){
+
+        }
+
+
+
+    }
 
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        retainInstance= true
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = activity!!.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        view.menu.getItem(2).isCheckable=true
-        view.menu.getItem(2).isChecked=true
-        return inflater.inflate(R.layout.searchnews,container,false)       
-
-    }
+        setContentView(R.layout.searchnews)
+        getCategories()
 
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-/*
-        news.add(NewsModel("Topic 1","14/12/61"))
-        news.add(NewsModel("Topic 2","14/12/61"))
-        news.add(NewsModel("Topic 3","14/12/61"))
-        news.add(NewsModel("Topic 4","14/12/61"))
-        news.add(NewsModel("Topic 5","14/12/61"))
+        searchnews.textChanges().debounce(450,TimeUnit.MILLISECONDS).subscribe({it ->
+            d("Text","Changed")
 
-
-
-*/
-       getCategories()
-
-        ///// Searching /////
-        etsearch = view.findViewById(R.id.searchbookmark) as EditText
-        array_sort = java.util.ArrayList<ArticleData>()
-        array_sort = populateList()
-        etsearch!!.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable) {}
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                textlength = etsearch!!.text.length
-                array_sort.clear()
-                for (i in news.indices) {
-                    if (textlength <= news[i].articleName.th.length) {
-                        Log.d("ertyyy", news[i].articleName.th.toLowerCase().trim())
-                        if (news[i].articleName.th.toLowerCase().trim().contains(
-                                        etsearch!!.text.toString().toLowerCase().trim { it <= ' ' })
-                        ) {
-                            array_sort.add(news[i])
-                        }
-                    }
+            try {
+                if(searchnews.text.isEmpty()){
+                    mCurrentPage=1
+                    searchState =false
+                    news.clear()
+                    searchText = ""
+                    getArticle(CategoriesId,searchText)
+                }else{
+                    searchText=it.toString()
+                    searchState= true
+                    mCurrentPage=1
+                    news.clear()
+                    getArticle(CategoriesId,searchText)
                 }
-                list_recycler_view.apply {
-                    layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
-                    adapter = NewsAdapter(context,array_sort)
-
-                }
+              //  d("SEARCH", it.toString())
+               // searchingArticle(it.toString())
+            }catch (e : Exception){
 
             }
-        })
-///// Searching /////
+        },{ throwable -> d("Error",throwable.message)})
 
-        backprees.setOnClickListener {
-            fragmentManager?.popBackStack()
-        }
 
-        searchbookmark.addTextChangedListener(object : TextWatcher{
-            override fun afterTextChanged(s: Editable?) {
 
-            }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                adaptertest?.filter?.filter(s)
-
-            }
-
-        })
-    }
-
-    companion object {
-        fun newInstance(): SearchNews = SearchNews()
-    }
-    private fun populateList(): java.util.ArrayList<ArticleData> {
-
-        val list = java.util.ArrayList<ArticleData>()
-
-        for (i in 0..7) {
-
-           // list.add(ArticleData("",""))
-        }
-
-        return list
-    }
-
-    interface ClickListener {
-        fun onClick(view: View, position: Int)
-
-        fun onLongClick(view: View?, position: Int)
-    }
-
-    internal class RecyclerTouchListener(
-            context: Context,
-            recyclerView: androidx.recyclerview.widget.RecyclerView,
-            private val clickListener: ClickListener?
-    ) : androidx.recyclerview.widget.RecyclerView.OnItemTouchListener {
-
-        private val gestureDetector: GestureDetector
-
-        init {
-            gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
-                override fun onSingleTapUp(e: MotionEvent): Boolean {
-                    return true
-                }
-                override fun onLongPress(e: MotionEvent) {
-                    val child = recyclerView.findChildViewUnder(e.x, e.y)
-                    if (child != null && clickListener != null) {
-                        clickListener.onLongClick(child, recyclerView.getChildPosition(child))
-                    }
-                }
-            })
-        }
-
-        override fun onInterceptTouchEvent(rv: androidx.recyclerview.widget.RecyclerView, e: MotionEvent): Boolean {
-
-            val child = rv.findChildViewUnder(e.x, e.y)
-            if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
-                clickListener.onClick(child, rv.getChildPosition(child))
-            }
-            return false
-        }
-
-        override fun onTouchEvent(rv: androidx.recyclerview.widget.RecyclerView, e: MotionEvent) {}
-
-        override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
+        ///// Searching  API/////
+        backpreesnews.setOnClickListener {
+            finish()
+            this.overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_right)
 
         }
 
     }
 
-    override fun onResume() {
-        val view = activity!!.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        view.menu.getItem(2).isCheckable=true
-        view.menu.getItem(2).isChecked=true
-        super.onResume()
-    }
-    private fun getArticle(id : String?){
-        mAPIService = ApiUtils.apiService
-        val partnerId = "5dbfe99c776a690010deb237"
+
+
+
+    private fun getArticle(id : String?,text : String){
+        mAPIService = ApiUtilsContent.apiService
+        sharedPreferences = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        val partnerId = sharedPreferences!!.getString("partnerId","-")
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
-        mAPIService!!.getArticles(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId,id!!).enqueue(object : Callback<ArticleModel> {
+        mAPIService!!.getArticlesSearchLimitAll(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId,(mItemPerRow*(mCurrentPage-1)), 10,text!!,"updatedAt").enqueue(object : Callback<ArticleModel> {
 
             override fun onResponse(call: Call<ArticleModel>, response: Response<ArticleModel>) {
                 //  d("Article",response.body()!!.developerMessage)
                 try {
-                    if(response.body()!!.resultData[0] != null){
-                        upDateUi(response.body()!!.resultData,response.body()!!.rowCount)
+
+                    for(i in 0 until response.body()!!.resultData.size) {
+
+                        news.add(response.body()!!.resultData[i])
+
                     }
+                    mCurrentPage++
+                    upDateUi(news)
+
                 }catch (e : Exception){}
-
-
             }
-
             override fun onFailure(call: Call<ArticleModel>, t: Throwable) {
                 d("arm","onFailure")
             }
         })
     }
-    private fun upDateUi(data : ArrayList<ArticleData>,Count : Int){
-        list_recycler_view.apply {
-            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
+    private fun upDateUi(data : ArrayList<ArticleData?>){
+        var layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this@SearchNews)
+        list_recycler_view_news.layoutManager = layoutManager
+         adapter = NewsAdapter(list_recycler_view_news,this@SearchNews,data,this@SearchNews)
+        list_recycler_view_news.adapter = adapter
+        adapter.setLoadMore(this)
+
+
+     /*   list_recycler_view_news.apply {
+            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this@SearchNews)
             adapter = NewsAdapter(context,data)
+
         }
+
+*/
+
     }
     private fun getCategories(){
-        mAPIService = ApiUtils.apiService
-        val partnerId = "5dbfe99c776a690010deb237"
+        mAPIService = ApiUtilsContent.apiService
+        sharedPreferences = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        val partnerId = sharedPreferences!!.getString("partnerId","-")
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
-        mAPIService!!.getCategories(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId).enqueue(object : Callback<CateModel> {
+        mAPIService!!.getCategoriesAll(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId).enqueue(object : Callback<CateModel> {
 
             override fun onResponse(call: Call<CateModel>, response: Response<CateModel>) {
                 //   d("Video",response.body()!!.resultData[0]._id)
                 try {
                     CategoriesId = response.body()!!.resultData[0]._id
                     if(CategoriesId != null){
-                        getArticle(CategoriesId)
+                        //getArticle(CategoriesId,searchText)
                     }
                 }catch (e : Exception){
 
@@ -236,6 +182,70 @@ class SearchNews : androidx.fragment.app.Fragment() {
             }
         })
     }
+
+    override fun onBackPressed() {
+        finish()
+        this.overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_right)
+        super.onBackPressed()
+    }
+    private fun searchingArticle(text : String){
+        mAPIService = ApiUtilsContent.apiService
+        sharedPreferences = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        val partnerId = sharedPreferences!!.getString("partnerId","-")
+        val sdf = SimpleDateFormat("yyMMdd")
+        val currentDate = sdf.format(Date())
+        val r = (10..12).shuffled().first()
+        mAPIService!!.getArticlesSearchLimit(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId,CategoriesId!!,(mItemPerRow*(mCurrentPage-1)), 10,text!!,"updatedAt").enqueue(object : Callback<ArticleModel> {
+
+            override fun onResponse(call: Call<ArticleModel>, response: Response<ArticleModel>) {
+                //  d("Article",response.body()!!.developerMessage)
+                try {
+                    for (i in 0 until response.body()!!.resultData.size){
+
+                        news.add(response.body()!!.resultData[i])
+                    }
+
+                    upDateUi(news)
+
+                }catch (e : Exception){}
+            }
+            override fun onFailure(call: Call<ArticleModel>, t: Throwable) {
+                d("arm","onFailure")
+            }
+        })
+    }
+    private fun LoadMore(id : String,text : String){
+        mAPIService = ApiUtilsContent.apiService
+        sharedPreferences =getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        val partnerId = sharedPreferences!!.getString("partnerId","-")
+        val sdf = SimpleDateFormat("yyMMdd")
+        val currentDate = sdf.format(Date())
+        val r = (10..12).shuffled().first()
+        mAPIService!!.getArticlesSearchLimitAll(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId,(mItemPerRow*(mCurrentPage-1)), 10,text!!,"updatedAt").enqueue(object : Callback<ArticleModel> {
+
+            override fun onResponse(call: Call<ArticleModel>, response: Response<ArticleModel>) {
+                //  d("Article",response.body()!!.developerMessage)
+                try {
+
+                    for(i in 0 until response.body()!!.resultData.size) {
+
+                        news.add(response.body()!!.resultData[i])
+
+
+                    }
+
+                     adapter.notifyDataSetChanged()
+                    adapter.setLoaded()
+                    mCurrentPage++
+
+                }catch (e : Exception){}
+            }
+            override fun onFailure(call: Call<ArticleModel>, t: Throwable) {
+                d("arm","onFailure")
+            }
+        })
+    }
+
 
 
 }

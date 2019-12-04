@@ -68,15 +68,26 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:id="@+id/iconLocation"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/offsetlocationorangeresize"/>
         <TextView
             android:layout_width="wrap_content"
             android:fontFamily="@font/anakotmai_light"
             android:textColor="@color/Primary2"
-            android:layout_margin="15dp"
-            android:drawablePadding="5dp"
+            android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_toRightOf="@+id/iconLocation"
             android:textSize="24dp"
             android:id="@+id/locationname"
-            android:drawableStart="@drawable/offsetlocationorangeresize"
             android:layout_height="wrap_content"
             android:text="Locationname"/>
 

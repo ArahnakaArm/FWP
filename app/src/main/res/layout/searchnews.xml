@@ -18,7 +18,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
                 <ImageView
-                    android:id="@+id/backprees"
+                    android:id="@+id/backpreesnews"
                     android:layout_marginTop="11dp"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
@@ -67,17 +67,17 @@
 
                 <RelativeLayout
                     android:layout_width="330dp"
-
+                    android:focusableInTouchMode="true"
                     android:layout_height="40dp"
                     android:background="@drawable/inputsearchlocation">
                     <EditText
                         android:layout_marginLeft="15dp"
-                        android:id="@+id/searchbookmark"
+                        android:id="@+id/searchnews"
                         android:drawableStart="@drawable/newsearch"
                         android:drawableTint="@color/Grey"
-
+                        android:lines="1"
                         android:layout_width="match_parent"
-                        android:hint="ค้นหา..."
+                        android:hint="ค้นหา"
                         android:layout_height="match_parent"
                         android:drawablePadding="10dp"
                         android:background="@null"/>
@@ -90,7 +90,7 @@
         android:layout_width="match_parent"
         android:layout_marginTop="2dp"
         android:layout_height="match_parent"
-        android:id="@+id/list_recycler_view">
+        android:id="@+id/list_recycler_view_news">
 
 
     </androidx.recyclerview.widget.RecyclerView>

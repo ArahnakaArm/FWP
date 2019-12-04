@@ -10,15 +10,16 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.marginTop
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.itembookmark.view.*
+import kotlinx.android.synthetic.main.item_bookmark.view.*
 import org.w3c.dom.Text
 import java.lang.Exception
 
 import java.util.ArrayList
 
 
-class ArticleInfoAdapter(ctx: Context, private val imageModelArrayList: ArrayList<Content>) :
+class ArticleInfoAdapter(ctx: Context, private val ModelArrayList: ArrayList<Content>) :
         androidx.recyclerview.widget.RecyclerView.Adapter<ArticleInfoAdapter.MyViewHolder>() {
 
     private val inflater: LayoutInflater
@@ -40,20 +41,24 @@ class ArticleInfoAdapter(ctx: Context, private val imageModelArrayList: ArrayLis
 
     override fun onBindViewHolder(holder: ArticleInfoAdapter.MyViewHolder, position: Int) {
 
-                  if (imageModelArrayList[position].messageType == "Image") {
-               holder.des.visibility = View.GONE
-               holder.image.visibility = View.VISIBLE
-                Glide.with(holder.itemView.context)
-                        .load(holder.URLImage + imageModelArrayList[position].image.path)
+                  if (ModelArrayList[position].messageType == "Image") {
+                         holder.image.requestLayout()
+                         holder.des.visibility = View.GONE
+                         holder.image.visibility = View.VISIBLE
+                         Glide.with(holder.itemView.context)
+                        .load(ModelArrayList[position].image)
                         .into(holder.image)
 
-                d("TestInfo", imageModelArrayList[position].image.path)
+                      holder.image.layoutParams.height = 600
+                      holder.image.scaleType = ImageView.ScaleType.CENTER_CROP
+//                d("TestInfo", ModelArrayList[position].image)
 
-                } else if(imageModelArrayList[position].messageType == "Text"){
+                } else if(ModelArrayList[position].messageType == "Text"){
                holder.des.visibility = View.VISIBLE
                holder.image.visibility = View.GONE
-                holder.des.text = imageModelArrayList[position].articleDescription.th
-                d("TestInfo", imageModelArrayList[position].articleDescription.th)
+                holder.des.text = "  "+ModelArrayList[position].articleDescription.th
+
+                d("TestInfo", ModelArrayList[position].articleDescription.th)
                 }
         holder.image.setOnClickListener {
             d("ClickTest","Image"+position.toString())
@@ -66,7 +71,7 @@ class ArticleInfoAdapter(ctx: Context, private val imageModelArrayList: ArrayLis
     }
 
     override fun getItemCount(): Int {
-        return imageModelArrayList.size
+        return ModelArrayList.size
     }
 
     inner class MyViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {

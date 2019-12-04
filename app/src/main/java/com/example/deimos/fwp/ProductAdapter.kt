@@ -1,19 +1,12 @@
 package com.example.deimos.fwp
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import com.google.android.material.tabs.TabLayout
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup
-import androidx.fragment.app.FragmentActivity
-
 
 
 class ProductAdapter(groups: List<ExpandableGroup<*>>) : ExpandableRecyclerViewAdapter<CompanyViewHolder, ProductViewHolder>(groups) {
@@ -22,14 +15,14 @@ class ProductAdapter(groups: List<ExpandableGroup<*>>) : ExpandableRecyclerViewA
     private val myContext: androidx.fragment.app.FragmentActivity? = null
     override fun onCreateGroupViewHolder(parent: ViewGroup, viewType: Int): CompanyViewHolder {
 
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.expandable_recyclerview_company, parent, false)
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.expandable_recyclerview_region, parent, false)
 
         return CompanyViewHolder(v)
 
     }
 
     override fun onCreateChildViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.expandable_recyclerview_product, parent, false)
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.expandable_recyclerview_location, parent, false)
 
         return ProductViewHolder(v)
     }

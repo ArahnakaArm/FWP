@@ -30,8 +30,8 @@ public class CompanyViewHolder extends GroupViewHolder {
     public void expand() {
 
         RotateAnimation rotate =
-                new RotateAnimation(180, 360, RELATIVE_TO_SELF, 0.5f, RELATIVE_TO_SELF, 0.5f);
-        rotate.setDuration(300);
+                new RotateAnimation(360, 180, RELATIVE_TO_SELF, 0.5f, RELATIVE_TO_SELF, 0.5f);
+        rotate.setDuration(250);
         rotate.setFillAfter(true);
         Animation animation = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.rotate_around_center_point);
         arrow.startAnimation(rotate);
@@ -40,8 +40,8 @@ public class CompanyViewHolder extends GroupViewHolder {
     @Override
     public void collapse() {
         RotateAnimation rotate =
-                new RotateAnimation(360, 180, RELATIVE_TO_SELF, 0.5f, RELATIVE_TO_SELF, 0.5f);
-        rotate.setDuration(300);
+                new RotateAnimation(180, 360, RELATIVE_TO_SELF, 0.5f, RELATIVE_TO_SELF, 0.5f);
+        rotate.setDuration(250);
         rotate.setFillAfter(true);
         Animation animation = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.rotate_around_center_point);
         arrow.startAnimation(rotate);
