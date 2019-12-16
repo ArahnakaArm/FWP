@@ -289,6 +289,7 @@ class Tab1Complian  : androidx.fragment.app.Fragment() {
                     putString("Detail",Detail)
                     putString("firstName",nameComplian.text.toString())
                     putString("lastName",surnameInputComplian.text.toString())
+                    putString("Type",Type)
 
                 }
 

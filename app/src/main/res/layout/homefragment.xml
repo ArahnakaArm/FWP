@@ -144,8 +144,14 @@
             </LinearLayout>
 
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
         <RelativeLayout
             android:layout_width="match_parent"
+            android:id="@+id/slide"
             android:layout_height="180dp" >
 
             <androidx.viewpager.widget.ViewPager
@@ -169,18 +175,20 @@
                 app:strokeColor="@color/Grey"
                 app:snap="false" />
         </RelativeLayout>
-
-        <androidx.percentlayout.widget.PercentRelativeLayout
-            android:layout_width="match_parent"
-            android:layout_marginTop="5dp"
-            android:layout_height="wrap_content">
+<androidx.percentlayout.widget.PercentRelativeLayout
+    android:layout_width="match_parent"
+    android:layout_marginTop="5dp"
+    android:id="@+id/Topic1"
+    android:layout_height="wrap_content">
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_centerHorizontal="true"
+
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 app:layout_widthPercent="95%"
-                android:id="@+id/Topic1"
+
+
                 android:background="@color/backgroundgrey">
 
                 <RelativeLayout
@@ -192,6 +200,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
                 app:layout_widthPercent="90%"
+
                 android:id="@+id/newsImage1"
                 android:scaleType="center"
                 android:src="@drawable/logo"
@@ -263,14 +272,13 @@
                 </RelativeLayout>
            </LinearLayout>
 
+</androidx.percentlayout.widget.PercentRelativeLayout>
 
 
 
-
-
-        </androidx.percentlayout.widget.PercentRelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
+                android:id="@+id/recyclerViewNews"
                 android:layout_height="match_parent">
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
@@ -295,7 +303,7 @@
         />
             </RelativeLayout>
 
-
+        </LinearLayout>
     </LinearLayout>
 
 
