@@ -30,9 +30,9 @@ import retrofit2.Response
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
-data class LocationById(var resultCode : String,var developerMessage : String ,var resultData : resultLoca,var rowCount :Number)
+data class LocationById(var resultCode : String,var developerMessage : String ,var resultData : resultLoca,var rowCount :Int)
 data class resultLoca(var locationName : namelocation , var address : addresslocation, var subDistrict : subDistrictlocation , var city : citylocation,
-                      var province : provincelocation , var region : regionlocation ,var map : maplocation ,var image : imagelocation ,var email : String,var mobileNo :String,var postalCode :String)
+                      var province : provincelocation , var region : regionlocation ,var map : maplocation ,var image : String ,var email : String,var mobileNo :String,var postalCode :String)
 data class namelocation(var en : String,var th : String)
 data class addresslocation(var en : String,var th : String)
 data class  subDistrictlocation(var en: String,var th: String)
@@ -81,7 +81,7 @@ class LocationContent : Activity(){
                         " "+response.body()!!.resultData.city.th+" "+response.body()!!.resultData.subDistrict.th+" "+response.body()!!.resultData.postalCode)
                 telinfo.setText(response.body()!!.resultData.mobileNo)
                 emailinfo.setText(response.body()!!.resultData.email)
-                var Url = response.body()!!.resultData.image.path
+                var Url = response.body()!!.resultData.image
                 Glide.with(this@LocationContent)
                         .load(Url)
                         .into(locationimage)
@@ -118,7 +118,7 @@ class LocationContent : Activity(){
 
 
             override fun onFailure(call: Call<LocationById>, t: Throwable) {
-                d("arm","onFailure")
+                d("arm", t.toString())
             }
 
         })

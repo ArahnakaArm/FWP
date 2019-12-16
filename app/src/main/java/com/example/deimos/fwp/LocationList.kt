@@ -28,9 +28,14 @@ import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
+data class RegionModel(var resultCode: String,var developerMessage: String,var resultData: ArrayList<resultRegion>)
+data class resultRegion(var region : regionName,var priority : Int)
+data class regionName(var th: String,var en: String)
 data class LocationModel(var resultCode : String,var developerMessage : String,var resultData : ArrayList<result>,var rowCount : Int)
-data class result(var locationName : locationame,var address : address,var map : map,var region : region,var image: imageinfo,var email : String,var _id : String)
+data class result(var locationName : locationame,var address : address,var map : map,var region : region,var image: String,var email : String,var _id : String)
 data class imageinfo(var path : String)
 data class locationame(var en : String,var th : String)
 data class address(var en : String ,var th : String)
@@ -39,6 +44,11 @@ data class region(var en : String, var th : String)
 class LocationList : androidx.fragment.app.Fragment() {
     private var sharedPreferences : SharedPreferences?=null
     private var mAPIService: ApiServiceLocation? = null
+   private var test = ArrayList<result>()
+    private var test2 = ArrayList<result>()
+    private var list = ArrayList<Company>()
+    var dataLocation = HashMap<String,result>()
+    var dataLocation2 = HashMap<String,String>()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = activity!!.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         view.menu.getItem(0).isCheckable=true
@@ -49,16 +59,25 @@ class LocationList : androidx.fragment.app.Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
+
+
+        dataLocation2.put("sads","sadsad")
+        dataLocation2.put("sads","Sadsasssssd")
+        d("HASH",dataLocation2["sads"].toString())
+
+        getLocationAndRegion("")
         map.setOnClickListener {
             startActivity(Intent(requireContext(),MapsActivity::class.java))
             activity!!.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left)
         }
-        getLocation()
 
-        searchlocation.textChanges().debounce(300, TimeUnit.MILLISECONDS).subscribe({ it ->
+      //  getLocationAndRegion()
+       // getLocation()
+
+     searchlocation.textChanges().debounce(300, TimeUnit.MILLISECONDS).subscribe({ it ->
             try {
                 d("SEARCH", it.toString())
-                searchingLocation(it.toString())
+                getLocationAndRegion(it.toString())
             }catch (e : Exception){
 
             }
@@ -79,25 +98,13 @@ class LocationList : androidx.fragment.app.Fragment() {
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
-        val northList= ArrayList<Product>()
-        val centralList = ArrayList<Product>()
-        val westList = ArrayList<Product>()
-        val eastList = ArrayList<Product>()
-        val eastnorthList = ArrayList<Product>()
-        val southList = ArrayList<Product>()
-        val bankkok = ArrayList<Product>()
-        val mProgressDialog = ProgressDialog(requireContext())
-        mProgressDialog.isIndeterminate = true
-        mProgressDialog.setMessage("Loading...")
-        mProgressDialog.setCancelable(false)
-        mProgressDialog.show()
         mAPIService!!.getLocation(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId).enqueue(object : Callback<LocationModel> {
 
             override fun onResponse(call: Call<LocationModel>, response: Response<LocationModel>) {
 
                 ///        d("Location",response.body()!!.resultData[0]!!.locationName.th)
                 //      d("Location",response.body()!!.resultData[1]!!.locationName.th.toString())
-                try {
+               /* try {
                     for (i in 0..response.body()!!.rowCount-1) {
 
                         when(response.body()!!.resultData[i]!!.region.th){
@@ -173,6 +180,8 @@ class LocationList : androidx.fragment.app.Fragment() {
                         }
                         */
                     }
+
+
                     val Bankok = Company("" +
                             "กรุงเทพมหานคร", bankkok)
                     companies.add(Bankok)
@@ -209,8 +218,8 @@ class LocationList : androidx.fragment.app.Fragment() {
 
                 }
 
-
-                mProgressDialog.dismiss();
+*/
+               // mProgressDialog.dismiss();
             }
 
             override fun onFailure(call: Call<LocationModel>, t: Throwable) {
@@ -234,20 +243,13 @@ class LocationList : androidx.fragment.app.Fragment() {
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
-        val northList= ArrayList<Product>()
-        val centralList = ArrayList<Product>()
-        val westList = ArrayList<Product>()
-        val eastList = ArrayList<Product>()
-        val eastnorthList = ArrayList<Product>()
-        val southList = ArrayList<Product>()
-        val bankkok = ArrayList<Product>()
         mAPIService!!.getSearchLocation(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId,text!!).enqueue(object : Callback<LocationModel> {
 
             override fun onResponse(call: Call<LocationModel>, response: Response<LocationModel>) {
 
                 ///        d("Location",response.body()!!.resultData[0]!!.locationName.th)
                 //      d("Location",response.body()!!.resultData[1]!!.locationName.th.toString())
-                try {
+             /*   try {
                     for (i in 0..response.body()!!.rowCount-1) {
 
                         when(response.body()!!.resultData[i]!!.region.th){
@@ -409,12 +411,85 @@ class LocationList : androidx.fragment.app.Fragment() {
                     updateUi(companies)
                 }catch (e : Exception){
 
-                }
+                }*/
 
             }
 
             override fun onFailure(call: Call<LocationModel>, t: Throwable) {
                 d("arm",t.toString())
+            }
+
+        })
+    }
+    private fun getLocationAndRegion(text : String){
+        mAPIService = ApiUtilsLocation.apiServiceLocation
+        sharedPreferences = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        val partnerId = sharedPreferences!!.getString("partnerId","-")
+        val sdf = SimpleDateFormat("yyMMdd")
+        val currentDate = sdf.format(Date())
+        val companies = ArrayList<Company>()
+        var dataLocation = HashMap<String,ArrayList<Product>>()
+        val location = ArrayList<ArrayList<Product>>()
+        val r = (10..12).shuffled().first()
+        val mProgressDialog = ProgressDialog(requireContext())
+        mProgressDialog.isIndeterminate = true
+        mProgressDialog.setCancelable(false)
+        mProgressDialog.setMessage("Loading...")
+        mProgressDialog.show()
+        mAPIService!!.getSearchLocation(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId,text!!).enqueue(object : Callback<LocationModel> {
+
+            override fun onResponse(call: Call<LocationModel>, response: Response<LocationModel>) {
+
+//                Product(response.body()!!.resultData[i]!!.locationName.th, response.body()!!.resultData[i]!!.image.path, "0978512369",  response.body()!!.resultData[i]!!.email,
+//                        response.body()!!.resultData[i]!!.map.lat.toString(),response.body()!!.resultData[i]!!.map.long.toString() ,response.body()!!.resultData[i]!!._id
+
+
+                for (i in 0 until response.body()!!.rowCount) {
+                    var regionName = response.body()!!.resultData[i].region.th
+                  if(dataLocation[regionName] == null){
+//                        dataLocation.put(response.body()!!.resultData[i].region.th, ArrayList<Product>())
+                      dataLocation.put(regionName, ArrayList<Product>())
+                    }
+                    dataLocation[regionName]!!.add(Product(response.body()!!.resultData[i]!!.locationName.th, response.body()!!.resultData[i]!!.image, "0978512369",  response.body()!!.resultData[i]!!.email,
+                            response.body()!!.resultData[i]!!.map.lat.toString(),response.body()!!.resultData[i]!!.map.long.toString() ,response.body()!!.resultData[i]!!._id))
+//                    dataLocation.put(response.body()!!.resultData[i].region.th, response.body()!!.resultData[i])
+
+                }
+                var regionName = ArrayList<String>(dataLocation.keys)
+               // var locationItem = ArrayList<result>(dataLocation.values)
+
+                for (i in 0 until regionName.size) {
+//                    var item = ArrayList<Product>()
+//                    for(j in 0 until response.body()!!.rowCount) {
+//                        var data = response.body()!!.resultData[j]
+//                        when(data.region.th) {
+//                            regionName[i] -> item.add(Product(data.locationName.th, data.address.th, "0", data.email, data.map.lat.toString(), data.map.long.toString(), data._id))
+//                        }
+//                        d("JJJ",j.toString())
+//                    }
+//
+//                    companies.add(Company("" + regionName[i], item))
+                    companies.add(Company("" + regionName[i], dataLocation[regionName[i]]!!.toList()))
+                   // d("Size",item.size.toString())
+
+
+
+                }
+
+
+
+
+
+
+                updateUi(companies)
+                mProgressDialog.dismiss()
+
+
+            }
+
+            override fun onFailure(call: Call<LocationModel>, t: Throwable) {
+                d("arm",t.toString())
+                mProgressDialog.dismiss()
             }
 
         })

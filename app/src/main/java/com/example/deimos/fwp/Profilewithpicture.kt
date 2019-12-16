@@ -113,7 +113,7 @@ class Profilewithpicture : androidx.fragment.app.Fragment() {
     var fileupload : File?=null
     private var transferUtility: TransferUtility?=null
     private var appContext: Context?=null
-
+    var date : Date?=null
     private val CAMERA_REQUEST = 1888
     private var uri:Uri?=null
     private var sharedPreferences:SharedPreferences?=null
@@ -200,8 +200,11 @@ class Profilewithpicture : androidx.fragment.app.Fragment() {
         if (checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), MY_WRITE_PERMISSION_CODE);
         }
+        try {
+            getData()
+        }catch (e :Exception){
 
-        getData()
+        }
         FWP.setOnClickListener {
             startActivity(Intent(requireContext(),com.example.deimos.fwp.WebView::class.java))
             activity!!.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left)
@@ -244,7 +247,7 @@ class Profilewithpicture : androidx.fragment.app.Fragment() {
           context?.startActivity(intent)*/
         }
         savelist.setOnClickListener {
-
+            savelist.isEnabled = false
             startActivity(Intent(requireContext(), FavoriteList::class.java))
             activity!!.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left)
         }
@@ -416,19 +419,28 @@ class Profilewithpicture : androidx.fragment.app.Fragment() {
 
                 if (response.isSuccessful()) {
                     try {
+                    userIdTest = response.body()!!.resultData._id
+                    d("ID",userIdTest)
                     var dataDate = response.body()!!.resultData.birthDate
                     val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale("th", "TH"))
                     d("DateCheck",inputFormat.format(Date()))
-                    val date = inputFormat.parse(response.body()!!.resultData.birthDate)
-                    d("DateCheck2",response.body()!!.resultData.birthDate.substring(5,7))
-                    d("DateCheck3",Profilewithpicture.ConvertDate.ChangeFormatDate(dataDate.substring(0,4),dataDate.substring(5,7),dataDate.substring(8,10)))
-                    val dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM).format(date)
+                        if (response.body()!!.resultData.birthDate != "") {
+                             date = inputFormat.parse(response.body()!!.resultData.birthDate)
+                            d("DateCheck2",response.body()!!.resultData.birthDate.substring(5,7))
+                            birthday.text = Profilewithpicture.ConvertDate.ChangeFormatDate(dataDate.substring(0,4),dataDate.substring(5,7),dataDate.substring(8,10))
+
+                            val dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM).format(date)
+                            d("DateCheck3",Profilewithpicture.ConvertDate.ChangeFormatDate(dataDate.substring(0,4),dataDate.substring(5,7),dataDate.substring(8,10)))
+                        }
+
+
                        textEmail.text = response.body()!!.resultData.email
                       // memberid.text = response.body()!!.resultData._id
-                       userIdTest = response.body()!!.resultData._id
+
+
                        firstName.text = response.body()!!.resultData.firstName
                        lastName.text = response.body()!!.resultData.lastName
-                      birthday.text = Profilewithpicture.ConvertDate.ChangeFormatDate(dataDate.substring(0,4),dataDate.substring(5,7),dataDate.substring(8,10))
+
                        genderForChange = response.body()!!.resultData.gender
                        imageUrl = response.body()!!.resultData.image
                        val editor = sp?.edit()
@@ -570,6 +582,8 @@ class Profilewithpicture : androidx.fragment.app.Fragment() {
     }
 
     override fun onResume() {
+        getData()
+        savelist.isEnabled = true
         super.onResume()
         d("Profile","TEsssssssssssssss")
       /*  if(sp!!.getBoolean("LogIn_State",false)==false) {
@@ -633,4 +647,5 @@ class Profilewithpicture : androidx.fragment.app.Fragment() {
         }
         return sb.toString()
     }
+
 }

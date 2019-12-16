@@ -47,7 +47,7 @@ class ComplainList : AppCompatActivity() {
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
 
-        mAPIService!!.getComplianList(token!!,Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId).enqueue(object : Callback <ComplianModel> {
+      /*  mAPIService!!.getComplianList(token!!,Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId).enqueue(object : Callback <ComplianModel> {
 
             override fun onResponse(call: Call <ComplianModel>, response: Response <ComplianModel>) {
 
@@ -75,7 +75,7 @@ class ComplainList : AppCompatActivity() {
             }
 
         })
-
+*/
 
         searchcomplain.textChanges().debounce(300, TimeUnit.MILLISECONDS).subscribe({ it ->
             try {

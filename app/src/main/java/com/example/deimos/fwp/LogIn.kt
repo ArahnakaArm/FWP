@@ -48,6 +48,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
 import com.facebook.login.LoginManager
+import java.lang.Exception
 
 data class UserProfile(var resultData : resultData2,
                        var resultCode : String
@@ -316,7 +317,7 @@ class LogIn :AppCompatActivity() {
                 .build()
         client.newCall(request).enqueue(object : com.squareup.okhttp.Callback {
             override fun onFailure(request: Request, e: IOException) {
-                Log.e("Test", e.toString())
+                d("Test", e.toString())
             }
 
             @Throws(IOException::class)
@@ -333,19 +334,14 @@ class LogIn :AppCompatActivity() {
                     Log.i("Token", "Google Token :" + tokenGoogle)
                     getLocalTokenGoogle()
                 } catch (e: JSONException) {
-                    e.printStackTrace()
+                    d("Test", e.toString())
                 }
 
             }
         })
     }
 
-    private fun signOutGoogle() {
-        mGoogleSignInClient?.signOut()?.addOnCompleteListener(this@LogIn,OnCompleteListener<Void> {
 
-            Toast.makeText(this,"Loged Out",Toast.LENGTH_SHORT).show()
-        })
-    }
     private fun getLocalTokenGoogle(){
         sharedPreferences = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
         val partnerId = sharedPreferences!!.getString("partnerId","-")
@@ -358,7 +354,7 @@ class LogIn :AppCompatActivity() {
         mAPIService!!.userLoginGoogle(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),tokenGoogle!!,partnerId).enqueue(object : Callback<UserMo> {
 
             override fun onResponse(call: Call<UserMo>, response: Response<UserMo>) {
-
+                try {
                     token=response.body()!!.resultData.access_token
                     // replaceFragmentToRight(Profilewithpicture())
                     d("Token","Local Token : "+token)
@@ -368,7 +364,12 @@ class LogIn :AppCompatActivity() {
                     editor?.putString("LogIn_Type", "Social")
                     editor?.putBoolean("isFromLogin", true)
                     editor?.commit()
-                         finish()
+                    finish()
+
+                }catch (e : Exception){
+                    d("Error",e.toString())
+                }
+
 
             }
 
@@ -396,15 +397,20 @@ class LogIn :AppCompatActivity() {
 
             override fun onResponse(call: Call<UserMo>, response: Response<UserMo>) {
                 if (response.isSuccessful()) {
-                    token=response.body()!!.resultData.access_token
-                    d("Token","Local Token Face: "+token)
-                    var editor = sp?.edit()
-                    editor?.putBoolean("LogIn_State", true)
-                    editor?.putString("user_token", response.body()!!.resultData.access_token)
-                    editor?.putString("LogIn_Type", "Social")
-                    editor?.putBoolean("isFromLogin", true)
-                    editor?.commit()
-                    finish()
+                    try {
+                        token=response.body()!!.resultData.access_token
+                        d("Token","Local Token Face: "+token)
+                        var editor = sp?.edit()
+                        editor?.putBoolean("LogIn_State", true)
+                        editor?.putString("user_token", response.body()!!.resultData.access_token)
+                        editor?.putString("LogIn_Type", "Social")
+                        editor?.putBoolean("isFromLogin", true)
+                        editor?.commit()
+                        finish()
+                    }catch (e : Exception){
+                        d("Error",e.toString())
+                    }
+
                 }
                 else if(response.code()==401){
                     val mAlert = AlertDialog.Builder(this@LogIn)

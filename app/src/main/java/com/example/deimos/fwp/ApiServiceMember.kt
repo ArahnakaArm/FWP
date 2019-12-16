@@ -11,7 +11,7 @@ interface ApiServiceMember {
     @Headers("Content-Type: application/json")
     @GET("favoriteItems")
     fun getFavorite(@Header("Authorization") auth: String, @Header("x-session-id") header : String,
-                    @Header("x-tid") header2 : String, @Query("partnerId") partnerId : String): Call<Favorite>
+                    @Header("x-tid") header2 : String, @Query("partnerId") partnerId : String,@Query ("orderby") orderby : String): Call<Favorite>
 
 
 
@@ -55,7 +55,7 @@ interface ApiServiceMember {
     @Headers("Content-Type: application/json")
     @PATCH("members/{memberId}")
     fun updateUser(@Header("Authorization") auth: String, @Header ("x-session-id") header : String,
-                   @Header ("x-tid") header2 : String,@Path("memberId") memberId : String,@Body changeProfileModel: ChangeProfileModel): Call<ChangeProfileModel>
+                   @Header ("x-tid") header2 : String,@Path("memberId") memberId : String,@Body changeProfileModel: ChangeProfileModel,@Query ("partnerId") partnerId : String): Call<ChangeProfileModel>
 
 
     @Multipart
