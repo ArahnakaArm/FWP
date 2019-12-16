@@ -1,5 +1,6 @@
 package com.example.deimos.fwp
 
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -67,6 +68,9 @@ class FragmentHome : androidx.fragment.app.Fragment() {
     private var recyclerArticle = ArrayList<ArticleData>()
     private var CurrentrecyclerArticle = ArrayList<ArticleData>()
     private var mCurrentPage = 1
+    private var noSlide = false
+    private var noBigImage = false
+    private var noNews = false
     private val mItemPerRow = 10
     private var _idImage = ArrayList<String>()
     val lists: ArrayList<ImageArray> = ArrayList()
@@ -76,8 +80,7 @@ class FragmentHome : androidx.fragment.app.Fragment() {
     lateinit var adapter: ArticleAdapter
 
 
-    private val urls = arrayOf("https://demonuts.com/Demonuts/SampleImages/W-03.JPG","asdsdsads","https://demonuts.com/Demonuts/SampleImages/W-03.JPG","asdsdsads")
-    private val urls2 = arrayOf("https://demonuts.com/Demonuts/SampleImages/W-03.JPG","asdsdsads")
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = activity!!.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         view.menu.getItem(2).isCheckable=true
@@ -89,6 +92,7 @@ class FragmentHome : androidx.fragment.app.Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         getPartner()
+
        // getCategories()
         layoutManager = androidx.recyclerview.widget.GridLayoutManager(activity,2)
         list_recycler_view_article.layoutManager =layoutManager
@@ -104,34 +108,77 @@ class FragmentHome : androidx.fragment.app.Fragment() {
            activity?.startActivity(intent)
        }
         li1.setOnClickListener {
+           _NameImage  = ArrayList<String>()
+           CurrentrecyclerArticle = ArrayList<ArticleData>()
+            _idImage = ArrayList<String>()
+            ImageStringUrl = ArrayList<String>()
             init = false
-            CurrentrecyclerArticle.clear()
             mCurrentPage = 1
+            bigImageCount=0
+            count =1
+            if (noBigImage && noNews && noSlide){
+                showNoArticles()
+            }
+            li1.isEnabled = false
+            li1.isClickable = false
+            recyclerViewNews.visibility = View.GONE
+            slide.visibility = View.GONE
+            Topic1.visibility = View.GONE
+         /* CurrentrecyclerArticle.clear()
             _idImage.clear()
             ImageStringUrl.clear()
             _NameImage.clear()
+*/
             sharedPreferences = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
             getCategories(sharedPreferences!!.getString("partnerId","-"),"Top")
         }
         li2.setOnClickListener {
+
+           _NameImage  = ArrayList<String>()
+           CurrentrecyclerArticle = ArrayList<ArticleData>()
+            _idImage = ArrayList<String>()
+             ImageStringUrl = ArrayList<String>()
             init = false
-            CurrentrecyclerArticle.clear()
             mCurrentPage = 1
+            bigImageCount=0
+            count =1
+            li2.isEnabled = false
+            li2.isClickable = false
+            recyclerViewNews.visibility = View.GONE
+            slide.visibility = View.GONE
+            Topic1.visibility = View.GONE
+           /* CurrentrecyclerArticle.clear()
             _idImage.clear()
             ImageStringUrl.clear()
-            _NameImage.clear()
+            _NameImage.clear()*/
             sharedPreferences = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
             getCategories(sharedPreferences!!.getString("partnerId","-"),"ข่าวสาร")
+
         }
         li3.setOnClickListener {
+
+             _NameImage  = ArrayList<String>()
+             CurrentrecyclerArticle = ArrayList<ArticleData>()
+             _idImage = ArrayList<String>()
+             ImageStringUrl = ArrayList<String>()
             init = false
-            CurrentrecyclerArticle.clear()
+            count =1
             mCurrentPage = 1
+
+            bigImageCount=0
+            li3.isEnabled = false
+            li3.isClickable = false
+            recyclerViewNews.visibility = View.GONE
+            slide.visibility = View.GONE
+            Topic1.visibility = View.GONE
+         /* CurrentrecyclerArticle.clear()
             _idImage.clear()
             ImageStringUrl.clear()
             _NameImage.clear()
+*/
             sharedPreferences = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
             getCategories(sharedPreferences!!.getString("partnerId","-"),"กิจกรรม")
+
         }
     }
 
@@ -142,6 +189,13 @@ class FragmentHome : androidx.fragment.app.Fragment() {
         super.onResume()
     }
     private fun init(test: Array<Any>,test2 : Array<Any>,test3 : Array<Any> ) {
+        d("BUG",test2.size.toString())
+        if (test.size == 0 || test2.size == 0 || test3.size ==0){
+            indicator.visibility = View.GONE
+        }else{
+            indicator.visibility = View.VISIBLE
+        }
+
         mPager = view?.findViewById(R.id.pager) as androidx.viewpager.widget.ViewPager
         mPager?.setAdapter(SlidingImage_Adapter(requireContext(),test,test2,test3))
         val indicator = view?.findViewById(R.id.indicator) as CirclePageIndicator
@@ -149,7 +203,7 @@ class FragmentHome : androidx.fragment.app.Fragment() {
         val density = resources.displayMetrics.density
         //Set circle indicator radius
         indicator.radius = 4 * density
-        NUM_PAGES = urls.size
+        NUM_PAGES = test.size
         // Auto start of viewpager
         val handler = Handler()
         val Update = Runnable {
@@ -189,20 +243,28 @@ class FragmentHome : androidx.fragment.app.Fragment() {
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
+        val mProgressDialog = ProgressDialog(requireContext())
+        mProgressDialog.isIndeterminate = true
+        mProgressDialog.setCancelable(false)
+        mProgressDialog.setMessage("Loading...")
+        mProgressDialog.show()
         mAPIService!!.getCategories(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId,cateName).enqueue(object : Callback<CateModel> {
             override fun onResponse(call: Call<CateModel>, response: Response<CateModel>) {
             try {
                 CategoriesId = response.body()!!.resultData[0]._id
                 if(CategoriesId != null){
-                    getArticle(CategoriesId)
-                    getSlide(CategoriesId!!)
+                    getArticle(CategoriesId);
+                   getSlide(CategoriesId!!)
                     getBigImage(CategoriesId!!)
                 }
             }catch (e : Exception){
                 }
+                mProgressDialog.dismiss()
+
             }
             override fun onFailure(call: Call<CateModel>, t: Throwable) {
                 d("arm","onFailure")
+                mProgressDialog.dismiss()
             }
         })
     }
@@ -218,10 +280,21 @@ class FragmentHome : androidx.fragment.app.Fragment() {
             override fun onResponse(call: Call<ArticleModel>, response: Response<ArticleModel>) {
                 //  d("Article",response.body()!!.developerMessage)
                 try {
-                    if(response.body()!! != null){
-                        upDateUiSlide(response.body()!!)
+
+                    if(response.body()!!.rowCount != 0) {
+                        noSlide = false
+                        slide.visibility = View.VISIBLE
+                        if (response.body()!! != null) {
+                            upDateUiSlide(response.body()!!)
+                        }
+                    }else{
+                        noSlide = true
+                        slide.visibility = View.GONE
+
                     }
-                }catch (e : Exception){}
+                }catch (e : Exception){
+                    d("Exception",e.toString()+"SLIDE1")
+                }
 
 
             }
@@ -256,6 +329,7 @@ class FragmentHome : androidx.fragment.app.Fragment() {
         })
     }
     private fun upDateUiSlide(data : ArticleModel) {
+
         data.resultData.sortBy { it.updatedAt }
         data.resultData.reverse()
         for (i in 0 until data.rowCount) {
@@ -268,8 +342,9 @@ class FragmentHome : androidx.fragment.app.Fragment() {
         val objects = ImageStringUrl.toArray()
         val objects2 = _idImage.toArray()
         val objects3 = _NameImage.toArray()
-        _idImage.toArray(urls2)
-        ImageStringUrl.toArray(urls)
+
+
+
 
         if (init) {
             try {
@@ -292,32 +367,16 @@ class FragmentHome : androidx.fragment.app.Fragment() {
              d("Index",recyclerArticle.size.toString())
 
            }
-           var date =recyclerArticle[0].updatedAt.substring(0..10)
-           var dateOutput = Profilewithpicture.ConvertDate.ChangeFormatDate(date.substring(0..3),date.substring(5..6),date.substring(8..9))
-           newsTopic1.setText(recyclerArticle[0].articleName.th)
-           textdate1.setText(dateOutput)
-           for (i in 0 until recyclerArticle[0].categoryInfo.size){
-               if (recyclerArticle[0].categoryInfo[i].categoryId.categoryName.th != "Top"){
-                    category1.setText(recyclerArticle[0].categoryInfo[i].categoryId.categoryName.th)
-               }
-           }
-           //category1.setText(recyclerArticle[0].categoryId.categoryName.th)
-           Glide.with(requireContext())
-                   .load(recyclerArticle[0].imageThumbnail)
-                   .into(newsImage1)
-           newsImage1.scaleType = ImageView.ScaleType.CENTER_CROP
-           idTopic1 = recyclerArticle[0]._id
-           recyclerArticle.removeAt(0)
 
            getArticleLimit(CategoriesId);
-
+/*
            layoutManager = androidx.recyclerview.widget.GridLayoutManager(activity,2)
            list_recycler_view_article.layoutManager = layoutManager
            adapter = ArticleAdapter(list_recycler_view_article,context!!,requireActivity(),CurrentrecyclerArticle)
            list_recycler_view_article.adapter = adapter
 
 
-
+*/
            nest.setOnScrollChangeListener(object : NestedScrollView.OnScrollChangeListener {
                var totalItemCount = 0
                override fun onScrollChange(v: NestedScrollView?, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int) {
@@ -395,7 +454,10 @@ class FragmentHome : androidx.fragment.app.Fragment() {
         if (((mItemPerRow * (mCurrentPage))) >= ArticleSize+10) {
             try {
                 testLoad.visibility = View.GONE
-            }catch (e : Exception){}
+            }catch (e : Exception){
+
+                d("Exception",e.toString()+"LIMIT")
+            }
             return
            // Toast.makeText(requireContext(), "No Data", Toast.LENGTH_SHORT).show()
         }
@@ -408,41 +470,58 @@ class FragmentHome : androidx.fragment.app.Fragment() {
             val r = (10..12).shuffled().first()
             d("Exception",(mCurrentPage).toString())
             d("Off",((mItemPerRow*mCurrentPage).toString()))
+
             mAPIService!!.getArticlesLimit(Register.GenerateRandomString.randomString(22), "AND-" + currentDate + Register.GenerateRandomString.randomString(r), partnerId, id!!, (mItemPerRow*(mCurrentPage-1))+1, 10 ,false,"updatedAt").enqueue(object : Callback<ArticleModel> {
 
                 override fun onResponse(call: Call<ArticleModel>, response: Response<ArticleModel>) {
                     //  d("Article",response.body()!!.developerMessage)
                     try {
+                        if (response.body()!!.rowCount != 0) {
+                            recyclerViewNews.visibility = View.VISIBLE
+                            noNews = false
+                            //   d("Size",ArticleSize.toString())
+                            ArticleSize = response.body()!!.rowCount
 
-                     //   d("Size",ArticleSize.toString())
-                        ArticleSize = response.body()!!.rowCount
-
-                        if (response.body()!!.resultData[0] != null) {
-                            for (i in 0..response.body()!!.resultData.size-1) {
-                               // d("Size",mCurrentPage.toString())
-                                CurrentrecyclerArticle.add(response.body()!!.resultData[i])
+                            if (response.body()!!.resultData[0] != null) {
+                                for (i in 0..response.body()!!.resultData.size - 1) {
+                                    // d("Size",mCurrentPage.toString())
+                                    CurrentrecyclerArticle.add(response.body()!!.resultData[i])
+                                }
                             }
-                        }
-                        if(count==1) {
-                            layoutManager = androidx.recyclerview.widget.GridLayoutManager(activity, 2)
-                            list_recycler_view_article.layoutManager = layoutManager
-                            adapter = ArticleAdapter(list_recycler_view_article, context!!, requireActivity(), CurrentrecyclerArticle)
-                            list_recycler_view_article.adapter = adapter
-                            count++
+                            if (count == 1) {
+                                layoutManager = androidx.recyclerview.widget.GridLayoutManager(activity, 2)
+                                list_recycler_view_article.layoutManager = layoutManager
+                                adapter = ArticleAdapter(list_recycler_view_article, context!!, requireActivity(), CurrentrecyclerArticle)
+                                list_recycler_view_article.adapter = adapter
+                                count++
+                            } else {
+                                adapter.notifyDataSetChanged()
+                            }
+
+                            mCurrentPage += 1
+                            testLoad.visibility = View.GONE
                         }
                         else{
-                            adapter.notifyDataSetChanged()
+                            recyclerViewNews.visibility = View.GONE
+                            noNews = true
+                            d("TEE","YES")
                         }
-
-                        mCurrentPage += 1
-                        testLoad.visibility = View.GONE
-
                        // CurrentrecyclerArticle.sortBy { it.updatedAt }
                       //  CurrentrecyclerArticle.reverse()
                     } catch (e: Exception) {
+                        d("Exception",e.toString()+"LIMIT2")
                        // d("Exception",e.toString())
                     }
+                    try {
+                        li1.isEnabled = true
+                        li1.isClickable = true
+                        li2.isEnabled = true
+                        li2.isClickable = true
+                        li3.isEnabled = true
+                        li3.isClickable = true
+                    }catch (e : Exception){
 
+                    }
 
                 }
 
@@ -466,24 +545,37 @@ class FragmentHome : androidx.fragment.app.Fragment() {
             override fun onResponse(call: Call<ArticleModel>, response: Response<ArticleModel>) {
                 //  d("Article",response.body()!!.developerMessage)
                 try {
-                    var responseData = response.body()!!.resultData[0]
-                        d("Test",response.body()!!.resultData[0].imageThumbnail)
-                        var date =responseData.updatedAt.substring(0..10)
+                    if(response.body()!!.rowCount != 0) {
+                        Topic1.visibility = View.VISIBLE
+                        noBigImage=false
+                        var responseData = response.body()!!.resultData[0]
+                        d("Test", response.body()!!.resultData[0].imageThumbnail)
+                        var date = responseData.updatedAt.substring(0..10)
                         var dateOutput = Profilewithpicture.ConvertDate.ChangeFormatDate(date.substring(0..3), date.substring(5..6), date.substring(8..9))
                         newsTopic1.setText(responseData.articleName.th)
                         textdate1.setText(dateOutput)
 
                         //category1.setText(responseData.categoryId.categoryName.th)
+                        for (i in 0 until response.body()!!.resultData[0].categoryInfo.size) {
+                            d("TestArray", i.toString())
+                            if (response.body()!!.resultData[0].categoryInfo[i].categoryId.categoryName.th != "Top") {
+                                category1.setText(response.body()!!.resultData[0].categoryInfo[i].categoryId.categoryName.th)
+                            }
+                        }
+
                         Glide.with(requireContext())
                                 .load(response.body()!!.resultData[0].imageThumbnail)
                                 .into(newsImage1)
 
                         newsImage1.scaleType = ImageView.ScaleType.CENTER_CROP
                         idTopic1 = responseData._id
-                        CurrentrecyclerArticle.removeAt(0)
-                        bigImageCount ++
+                    }else{
+                        Topic1.visibility = View.GONE
+                        noBigImage = true
+                    }
 
                 } catch (e: Exception) {
+
                     d("Exception",e.toString())
                 }
 
@@ -519,6 +611,12 @@ class FragmentHome : androidx.fragment.app.Fragment() {
                 d("Response",t.toString())
             }
         })
+    }
+    private fun refreshArticles(){
+
+    }
+    private fun showNoArticles(){
+
     }
 }
 

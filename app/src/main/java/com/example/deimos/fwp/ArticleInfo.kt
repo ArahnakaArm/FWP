@@ -21,7 +21,7 @@ import kotlin.collections.ArrayList
 
 data class ArticleById(var resultCode: String,var developerMessage : String,var resultData: ArticledataById)
 data class ArticledataById(var _id : String,var articleName: articledataName,var shortDescription : articledataDescription,var categoryInfo : ArrayList<categoryInfo>,
-                           var updatedAt :String,var imageThumbnail : String,var contentInfo : ArrayList<Content>,var viewCount : Int)
+                           var updatedAt :String,var imageThumbnail : String,var contentInfo : ArrayList<Content>,var viewCount : Int,var publishAt : String)
 data class ImageArticleById(var path : String)
 data class Content(var image : String,var orderBy : Int,var messageType : String,var articleDescription : articleDescriptionInfo)
 data class articleDescriptionInfo(var th: String,var en: String)
@@ -32,7 +32,7 @@ data class articledataDescription(var en : String,var th :String)
 data class categoryArticle(var categoryName : categoryNameArticledata)
 data class categoryNameArticledata(var en:String,var th : String)
 data class Favorite(var resultData : ArrayList<resultDataFav>,var rowCount:Int)
-data class resultDataFav(var articleId :IdArticle,var _id : String)
+data class resultDataFav(var articleId :String,var _id : String,var updatedAt: String)
 data class nameArticle(var en: String,var th: String)
 data class postFavoriteModel(var articleId : String , var partnerId : String)
 data class ResponseFav(var resultCode: String,var developerMessage: String,var resultData:responeFavData)
@@ -52,6 +52,10 @@ class ArticleInfo : Activity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.articleinfo)
+        bookmarkbutton.isEnabled = false
+        bookmarkbutton.isClickable = false
+        bookmarkbuttonorange.isClickable = false
+        bookmarkbuttonorange.isEnabled = false
         var bundle : Bundle ? =intent.extras
         var _id = bundle!!.getString("ID")
         sp = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
@@ -152,17 +156,23 @@ class ArticleInfo : Activity(){
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
-        mAPIServiceMember!!.getFavorite(token!!,Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId).enqueue(object : Callback<Favorite>{
+        mAPIServiceMember!!.getFavorite(token!!,Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId,"updatedAt").enqueue(object : Callback<Favorite>{
             override fun onResponse(call: Call<Favorite>, response: Response<Favorite>) {
                 if (response.isSuccessful) {
+
+                    bookmarkbutton.isEnabled = true
+                    bookmarkbutton.isClickable = true
+                    bookmarkbuttonorange.isClickable = true
+                    bookmarkbuttonorange.isEnabled = true
                     try {
                         for (i in 0 until response.body()!!.rowCount){
-                            d("CheckFav",response.body()!!.resultData[i].articleId._id)
-                            if(response.body()!!.resultData[i].articleId._id == articleID){
+                            d("CheckFav",response.body()!!.resultData[i].articleId)
+                            if(response.body()!!.resultData[i].articleId == articleID){
                                 d("CheckFav","Yes")
                                 favoriteID = response.body()!!.resultData[i]._id
                                 bookmarkbutton.visibility = View.INVISIBLE
                                 bookmarkbuttonorange.visibility = View.VISIBLE
+
                             }
                         }
 
@@ -171,7 +181,7 @@ class ArticleInfo : Activity(){
                 }
             }
             override fun onFailure(call: Call<Favorite>, t: Throwable) {
-                d("arm","onFailure")
+                d("arm",t.toString())
             }
 
         })
@@ -196,7 +206,7 @@ class ArticleInfo : Activity(){
                     }
                 }
                 override fun onFailure(call: Call<ResponseFav>, t: Throwable) {
-                    d("arm","onFailure")
+                    d("arm",t.toString())
                 }
 
             })
@@ -220,7 +230,7 @@ class ArticleInfo : Activity(){
                 }
             }
             override fun onFailure(call: Call<ResponseFav>, t: Throwable) {
-                d("arm","onFailure")
+                d("arm",t.toString())
             }
 
         })

@@ -102,11 +102,11 @@ class ArticleAdapter(recyclerView: RecyclerView,ctx: Context,var activity: Activ
                     .into(holder.image)
 
             holder.itemView.setOnClickListener {
-
-
-                val intent=Intent(holder.itemView.context,ArticleInfo::class.java)
-                intent.putExtra("ID",ModelArrayList[position]._id)
-                holder.itemView.context?.startActivity(intent)
+                try {
+                    val intent = Intent(holder.itemView.context, ArticleInfo::class.java)
+                    intent.putExtra("ID", ModelArrayList[position]._id)
+                    holder.itemView.context?.startActivity(intent)
+                }catch (e:Exception){}
 
             }
         }

@@ -71,9 +71,6 @@ class MapsActivity : AppCompatActivity(){
             mAPIService!!.getLocationPinMap(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId).enqueue(object : Callback<LocationModel>{
                 override fun onResponse(call: Call<LocationModel>, response: Response<LocationModel>) {
                     pinCount = response.body()!!.rowCount.toInt()
-
-
-
                     d("TestPin",pinCount.toString())
                     for(i in 0..response.body()!!.rowCount-1) {
                         latlng = response.body()!!.resultData[i].map.lat.toString() + "," + response.body()!!.resultData[i].map.long.toString()

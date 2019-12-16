@@ -135,6 +135,8 @@ class EditProfile : AppCompatActivity() {
                 d("CheckValue",changeprofilemodel.toString())
                 d("CheckValue",userId.toString())
                 d("CheckValue",token)
+                sharedPreferences = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+                val partnerId = sharedPreferences!!.getString("partnerId","-")
                 /// Save info ///
                 val mAlert = AlertDialog.Builder(this@EditProfile)
                 val mProgressDialog = ProgressDialog(this@EditProfile)
@@ -144,7 +146,7 @@ class EditProfile : AppCompatActivity() {
                 mProgressDialog.show()
 
                 mAPIService!!.updateUser("Bearer "+token,Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),userId!!,
-                        changeprofilemodel!!).enqueue(object : Callback<ChangeProfileModel> {
+                        changeprofilemodel!!,partnerId).enqueue(object : Callback<ChangeProfileModel> {
 
                     override fun onResponse(call: Call<ChangeProfileModel>, response: Response<ChangeProfileModel>) {
                         if (response.isSuccessful()) {
@@ -169,6 +171,7 @@ class EditProfile : AppCompatActivity() {
                             mAlert.show()
 
                         }
+                        mProgressDialog.dismiss()
 
                     }
 
@@ -181,6 +184,7 @@ class EditProfile : AppCompatActivity() {
                             dialog.dismiss()
                         }
                         mAlert.show()
+                        mProgressDialog.dismiss()
                     }
                 })
 

@@ -23,24 +23,17 @@ class ComplianAdapter(ctx: Context, private val ModelArrayList: ArrayList<Compli
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ComplianAdapter.MyViewHolder {
-
         val view = inflater.inflate(R.layout.item_complian, parent, false)
-
         return MyViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ComplianAdapter.MyViewHolder, position: Int) {
-
-
-
-
 
         holder.date.setText(ModelArrayList[position].updatedAt.substring(0..9))
         holder.id.setText(ModelArrayList[position].complainNumber)
         holder.type.setText(ModelArrayList[position].complainType)
         holder.title.setText(ModelArrayList[position].subject)
         holder.itemView.setOnClickListener {
-            Toast.makeText(holder.itemView.context,ModelArrayList[position].subject,Toast.LENGTH_SHORT).show()
         }
 
         if (ModelArrayList[position].status=="Inprogress"){

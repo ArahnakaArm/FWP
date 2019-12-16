@@ -14,12 +14,6 @@ import java.nio.file.Files.exists
 import retrofit2.http.POST
 import retrofit2.http.Multipart
 
-
-
-
-
-
-
 interface ApiService {
 
     ////News////

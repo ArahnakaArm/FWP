@@ -15,15 +15,16 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
-class BookMarkAdapter(ctx: Context, private val ModelArrayList: ArrayList<resultDataFav>) :
+class BookMarkAdapter(ctx: Context, private val ModelArrayList: ArrayList<sortArray>,private val favId : ArrayList<String>) :
         androidx.recyclerview.widget.RecyclerView.Adapter<BookMarkAdapter.MyViewHolder>() {
     private var sharedPreferences:SharedPreferences?=null
     var mAPIService: ApiServiceMember? = null
     private var token : String?=null
     private val inflater: LayoutInflater
     private var partnerId : String?=null
-    private val arraylist: ArrayList<resultDataFav>
+    private val arraylist: ArrayList<sortArray>
     private var sp : SharedPreferences?=null
     init {
         sharedPreferences = ctx.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
@@ -33,7 +34,7 @@ class BookMarkAdapter(ctx: Context, private val ModelArrayList: ArrayList<result
         sp = ctx.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
         token = sp!!.getString("user_token","-")
         inflater = LayoutInflater.from(ctx)
-        this.arraylist = ArrayList<resultDataFav>()
+        this.arraylist = ArrayList<sortArray>()
         // this.arraylist.addAll(Search.movieNamesArrayList)
     }
 
@@ -47,11 +48,11 @@ class BookMarkAdapter(ctx: Context, private val ModelArrayList: ArrayList<result
     override fun onBindViewHolder(holder: BookMarkAdapter.MyViewHolder, position: Int) {
         try {
 
-            holder.title.setText(ModelArrayList[position].articleId.articleName.th)
-            holder.date.setText(ModelArrayList[position].articleId.updatedAt.substring(0..9))
+          holder.title.setText(ModelArrayList[position].articleName)
+            holder.date.setText(ModelArrayList[position].updatedAt.substring(0..9))
             holder.itemView.setOnClickListener {
              val intent = Intent(holder.itemView.context, ArticleInfo::class.java)
-                intent.putExtra("ID", ModelArrayList[position].articleId._id)
+           intent.putExtra("ID", ModelArrayList[position]._id)
                 holder.itemView.context?.startActivity(intent)
             }
             holder.bookmark.setOnClickListener {
@@ -60,14 +61,16 @@ class BookMarkAdapter(ctx: Context, private val ModelArrayList: ArrayList<result
                 val sdf = SimpleDateFormat("yyMMdd")
                 val currentDate = sdf.format(Date())
                 val r = (10..12).shuffled().first()
-                mAPIService!!.deleteFavorite(token!!,Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),ModelArrayList[position]._id,partnerId!!).enqueue(object : Callback<ResponseFav> {
+                mAPIService!!.deleteFavorite(token!!,Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),favId[position],partnerId!!).enqueue(object : Callback<ResponseFav> {
                     override fun onResponse(call: Call<ResponseFav>, response: Response<ResponseFav>) {
                         if (response.isSuccessful) {
                             try {
                                 ModelArrayList.removeAt(position)
                                 //notifyItemRemoved(position)
+                                favId.removeAt(position)
                                 notifyDataSetChanged()
                             } catch (e: java.lang.Exception) {
+                                d("EXX",e.toString())
                             }
                         }
                     }
@@ -77,8 +80,8 @@ class BookMarkAdapter(ctx: Context, private val ModelArrayList: ArrayList<result
 
                 })
             }
-            Glide.with(holder.itemView.context)
-                    .load(holder.URLImage + ModelArrayList[position].articleId.imageThumbnail.path)
+           Glide.with(holder.itemView.context)
+                    .load( ModelArrayList[position].imageThumbnail)
                     .into(holder.imageUrl)
 
         }catch (e : Exception){
@@ -95,7 +98,7 @@ class BookMarkAdapter(ctx: Context, private val ModelArrayList: ArrayList<result
         var date : TextView
         var imageUrl : ImageView
         var bookmark : ImageView
-        var URLImage : String ="http://206.189.41.105:1210/"
+      //  var URLImage : String ="http://206.189.41.105:1210/"
         init {
             bookmark = itemView.findViewById(R.id.bookmarkicon) as ImageView
             title = itemView.findViewById(R.id.title) as TextView

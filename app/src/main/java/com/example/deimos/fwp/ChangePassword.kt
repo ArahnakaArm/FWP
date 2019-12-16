@@ -146,7 +146,7 @@ class ChangePassword : AppCompatActivity(){
                             mAlert.show()
 
                         }
-
+                        mProgressDialog.dismiss()
                     }
                     override fun onFailure(call: Call<ResponeModel>, t: Throwable) {
                         mProgressDialog.dismiss();
@@ -157,6 +157,7 @@ class ChangePassword : AppCompatActivity(){
                             dialog.dismiss()
                         }
                         mAlert.show()
+                        mProgressDialog.dismiss()
                     }
 
                 })
