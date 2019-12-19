@@ -83,8 +83,7 @@
             android:fontFamily="@font/anakotmai"
             android:layout_marginBottom="20dp"
             android:id="@+id/titlesearchnews"
-            android:text=" “ธนาธร” ชี้ปัญหา “รัฐราชการรวมศูนย์”
-ทำประเทศไม่พัฒนา "
+            android:text=""
             android:layout_marginLeft="5dp"
             >
 

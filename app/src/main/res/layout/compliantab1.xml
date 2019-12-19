@@ -75,13 +75,14 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:background="@null"
+                    android:maxLength="10"
                     android:layout_marginRight="15dp"
                     android:layout_gravity="center_vertical"
                     android:hint="เบอร์โทรศัพท์"
                     android:singleLine="true"
 
                     android:id="@+id/telcomplian"
-                    android:inputType="phone"
+                    android:inputType = "number"
                     android:textColorHint="@color/Grey"
                     android:fontFamily="@font/anakotmai_light"
                     android:textSize="21dp"

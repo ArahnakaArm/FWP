@@ -31,10 +31,7 @@ import android.widget.Toast
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.*
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapView
-import com.google.android.gms.maps.MapsInitializer
+import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
@@ -44,7 +41,9 @@ import kotlinx.android.synthetic.main.compliantab2.*
 import kotlinx.android.synthetic.main.mappin.*
 import java.util.ArrayList
 
-class Tab2Complian  : androidx.fragment.app.Fragment(),GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+class Tab2Complian  : androidx.fragment.app.Fragment(),GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener,OnMapReadyCallback {
+
+    private var googleMap:GoogleMap?=null
     var yourMarkerTag = MarkerModel()
     private var latitudeTextView: TextView? = null
     private var longitudeTextView: TextView? = null
@@ -77,55 +76,60 @@ class Tab2Complian  : androidx.fragment.app.Fragment(),GoogleApiClient.Connectio
 
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-        getLastLocation()
 
-        try {
-            MapsInitializer.initialize(requireContext().applicationContext)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        val mapFragment = childFragmentManager
+                .findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
 
-        mMapView2 = view.findViewById<View>(R.id.mapViewComplian) as MapView
+     /*   mMapView2 = view.findViewById<View>(R.id.mapViewComplian) as MapView
         mMapView2?.onCreate(savedInstanceState)
-        mMapView2?.onResume()
+      mMapView2?.onResume()
         mMapView2?.getMapAsync { mMap ->
             googleMap2 = mMap
             googleMap2!!.uiSettings.isScrollGesturesEnabled =true
-            val zoomLevel = 6f
-            val center = LatLng(13.7245601, 100.4930241)
-            googleMap2!!.setOnMarkerClickListener {
-                if(it.title != null) {
-                    val intent = Intent(requireContext(), LocationContent::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
-                    intent.putExtra("ID", it.title)
-                    startActivity(intent)
-                }
 
 
-                //  Toast.makeText(requireContext(),it.title,Toast.LENGTH_SHORT).show()
-                true
-            }
-            googleMap2!!.setOnCameraIdleListener {
-                d("Maps",googleMap2!!.cameraPosition.target.latitude.toString())
-                d("Maps",googleMap2!!.cameraPosition.target.longitude.toString())
-                sp = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
-                val editor = sp?.edit()
-                editor!!.putString("LAT",googleMap2!!.cameraPosition.target.latitude.toString())
-                editor!!.putString("LONG",googleMap2!!.cameraPosition.target.longitude.toString())
-            }
-            googleMap2!!.setOnCameraMoveListener {
-                googleMap2!!.clear()
-                // display imageView
-
-            }
 
 
         }
+        d("Create","Created")
+
+*/
+        getLastLocation()
+    }
+
+    override fun onMapReady(p0: GoogleMap?) {
+        googleMap=p0
+
+        //Adding markers to map
+
+        val latLng=LatLng(28.6139,77.2090)
+        val markerOptions:MarkerOptions=MarkerOptions().position(latLng).title("New Delhi")
+
+        // moving camera and zoom map
+
+        val zoomLevel = 12.0f //This goes up to 21
+
+
+        googleMap.let {
+            it!!.addMarker(markerOptions)
+            it.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel))
+        }
+        googleMap!!.setOnCameraIdleListener {
+            d("LatLong",googleMap!!.cameraPosition.target.latitude.toString() +","+googleMap!!.cameraPosition.target.longitude.toString())
+            sp = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+            val editor = sp?.edit()
+            editor!!.putString("LAT",googleMap!!.cameraPosition.target.latitude.toString())
+            editor!!.putString("LONG",googleMap!!.cameraPosition.target.longitude.toString())
+            editor?.commit()
+        }
+
     }
     override fun onResume() {
+        d("LocationDetect","resume")
         super.onResume()
-        mMapView2?.onResume()
-        getLastLocation()
+     //  mMapView2?.onResume()
+       getLastLocation()
     }
 
 
@@ -142,52 +146,25 @@ class Tab2Complian  : androidx.fragment.app.Fragment(),GoogleApiClient.Connectio
 
 
 
-    private fun getCurrentLocation() {
-        googleMap2!!.clear()
-
-    }
     private fun moveMap(lat : Double,long : Double) {
-        /**
-         * Creating the latlng object to store lat, long coordinates
-         * adding marker to map
-         * move the camera with animation
-         */
-        try {
-            val latLng = LatLng(lat!!, long!!)
-            googleMap2!!.addMarker(MarkerOptions()
-                    .position(latLng)
-                    .draggable(true)
-            )
 
-            googleMap2!!.moveCamera(CameraUpdateFactory.newLatLng(latLng))
-            googleMap2!!.animateCamera(CameraUpdateFactory.zoomTo(15f))
-            googleMap2!!.getUiSettings().setZoomControlsEnabled(true)
+           val latLng = LatLng(lat!!, long!!)
+            googleMap!!.moveCamera(CameraUpdateFactory.newLatLng(latLng))
+            googleMap!!.animateCamera(CameraUpdateFactory.zoomTo(15f))
+            googleMap!!.getUiSettings().setZoomControlsEnabled(true)
             sp = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
             val editor = sp?.edit()
             editor!!.putString("LAT",lat.toString())
             editor!!.putString("LONG",long.toString())
             editor?.commit()
 
-          //  googleApiClient!!.disconnect()
-        }catch (e : Exception){}
+
+
+          //  d("LocationDetect",e.toString())
+
 
     }
-  /*  @Synchronized
-    private fun setUpGClient() {
-        try {
-            googleApiClient = GoogleApiClient.Builder(requireContext())
-                    .enableAutoManage(requireActivity(), 0, this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build()
-        }catch (e : java.lang.Exception){
 
-        }
-
-        //googleApiClient!!.connect()
-    }
-*/
 
 
     override fun onLocationChanged(location: Location) {
@@ -221,8 +198,8 @@ class Tab2Complian  : androidx.fragment.app.Fragment(),GoogleApiClient.Connectio
                 if (permissionLocation == PackageManager.PERMISSION_GRANTED) {
                     mylocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient)
                     val locationRequest = LocationRequest()
-                    locationRequest.interval = 1
-                    locationRequest.fastestInterval = 1
+                    locationRequest.interval = 10000
+                    locationRequest.fastestInterval = 2000
                     locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
                     val builder = LocationSettingsRequest.Builder()
                             .addLocationRequest(locationRequest)
@@ -309,10 +286,13 @@ class Tab2Complian  : androidx.fragment.app.Fragment(),GoogleApiClient.Connectio
                 mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity()) { task ->
                     var location: Location? = task.result
                     if (location == null) {
+                        d("LocationDetect","null work")
                         requestNewLocationData()
                     } else {
                         latitude = location.latitude
                         longitude = location.longitude
+                        d("LocationDetect",latitude.toString())
+                        d("LocationDetect",longitude.toString())
                         moveMap(latitude!!,longitude!!)
                     }
                 }
@@ -330,8 +310,8 @@ class Tab2Complian  : androidx.fragment.app.Fragment(),GoogleApiClient.Connectio
     private fun requestNewLocationData() {
         var mLocationRequest = LocationRequest()
         mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        mLocationRequest.interval = 0
-        mLocationRequest.fastestInterval = 0
+        mLocationRequest.interval = 10000
+        mLocationRequest.fastestInterval = 2000
         mLocationRequest.numUpdates = 1
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())

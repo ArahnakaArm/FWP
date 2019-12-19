@@ -33,7 +33,7 @@ interface ApiServiceContent {
     @Headers("Content-Type: application/json")
     @GET("articles")
     fun getArticlesSearchLimitAll(@Header ("x-session-id") header : String,@Header ("x-tid") header2 : String,
-                               @Query ("partnerId") partnerId : String,@Query ("offset") offset : Int, @Query ("limit") limit : Int,@Query("searchAll")searchAll:String,@Query ("orderby") orderby : String):Call<ArticleModel>
+                               @Query ("partnerId") partnerId : String,@Query ("offset") offset : Int, @Query ("limit") limit : Int,@Query("searchAll")searchAll:String,@Query ("orderby") orderby : String,@Query ("isPublish") isPublish : Boolean = true):Call<ArticleModel>
 
 
 

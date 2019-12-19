@@ -156,7 +156,7 @@ interface ApiService {
     @Headers("Content-Type: application/json")
     @GET("videos")
     fun getVideo( @Header ("x-session-id") header : String,
-                   @Header ("x-tid") header2 : String,@Query("partnerId") partnerId : String,@Query("offset") offset : Int,@Query("limit") limit : Int): Call<VideosModel>
+                   @Header ("x-tid") header2 : String,@Query("partnerId") partnerId : String,@Query("offset") offset : Int,@Query("limit") limit : Int,@Query("isPublish") isPublish : Boolean = true): Call<VideosModel>
 
 
 
@@ -164,7 +164,7 @@ interface ApiService {
     @Headers("Content-Type: application/json")
     @GET("videos")
     fun getSearchVideo( @Header ("x-session-id") header : String,
-                  @Header ("x-tid") header2 : String,@Query("partnerId") partnerId : String,@Query("searchAll") searchAll : String,@Query("offset") offset : Int,@Query("limit") limit : Int,@Query("orderby") orderby : String): Call<VideosModel?>
+                  @Header ("x-tid") header2 : String,@Query("partnerId") partnerId : String,@Query("searchAll") searchAll : String,@Query("offset") offset : Int,@Query("limit") limit : Int,@Query("orderby") orderby : String,@Query("isPublish") isPublish : Boolean = true): Call<VideosModel?>
 
 
     @Headers("Content-Type: application/json")

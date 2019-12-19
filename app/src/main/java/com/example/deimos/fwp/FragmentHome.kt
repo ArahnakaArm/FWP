@@ -468,15 +468,16 @@ class FragmentHome : androidx.fragment.app.Fragment() {
             val sdf = SimpleDateFormat("yyMMdd")
             val currentDate = sdf.format(Date())
             val r = (10..12).shuffled().first()
-            d("Exception",(mCurrentPage).toString())
+           // d("Exception",(mCurrentPage).toString())
             d("Off",((mItemPerRow*mCurrentPage).toString()))
 
             mAPIService!!.getArticlesLimit(Register.GenerateRandomString.randomString(22), "AND-" + currentDate + Register.GenerateRandomString.randomString(r), partnerId, id!!, (mItemPerRow*(mCurrentPage-1))+1, 10 ,false,"updatedAt").enqueue(object : Callback<ArticleModel> {
 
                 override fun onResponse(call: Call<ArticleModel>, response: Response<ArticleModel>) {
                     //  d("Article",response.body()!!.developerMessage)
-                    try {
-                        if (response.body()!!.rowCount != 0) {
+                        if (response.body()!!.rowCount-1 != 0) {
+                            d("KKK",response.body()!!.rowCount.toString())
+                            try {
                             recyclerViewNews.visibility = View.VISIBLE
                             noNews = false
                             //   d("Size",ArticleSize.toString())
@@ -500,18 +501,19 @@ class FragmentHome : androidx.fragment.app.Fragment() {
 
                             mCurrentPage += 1
                             testLoad.visibility = View.GONE
+                            }catch (e : Exception){
+                                d("Exception",e.toString())
+                            }
                         }
                         else{
-                            recyclerViewNews.visibility = View.GONE
+                            d("KKK","No")
+                           // recyclerViewNews.visibility = View.GONE
                             noNews = true
                             d("TEE","YES")
                         }
                        // CurrentrecyclerArticle.sortBy { it.updatedAt }
                       //  CurrentrecyclerArticle.reverse()
-                    } catch (e: Exception) {
-                        d("Exception",e.toString()+"LIMIT2")
-                       // d("Exception",e.toString())
-                    }
+
                     try {
                         li1.isEnabled = true
                         li1.isClickable = true

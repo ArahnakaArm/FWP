@@ -38,7 +38,7 @@ class SearchNews : AppCompatActivity(),ILoadMore{
     var mAPIService: ApiServiceContent? = null
     private var CategoriesId: String?=null
     private var news = ArrayList<ArticleData?>()
-    private var mCurrentPage =1
+    private var mCurrentPage =0
     private val mItemPerRow = 10
     private var searchState = false
     private var searchText = ""
@@ -75,7 +75,7 @@ class SearchNews : AppCompatActivity(),ILoadMore{
 
             try {
                 if(searchnews.text.isEmpty()){
-                    mCurrentPage=1
+                    mCurrentPage=0
                     searchState =false
                     news.clear()
                     searchText = ""
@@ -83,7 +83,7 @@ class SearchNews : AppCompatActivity(),ILoadMore{
                 }else{
                     searchText=it.toString()
                     searchState= true
-                    mCurrentPage=1
+                    mCurrentPage=0
                     news.clear()
                     getArticle(CategoriesId,searchText)
                 }
@@ -116,7 +116,7 @@ class SearchNews : AppCompatActivity(),ILoadMore{
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
-        mAPIService!!.getArticlesSearchLimitAll(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId,(mItemPerRow*(mCurrentPage-1)), 10,text!!,"updatedAt").enqueue(object : Callback<ArticleModel> {
+        mAPIService!!.getArticlesSearchLimitAll(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId,(mItemPerRow*(mCurrentPage)), 10,text!!,"updatedAt").enqueue(object : Callback<ArticleModel> {
 
             override fun onResponse(call: Call<ArticleModel>, response: Response<ArticleModel>) {
                 //  d("Article",response.body()!!.developerMessage)
@@ -142,6 +142,7 @@ class SearchNews : AppCompatActivity(),ILoadMore{
         list_recycler_view_news.layoutManager = layoutManager
          adapter = NewsAdapter(list_recycler_view_news,this@SearchNews,data,this@SearchNews)
         list_recycler_view_news.adapter = adapter
+        adapter.notifyDataSetChanged()
         adapter.setLoadMore(this)
 
 
@@ -221,7 +222,7 @@ class SearchNews : AppCompatActivity(),ILoadMore{
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
-        mAPIService!!.getArticlesSearchLimitAll(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId,(mItemPerRow*(mCurrentPage-1)), 10,text!!,"updatedAt").enqueue(object : Callback<ArticleModel> {
+        mAPIService!!.getArticlesSearchLimitAll(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId,(mItemPerRow*(mCurrentPage)), 10,text!!,"updatedAt").enqueue(object : Callback<ArticleModel> {
 
             override fun onResponse(call: Call<ArticleModel>, response: Response<ArticleModel>) {
                 //  d("Article",response.body()!!.developerMessage)

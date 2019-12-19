@@ -77,11 +77,16 @@ class LocationList : androidx.fragment.app.Fragment() {
      searchlocation.textChanges().debounce(300, TimeUnit.MILLISECONDS).subscribe({ it ->
             try {
                 d("SEARCH", it.toString())
-                getLocationAndRegion(it.toString())
+                activity!!.runOnUiThread(java.lang.Runnable {
+                    getLocationAndRegion(it.toString())
+                })
+
+
             }catch (e : Exception){
+                d("ErrorKK",e.toString())
 
             }
-        },{ throwable -> d("Error",throwable.message)})
+        },{ throwable -> d("ErrorKK",throwable.message)})
     }
 
     override fun onResume() {
@@ -431,17 +436,19 @@ class LocationList : androidx.fragment.app.Fragment() {
         var dataLocation = HashMap<String,ArrayList<Product>>()
         val location = ArrayList<ArrayList<Product>>()
         val r = (10..12).shuffled().first()
-        val mProgressDialog = ProgressDialog(requireContext())
+        /*val mProgressDialog = ProgressDialog(requireContext())
         mProgressDialog.isIndeterminate = true
         mProgressDialog.setCancelable(false)
         mProgressDialog.setMessage("Loading...")
-        mProgressDialog.show()
+        mProgressDialog.show()*/
         mAPIService!!.getSearchLocation(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId,text!!).enqueue(object : Callback<LocationModel> {
 
             override fun onResponse(call: Call<LocationModel>, response: Response<LocationModel>) {
 
 //                Product(response.body()!!.resultData[i]!!.locationName.th, response.body()!!.resultData[i]!!.image.path, "0978512369",  response.body()!!.resultData[i]!!.email,
 //                        response.body()!!.resultData[i]!!.map.lat.toString(),response.body()!!.resultData[i]!!.map.long.toString() ,response.body()!!.resultData[i]!!._id
+
+            try {
 
 
                 for (i in 0 until response.body()!!.rowCount) {
@@ -482,14 +489,18 @@ class LocationList : androidx.fragment.app.Fragment() {
 
 
                 updateUi(companies)
-                mProgressDialog.dismiss()
+
+            }catch (e : Exception){
+
+            }
+              //  mProgressDialog.dismiss()
 
 
             }
 
             override fun onFailure(call: Call<LocationModel>, t: Throwable) {
                 d("arm",t.toString())
-                mProgressDialog.dismiss()
+               // mProgressDialog.dismiss()
             }
 
         })

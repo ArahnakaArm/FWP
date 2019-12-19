@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.loading.view.*
+import java.lang.Exception
 
 import java.util.ArrayList
 
@@ -41,6 +43,9 @@ class VideoAdapter(recyclerView: RecyclerView,ctx: Context, private val ModelArr
                 totalItemCount = grid.itemCount
                 visibleItemCount = grid.getChildCount()
                 pastVisibleItems  = grid.findFirstVisibleItemPosition()
+                if(totalItemCount < 10){
+                    totalItemCount = 10
+                }
                // Log.d("Detect", lastVisibleItem.toString())
                 if(!isLoading && totalItemCount <= pastVisibleItems+ visibleItemCount){
 
@@ -80,6 +85,8 @@ class VideoAdapter(recyclerView: RecyclerView,ctx: Context, private val ModelArr
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if(holder is MyViewHolder) {
+        try {
+
 
             var dateFormate = ModelArrayList[position]!!.updatedAt.substring(range = 0..10)
             var dateOutput =Profilewithpicture.ConvertDate.ChangeFormatDate(dateFormate.substring(0..3),dateFormate.substring(5..6),dateFormate.substring(8..9))
@@ -107,6 +114,9 @@ class VideoAdapter(recyclerView: RecyclerView,ctx: Context, private val ModelArr
                 holder.itemView.context?.startActivity(intent)
 
             }
+        }catch (e : Exception){
+            d("Exception",e.toString())
+        }
         }
         else if(holder is ArticleAdapter.LoadingViewHolder){
             holder.progressBar.isIndeterminate = true

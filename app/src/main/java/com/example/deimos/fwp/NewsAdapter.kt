@@ -68,6 +68,7 @@ class NewsAdapter(recyclerView: RecyclerView,ctx: Context, private val ModelArra
         if(holder is MyViewHolder) {
             try {
                // holder.cate.setText(ModelArrayList[position]!!.categoryId.categoryName.th)
+
                 holder.title.setText(ModelArrayList[position]!!.articleName.th)
                 holder.date.setText(ModelArrayList[position]!!.updatedAt.substring(0..9))
                 holder.itemView.setOnClickListener {
@@ -79,12 +80,23 @@ class NewsAdapter(recyclerView: RecyclerView,ctx: Context, private val ModelArra
                 Glide.with(holder.itemView.context)
                         .load(ModelArrayList[position]!!.imageThumbnail)
                         .into(holder.image)
+
+                for (i in 0 until ModelArrayList[position]!!.categoryInfo.size) {
+                    d("TestArray", i.toString())
+                    if (ModelArrayList[position]!!.categoryInfo[i].categoryId.categoryName.th != "Top") {
+                        holder.cate.setText(ModelArrayList[position]!!.categoryInfo[i].categoryId.categoryName.th)
+                    }
+                }
             }catch (e : Exception){
 
             }
         }
         else if(holder is ArticleAdapter.LoadingViewHolder){
-            holder.progressBar.isIndeterminate = true
+            try {
+                holder.progressBar.isIndeterminate = true
+            }catch (e : java.lang.Exception){
+
+            }
         }
     }
 

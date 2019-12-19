@@ -77,8 +77,8 @@ class LocationContent : Activity(){
                 location = LatLng(lat, lon)
 
                 locationname.setText(response.body()!!.resultData.locationName.th)
-                locationinfo.setText(response.body()!!.resultData.address.th+" "+response.body()!!.resultData.province.th+
-                        " "+response.body()!!.resultData.city.th+" "+response.body()!!.resultData.subDistrict.th+" "+response.body()!!.resultData.postalCode)
+                locationinfo.setText(response.body()!!.resultData.address.th+" "+response.body()!!.resultData.subDistrict.th+
+                        " "+response.body()!!.resultData.city.th+" "+response.body()!!.resultData.province.th+" "+response.body()!!.resultData.postalCode)
                 telinfo.setText(response.body()!!.resultData.mobileNo)
                 emailinfo.setText(response.body()!!.resultData.email)
                 var Url = response.body()!!.resultData.image

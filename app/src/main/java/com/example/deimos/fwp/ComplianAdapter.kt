@@ -42,7 +42,7 @@ class ComplianAdapter(ctx: Context, private val ModelArrayList: ArrayList<Compli
         if(ModelArrayList[position].status=="Done"){
             holder.status.setImageResource(R.drawable.successstatus)
         }
-        if(ModelArrayList[position].status=="Cancle"){
+        if(ModelArrayList[position].status=="Cancel"){
             holder.status.setImageResource(R.drawable.cancelstatus)
         }
         if(ModelArrayList[position].status=="New"){

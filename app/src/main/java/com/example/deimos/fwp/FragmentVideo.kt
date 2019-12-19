@@ -44,7 +44,7 @@ data class  videoName(var en : String,var th : String)
 class FragmentVideo : androidx.fragment.app.Fragment(),ILoadMore {
     lateinit var adapter: VideoAdapter
     private var mCurrentPage = 1
-    private val mItemPerRow = 3
+    private val mItemPerRow = 10
     private var sharedPreferences:SharedPreferences?=null
     private var searchText = ""
     private var searchState = false
@@ -223,24 +223,24 @@ class FragmentVideo : androidx.fragment.app.Fragment(),ILoadMore {
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
 
-        mAPIService!!.getSearchVideo(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId,text,(mItemPerRow*(mCurrentPage-1)), 3,"updatedAt").enqueue(object : Callback<VideosModel?>{
+        mAPIService!!.getSearchVideo(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId,text,(mItemPerRow*(mCurrentPage-1)), 10,"updatedAt").enqueue(object : Callback<VideosModel?>{
 
             override fun onResponse(call: Call<VideosModel?>, response: Response<VideosModel?>) {
 
-                try {
-                    for (i in 0 until response.body()!!.resultData.size){
-                        videos.add(response.body()!!.resultData[i])
+                    try {
+                        for (i in 0 until response.body()!!.resultData.size) {
+                            videos.add(response.body()!!.resultData[i])
+
+                        }
+                        mCurrentPage++
+                        showData(videos)
+
+                    } catch (e: Exception) {
 
                     }
-                    mCurrentPage++
-                    showData(videos)
 
-                } catch (e: Exception) {
-
-                }
 
             }
-
             override fun onFailure(call: Call<VideosModel?>, t: Throwable) {
                 d("arm",t.toString())
 
@@ -256,22 +256,23 @@ class FragmentVideo : androidx.fragment.app.Fragment(),ILoadMore {
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
-        mAPIService!!.getVideo(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId,(mItemPerRow*(mCurrentPage-1)), 3).enqueue(object : Callback<VideosModel>{
+        mAPIService!!.getVideo(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId,(mItemPerRow*(mCurrentPage-1)), 10).enqueue(object : Callback<VideosModel>{
 
             override fun onResponse(call: Call<VideosModel>, response: Response<VideosModel>) {
 
-                try {
-                    for (i in 0 until response.body()!!.resultData.size){
-                        videos.add(response.body()!!.resultData[i])
+                    try {
+                        for (i in 0 until response.body()!!.resultData.size) {
+                            videos.add(response.body()!!.resultData[i])
 
+                        }
+                        adapter.notifyDataSetChanged()
+                        adapter.setLoaded()
+                        d("Video", videos[0]!!._id)
+                        mCurrentPage++
+                    } catch (e: Exception) {
+                        d("Video2", e.toString())
                     }
-                    adapter.notifyDataSetChanged()
-                    adapter.setLoaded()
-                    d("Video", videos[0]!!._id)
-                     mCurrentPage++
-                } catch (e: Exception) {
-                    d("Video", e.toString())
-                }
+
 
 
             }
@@ -291,26 +292,26 @@ class FragmentVideo : androidx.fragment.app.Fragment(),ILoadMore {
             val sdf = SimpleDateFormat("yyMMdd")
             val currentDate = sdf.format(Date())
             val r = (10..12).shuffled().first()
-            mAPIService!!.getSearchVideo(Register.GenerateRandomString.randomString(22), "AND-" + currentDate + Register.GenerateRandomString.randomString(r), partnerId, text, (mItemPerRow * (mCurrentPage - 1)), 3, "updatedAt").enqueue(object : Callback<VideosModel?> {
+            mAPIService!!.getSearchVideo(Register.GenerateRandomString.randomString(22), "AND-" + currentDate + Register.GenerateRandomString.randomString(r), partnerId, text, (mItemPerRow * (mCurrentPage - 1)), 10, "updatedAt").enqueue(object : Callback<VideosModel?> {
 
                 override fun onResponse(call: Call<VideosModel?>, response: Response<VideosModel?>) {
 
-                    try {
-                        for (i in 0 until response.body()!!.resultData.size) {
-                            videos.add(response.body()!!.resultData[i])
+                        try {
+                            for (i in 0 until response.body()!!.resultData.size) {
+                                videos.add(response.body()!!.resultData[i])
 
+                            }
+                            adapter.notifyDataSetChanged()
+                            adapter.setLoaded()
+                            d("Video", videos[0]!!._id)
+                            mCurrentPage++
+                        } catch (e: Exception) {
+                            d("Video", e.toString())
                         }
-                        adapter.notifyDataSetChanged()
-                        adapter.setLoaded()
-                        d("Video", videos[0]!!._id)
-                        mCurrentPage++
-                    } catch (e: Exception) {
-                        d("Video", e.toString())
-                    }
+
 
 
                 }
-
                 override fun onFailure(call: Call<VideosModel?>, t: Throwable) {
                     d("arm", t.toString())
                 }

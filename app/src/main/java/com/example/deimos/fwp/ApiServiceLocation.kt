@@ -15,7 +15,7 @@ interface ApiServiceLocation {
     @Headers("Content-Type: application/json")
     @GET("locations")
     fun getSearchLocation(@Header("x-session-id") header : String,
-                          @Header("x-tid") header2 : String, @Query("partnerId") partnerId : String, @Query("searchAll") searchAll : String): Call<LocationModel>
+                          @Header("x-tid") header2 : String, @Query("partnerId") partnerId : String, @Query("searchAll") searchAll : String,@Query("isPublish") isPublish : Boolean = true): Call<LocationModel>
 
 
 
@@ -29,7 +29,7 @@ interface ApiServiceLocation {
     @Headers("Content-Type: application/json")
     @GET("locations")
     fun getLocationPinMap(@Header("x-session-id") header : String,
-                          @Header("x-tid") header2 : String, @Query("partnerId") partnerId : String): Call<LocationModel>
+                          @Header("x-tid") header2 : String, @Query("partnerId") partnerId : String,@Query("isPublish") isPublish : Boolean = true): Call<LocationModel>
 
 
 

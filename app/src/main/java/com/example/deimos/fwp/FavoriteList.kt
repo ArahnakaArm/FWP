@@ -68,20 +68,26 @@ class FavoriteList : AppCompatActivity() {
         mAPIService!!.getFavorite(token!!,Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId,"updatedAt").enqueue(object : Callback<Favorite> {
 
             override fun onResponse(call: Call<Favorite>, response: Response<Favorite>) {
-                try {
-                    for (i in 0 until response.body()!!.rowCount) {
+                if (!response.body()!!.resultData.isEmpty()) {
+                    try {
+                        for (i in 0 until response.body()!!.rowCount) {
 
-                        idArticle.add(response.body()!!.resultData[i].articleId)
-                        idFav.add(response.body()!!.resultData[i]._id)
-                        updateAt.add(response.body()!!.resultData[i].updatedAt)
-                        d("Update",idFav[i])
+                            idArticle.add(response.body()!!.resultData[i].articleId)
+                            idFav.add(response.body()!!.resultData[i]._id)
+                            updateAt.add(response.body()!!.resultData[i].updatedAt)
+                            d("Update", idFav[i])
+                        }
+
+                        getArticleById(idArticle, idFav, updateAt)
+                        // favList=response.body()!!.resultData
+                        //  d("Favorite",idArticle.toString())
+                    } catch (e: Exception) {
+                        d("Exception", e.toString())
+
                     }
-
-                    getArticleById(idArticle,idFav,updateAt)
-                   // favList=response.body()!!.resultData
-                 //  d("Favorite",idArticle.toString())
-                }catch (e : Exception){
-
+                }
+                else{
+                    list_recycler_view.visibility = View.GONE
                 }
                // mProgressDialog.dismiss();
             }
