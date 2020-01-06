@@ -41,18 +41,22 @@ data class locationame(var en : String,var th : String)
 data class address(var en : String ,var th : String)
 data class map(var lat: Number , var long : Number)
 data class region(var en : String, var th : String)
+data class regionsModel(var resultCode: String,var rowCount: Int,var resultData: ArrayList<resultRegions>)
+data class resultRegions(var region: regions)
+data class regions(var th: String,var en: String)
 class LocationList : androidx.fragment.app.Fragment() {
     private var sharedPreferences : SharedPreferences?=null
     private var mAPIService: ApiServiceLocation? = null
    private var test = ArrayList<result>()
+    private var regions = ArrayList<String>()
     private var test2 = ArrayList<result>()
     private var list = ArrayList<Company>()
     var dataLocation = HashMap<String,result>()
     var dataLocation2 = HashMap<String,String>()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = activity!!.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        view.menu.getItem(0).isCheckable=true
-        view.menu.getItem(0).isChecked=true
+        view.menu.getItem(3).isCheckable=true
+        view.menu.getItem(3).isChecked=true
 
         return inflater.inflate(R.layout.loacationlist,container,false)
     }
@@ -65,7 +69,8 @@ class LocationList : androidx.fragment.app.Fragment() {
         dataLocation2.put("sads","Sadsasssssd")
         d("HASH",dataLocation2["sads"].toString())
 
-        getLocationAndRegion("")
+        //getLocationAndRegion("")
+        //getRegion("")
         map.setOnClickListener {
             startActivity(Intent(requireContext(),MapsActivity::class.java))
             activity!!.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left)
@@ -78,7 +83,8 @@ class LocationList : androidx.fragment.app.Fragment() {
             try {
                 d("SEARCH", it.toString())
                 activity!!.runOnUiThread(java.lang.Runnable {
-                    getLocationAndRegion(it.toString())
+                    regions.clear()
+                    getRegion(it.toString())
                 })
 
 
@@ -91,8 +97,8 @@ class LocationList : androidx.fragment.app.Fragment() {
 
     override fun onResume() {
         val view = activity!!.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        view.menu.getItem(0).isCheckable=true
-        view.menu.getItem(0).isChecked=true
+        view.menu.getItem(3).isCheckable=true
+        view.menu.getItem(3).isChecked=true
         super.onResume()
     }
     private fun getLocation(){
@@ -426,7 +432,7 @@ class LocationList : androidx.fragment.app.Fragment() {
 
         })
     }
-    private fun getLocationAndRegion(text : String){
+    private fun getLocationAndRegion(text : String,regions: ArrayList<String>){
         mAPIService = ApiUtilsLocation.apiServiceLocation
         sharedPreferences = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
         val partnerId = sharedPreferences!!.getString("partnerId","-")
@@ -449,10 +455,8 @@ class LocationList : androidx.fragment.app.Fragment() {
 //                        response.body()!!.resultData[i]!!.map.lat.toString(),response.body()!!.resultData[i]!!.map.long.toString() ,response.body()!!.resultData[i]!!._id
 
             try {
-
-
                 for (i in 0 until response.body()!!.rowCount) {
-                    var regionName = response.body()!!.resultData[i].region.th
+                        var regionName = response.body()!!.resultData[i].region.th
                   if(dataLocation[regionName] == null){
 //                        dataLocation.put(response.body()!!.resultData[i].region.th, ArrayList<Product>())
                       dataLocation.put(regionName, ArrayList<Product>())
@@ -465,7 +469,7 @@ class LocationList : androidx.fragment.app.Fragment() {
                 var regionName = ArrayList<String>(dataLocation.keys)
                // var locationItem = ArrayList<result>(dataLocation.values)
 
-                for (i in 0 until regionName.size) {
+                for (i in 0 until regions.size) {
 //                    var item = ArrayList<Product>()
 //                    for(j in 0 until response.body()!!.rowCount) {
 //                        var data = response.body()!!.resultData[j]
@@ -476,7 +480,9 @@ class LocationList : androidx.fragment.app.Fragment() {
 //                    }
 //
 //                    companies.add(Company("" + regionName[i], item))
-                    companies.add(Company("" + regionName[i], dataLocation[regionName[i]]!!.toList()))
+                    if (dataLocation[regions[i]] != null) {
+                        companies.add(Company("" + regions[i], dataLocation[regions[i]]!!.toList()))
+                    }
                    // d("Size",item.size.toString())
 
 
@@ -491,6 +497,7 @@ class LocationList : androidx.fragment.app.Fragment() {
                 updateUi(companies)
 
             }catch (e : Exception){
+                d("DDDA",e.toString())
 
             }
               //  mProgressDialog.dismiss()
@@ -505,4 +512,32 @@ class LocationList : androidx.fragment.app.Fragment() {
 
         })
     }
+
+    private fun getRegion(text : String){
+        mAPIService = ApiUtilsLocation.apiServiceLocation
+        sharedPreferences = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        val partnerId = sharedPreferences!!.getString("partnerId","-")
+        val sdf = SimpleDateFormat("yyMMdd")
+        val currentDate = sdf.format(Date())
+        val r = (10..12).shuffled().first()
+        mAPIService!!.getSearchRegion(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),partnerId).enqueue(object : Callback<regionsModel> {
+
+            override fun onResponse(call: Call<regionsModel>, response: Response<regionsModel>) {
+                for(i in 0 until response.body()!!.rowCount){
+                    regions.add(response.body()!!.resultData[i].region.th)
+                    d("Regions",regions[i])
+                    when(i){
+                        response.body()!!.rowCount -1 ->  getLocationAndRegion(text,regions)
+                    }
+                }
+
+            }
+
+            override fun onFailure(call: Call<regionsModel>, t: Throwable) {
+                d("arm",t.toString())
+            }
+
+        })
+    }
+
 }

@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 android {
+
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.deimos.fwp"
@@ -19,6 +20,19 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    productFlavors {
+        flavorDimensions("develop")
+        develop {
+            buildConfigField("String", "API_BASE", "\"167.71.194.165:3000\"")
+            buildConfigField("String", "APP_ID", "\"111400\"")
+        }
+        flavorDimensions("production")
+        production {
+            buildConfigField("String", "API_BASE", "\"fwp-api.evolka.in\"")
+            buildConfigField("String", "APP_ID", "\"142243\"")
+        }
+    }
+
 }
 
 dependencies {

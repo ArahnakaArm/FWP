@@ -2,7 +2,8 @@
     <string name="app_name">FWP</string>
     <string name="DEV">167.71.194.165</string>
     <string name="SQA">206.189.41.105</string>
-    <string name="facebook_app_id">1059688530868369</string>
-    <string name="fb_login_protocol_scheme">fb1059688530868369</string>
+    <string name="facebook_app_id">501227754077632</string>
+    <string name="fb_login_protocol_scheme">fb501227754077632</string>
+    <string name="PDT">fwp-api.evolka.in</string>
 
 </resources>

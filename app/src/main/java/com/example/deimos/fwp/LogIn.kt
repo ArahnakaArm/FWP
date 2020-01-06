@@ -57,10 +57,11 @@ data class UserProfile(var resultData : resultData2,
 data class resultData2(var _id :String,var birthDate: String ,var email: String,var firstName : String ,
                        var gender : String,var lastName :String,var image : String,var complainNumber : String)
 data class image(var path : String)
-data class resultData(val access_token:String)
+data class resultData(val access_token:String,var firstName : String,var lastName: String)
 data class UserMo(val resultData : resultData,
                  val resultCode : String
                  ,val developerMessage:String)
+
 
 class LogIn :AppCompatActivity() {
     var callback : CallbackManager?=null
@@ -103,7 +104,9 @@ class LogIn :AppCompatActivity() {
                 tokenFacebook = access_token
                 d("Token","Facebook Token :"+ tokenFacebook)
                 acc = AccessToken.getCurrentAccessToken();
-                getLocalTokenFacebook()
+                runOnUiThread {
+                    getLocalTokenFacebook()
+                }
             }
             override fun onCancel() {
             }
@@ -195,6 +198,8 @@ class LogIn :AppCompatActivity() {
                             editor?.putString("LogIn_Type", "Local")
                             d("AA",sp?.getBoolean("LogIn_State", false).toString())
                             editor?.putBoolean("isFromLogin", true)
+                            editor?.putString("firstName", response.body()!!.resultData.firstName)
+                            editor?.putString("lastName", response.body()!!.resultData.lastName)
                             editor?.commit()
 
                             finish()
@@ -332,7 +337,10 @@ class LogIn :AppCompatActivity() {
                     Log.i("Test", message)
                     tokenGoogle =token
                     Log.i("Token", "Google Token :" + tokenGoogle)
-                    getLocalTokenGoogle()
+                    runOnUiThread {
+                        getLocalTokenGoogle()
+                    }
+
                 } catch (e: JSONException) {
                     d("Test", e.toString())
                 }
@@ -350,38 +358,83 @@ class LogIn :AppCompatActivity() {
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
         val editor = sp?.edit()
+        val mAlert = AlertDialog.Builder(this@LogIn)
+        val mProgressDialog = ProgressDialog(this@LogIn)
+        mProgressDialog.isIndeterminate = true
+        mProgressDialog.setCancelable(false)
+        mProgressDialog.setMessage("Loading...")
+        mProgressDialog.show()
 
         mAPIService!!.userLoginGoogle(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),tokenGoogle!!,partnerId).enqueue(object : Callback<UserMo> {
 
             override fun onResponse(call: Call<UserMo>, response: Response<UserMo>) {
-                try {
-                    token=response.body()!!.resultData.access_token
-                    // replaceFragmentToRight(Profilewithpicture())
-                    d("Token","Local Token : "+token)
-                    editor?.putBoolean("LogIn_State", true)
-                    editor?.putBoolean("LogIn_StateGoogle", true)
-                    editor?.putString("user_token", response.body()!!.resultData.access_token)
-                    editor?.putString("LogIn_Type", "Social")
-                    editor?.putBoolean("isFromLogin", true)
-                    editor?.commit()
-                    finish()
+                if (response.isSuccessful) {
+                    try {
+                        token = response.body()!!.resultData.access_token
+                        // replaceFragmentToRight(Profilewithpicture())
+                        d("Token", "Local Token : " + token)
+                        editor?.putBoolean("LogIn_State", true)
+                        editor?.putBoolean("LogIn_StateGoogle", true)
+                        editor?.putString("user_token", response.body()!!.resultData.access_token)
+                        editor?.putString("LogIn_Type", "Social")
+                        editor?.putBoolean("isFromLogin", true)
+                        editor?.putString("firstName", response.body()!!.resultData.firstName)
+                        editor?.putString("lastName", response.body()!!.resultData.lastName)
 
-                }catch (e : Exception){
-                    d("Error",e.toString())
+                        editor?.commit()
+
+                        finish()
+
+                    } catch (e: Exception) {
+                        d("Error", e.toString())
+
+                    }
+                    mProgressDialog.dismiss()
+
                 }
 
-
+                else{
+                    signOutGoogle()
+                    val sp = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE)
+                    val editor = sp?.edit()
+                    LoginManager.getInstance().logOut()
+                    editor?.putString("user_token","-")
+                    editor?.putBoolean("LogIn_State",false)
+                    editor?.putBoolean("LogIn_StateFacebook", false)
+                    editor?.putBoolean("LogIn_StateGoogle", false)
+                    editor?.commit()
+                    val mAlert = AlertDialog.Builder(this@LogIn)
+                    mAlert.setTitle("พบข้อผิดพลาด")
+                    mAlert.setMessage("กรุณาลองใหม่อีกครั้ง")
+                    mAlert.setNegativeButton("ตกลง"){dialog, which ->
+                        dialog.dismiss()
+                    }
+                    mProgressDialog.dismiss()
+                    mAlert.show()
+                }
             }
 
+
             override fun onFailure(call: Call<UserMo>, t: Throwable) {
+                val sp = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE)
+                val editor = sp?.edit()
+                LoginManager.getInstance().logOut()
+                editor?.putString("user_token","-")
+                editor?.putBoolean("LogIn_State",false)
+                editor?.putBoolean("LogIn_StateFacebook", false)
+                editor?.putBoolean("LogIn_StateGoogle", false)
+                editor?.commit()
+                signOutGoogle()
                 d("ss",t.toString())
                 val mAlert = AlertDialog.Builder(this@LogIn)
                 mAlert.setTitle("พบข้อผิดพลาด")
-                mAlert.setMessage("ท่านไม่ได้เชื่อมต่ออินเตอร์เน็ต")
+                mAlert.setMessage("กรุณาลองใหม่อีกครั้ง")
                 mAlert.setNegativeButton("ตกลง"){dialog, which ->
                     dialog.dismiss()
                 }
+                mProgressDialog.dismiss()
                 mAlert.show()
+
             }
         })
         d("What",sp!!.getBoolean("LogIn_State",false).toString())
@@ -393,6 +446,11 @@ class LogIn :AppCompatActivity() {
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
+        val mProgressDialog = ProgressDialog(this@LogIn)
+        mProgressDialog.isIndeterminate = true
+        mProgressDialog.setCancelable(false)
+        mProgressDialog.setMessage("Loading...")
+        mProgressDialog.show()
         mAPIService!!.userLoginFacebook(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),tokenFacebook!!,partnerId).enqueue(object : Callback<UserMo> {
 
             override fun onResponse(call: Call<UserMo>, response: Response<UserMo>) {
@@ -405,27 +463,46 @@ class LogIn :AppCompatActivity() {
                         editor?.putString("user_token", response.body()!!.resultData.access_token)
                         editor?.putString("LogIn_Type", "Social")
                         editor?.putBoolean("isFromLogin", true)
+                        editor?.putString("firstName", response.body()!!.resultData.firstName)
+                        editor?.putString("lastName", response.body()!!.resultData.lastName)
                         editor?.commit()
                         finish()
                     }catch (e : Exception){
                         d("Error",e.toString())
                     }
+                    mProgressDialog.dismiss()
 
                 }
-                else if(response.code()==401){
+                else {
+                    val sp = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE)
+                    val editor = sp?.edit()
+                    LoginManager.getInstance().logOut()
+                    editor?.putString("user_token","-")
+                    editor?.putBoolean("LogIn_State",false)
+                    editor?.putBoolean("LogIn_StateFacebook", false)
+                    editor?.putBoolean("LogIn_StateGoogle", false)
+                    editor?.commit()
                     val mAlert = AlertDialog.Builder(this@LogIn)
                     mAlert.setTitle("พบข้อผิดพลาด")
-                    mAlert.setMessage("รหัสผ่านของท่านผิด")
+                    mAlert.setMessage("กรุณาลองใหม่อีกครั้ง")
                     mAlert.setNegativeButton("ตกลง"){dialog, which ->
                         dialog.dismiss()
                     }
                     mAlert.show()
 
                 }
-
+                mProgressDialog.dismiss()
             }
 
             override fun onFailure(call: Call<UserMo>, t: Throwable) {
+                val sp = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE)
+                val editor = sp?.edit()
+                LoginManager.getInstance().logOut()
+                editor?.putString("user_token","-")
+                editor?.putBoolean("LogIn_State",false)
+                editor?.putBoolean("LogIn_StateFacebook", false)
+                editor?.putBoolean("LogIn_StateGoogle", false)
+                editor?.commit()
                 d("ss",t.toString())
                 val mAlert = AlertDialog.Builder(this@LogIn)
                 mAlert.setTitle("พบข้อผิดพลาด")
@@ -434,7 +511,9 @@ class LogIn :AppCompatActivity() {
                     dialog.dismiss()
                 }
                 mAlert.show()
+                mProgressDialog.dismiss()
             }
+
         })
 
     }
@@ -442,7 +521,10 @@ class LogIn :AppCompatActivity() {
     override fun onResume() {
         super.onResume()
     }
-
+    private fun signOutGoogle() {
+        mGoogleSignInClient?.signOut()?.addOnCompleteListener(this@LogIn, OnCompleteListener<Void> {
+        })
+    }
 
 }
 

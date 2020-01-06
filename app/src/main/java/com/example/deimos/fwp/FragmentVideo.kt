@@ -50,7 +50,7 @@ class FragmentVideo : androidx.fragment.app.Fragment(),ILoadMore {
     private var searchState = false
     lateinit var layoutManager: LinearLayoutManager
     private var videos = ArrayList<resultData3?>()
-    var mAPIService: ApiService? = null
+    var mAPIService: ApiServiceContent? = null
 
 
     override fun onLoadMore() {
@@ -210,13 +210,14 @@ class FragmentVideo : androidx.fragment.app.Fragment(),ILoadMore {
     }
 
     override fun onResume() {
+        d("Gumm","Yes")
         val view = activity!!.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         view.menu.getItem(1).isCheckable=true
         view.menu.getItem(1).isChecked=true
         super.onResume()
     }
     private fun searchvideoList(text : String){
-        mAPIService = ApiUtils.apiService
+        mAPIService = ApiUtilsContent.apiService
         sharedPreferences = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
         val partnerId = sharedPreferences!!.getString("partnerId","-")
         val sdf = SimpleDateFormat("yyMMdd")
@@ -249,7 +250,7 @@ class FragmentVideo : androidx.fragment.app.Fragment(),ILoadMore {
         })
     }
 
-    private fun LoadMore(){
+  /*  private fun LoadMore(){
         mAPIService = ApiUtils.apiService
         sharedPreferences = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
         val partnerId = sharedPreferences!!.getString("partnerId","-")
@@ -283,10 +284,10 @@ class FragmentVideo : androidx.fragment.app.Fragment(),ILoadMore {
 
         })
 
-    }
+    }*/
     private fun LoadMoreWithSearch(text : String){
         try {
-            mAPIService = ApiUtils.apiService
+            mAPIService = ApiUtilsContent.apiService
             sharedPreferences = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
             val partnerId = sharedPreferences!!.getString("partnerId", "-")
             val sdf = SimpleDateFormat("yyMMdd")

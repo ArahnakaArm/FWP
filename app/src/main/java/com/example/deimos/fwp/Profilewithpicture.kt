@@ -585,7 +585,6 @@ class Profilewithpicture : androidx.fragment.app.Fragment() {
         getData()
         savelist.isEnabled = true
         super.onResume()
-        d("Profile","TEsssssssssssssss")
       /*  if(sp!!.getBoolean("LogIn_State",false)==false) {
             replaceFisrtFragment(LogIn())
         }else{

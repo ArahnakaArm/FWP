@@ -124,7 +124,7 @@ class MapsActivity : AppCompatActivity(){
         }
 
 
-        maplist.setOnClickListener {
+        maplist2.setOnClickListener {
             onBackPressed()
         }
 

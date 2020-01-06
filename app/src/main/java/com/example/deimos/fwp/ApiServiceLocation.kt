@@ -18,6 +18,14 @@ interface ApiServiceLocation {
                           @Header("x-tid") header2 : String, @Query("partnerId") partnerId : String, @Query("searchAll") searchAll : String,@Query("isPublish") isPublish : Boolean = true): Call<LocationModel>
 
 
+    @Headers("Content-Type: application/json")
+    @GET("regions")
+    fun getSearchRegion(@Header("x-session-id") header : String,
+                          @Header("x-tid") header2 : String, @Query("partnerId") partnerId : String): Call<regionsModel>
+
+
+
+
 
     @Headers("Content-Type: application/json")
     @GET("locations/{locationId}")

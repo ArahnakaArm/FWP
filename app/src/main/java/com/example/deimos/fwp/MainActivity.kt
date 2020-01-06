@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     val stack = Stack<Int>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.main)
 
 
@@ -109,12 +110,14 @@ class MainActivity : AppCompatActivity() {
             R.id.complain -> {
 
                 val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-                bottomNav.menu.getItem(0).isEnabled = true
-                bottomNav.menu.getItem(2).isEnabled = true
+               /* bottomNav.menu.getItem(0).isEnabled = true
                 bottomNav.menu.getItem(1).isEnabled = true
+                bottomNav.menu.getItem(3).isEnabled = true
                 bottomNav.menu.getItem(4).isEnabled = true
-                bottomNav.menu.getItem(3).isCheckable = false
-
+                bottomNav.menu.getItem(2).isCheckable = false
+*/
+              //  bottomNav.menu.getItem(2).isEnabled = false
+                bottomNav.menu.getItem(2).isCheckable = false
                 if(sp?.getBoolean("LogIn_State", false)==false){
                     val intent = Intent(this@MainActivity, LogInWithSkip::class.java)
                     startActivity(intent)
@@ -138,8 +141,8 @@ class MainActivity : AppCompatActivity() {
             R.id.news -> {
                 item.isCheckable = true
                 val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-                bottomNav.menu.getItem(0).isEnabled = true
                 bottomNav.menu.getItem(1).isEnabled = true
+                bottomNav.menu.getItem(2).isEnabled = true
                 bottomNav.menu.getItem(3).isEnabled = true
                 bottomNav.menu.getItem(4).isEnabled = true
                 x = 2
@@ -151,10 +154,9 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.location -> {
                 val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-                bottomNav.menu.getItem(3).isEnabled = true
+                bottomNav.menu.getItem(0).isEnabled = true
                 bottomNav.menu.getItem(1).isEnabled = true
                 bottomNav.menu.getItem(2).isEnabled = true
-
                 bottomNav.menu.getItem(4).isEnabled = true
                 item.isCheckable = false
                 x = 3
@@ -165,7 +167,6 @@ class MainActivity : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.profile -> {
-
 
                 val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
                 bottomNav.menu.getItem(0).isEnabled = true
@@ -207,6 +208,7 @@ class MainActivity : AppCompatActivity() {
     public fun replaceFisrtFragment(fragment: androidx.fragment.app.Fragment) {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.fragmentcontainer, fragment)
+
         fragmentTransaction.commit()
 
 
@@ -271,7 +273,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-
         if(sp!!.getBoolean("isFromLogin",false)==true && (sp!!.getBoolean("LogIn_State",false))==true ) {
             replaceFisrtFragment(Profilewithpicture())
             sp!!.edit {
@@ -281,6 +282,8 @@ class MainActivity : AppCompatActivity() {
         }
         d("Resume","YES")
     }
+
+
 }
 
 

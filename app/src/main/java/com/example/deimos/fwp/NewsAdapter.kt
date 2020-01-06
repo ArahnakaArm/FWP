@@ -41,6 +41,9 @@ class NewsAdapter(recyclerView: RecyclerView,ctx: Context, private val ModelArra
                 visibleItemCount = grid.getChildCount()
                 pastVisibleItems  = grid.findFirstVisibleItemPosition()
                 // Log.d("Detect", lastVisibleItem.toString())
+                if(totalItemCount < 10){
+                    totalItemCount = 10
+                }
                 if(!isLoading && totalItemCount <= pastVisibleItems+ visibleItemCount){
 
                     if(loadMore != null){

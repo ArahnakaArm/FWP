@@ -290,50 +290,53 @@ interface ApiService {
 
 }
 
-object ApiUtils {
 
-    val BASE_URL = "http://167.71.194.165:1210/api/v1/"
-
-    val apiService: ApiService
-        get() = RetrofitClient.getClient(BASE_URL)!!.create(ApiService::class.java)
-
-}
 object ApiUtilsLocation {
+    var API = BuildConfig.API_BASE
+    var PDT ="fwp-api.evolka.in"
     var DEV = "167.71.194.165"
     var SQA = "206.189.41.105"
-    var BASE_URLLocation = "http://$SQA:3000/olf/v1/"
+    var BASE_URLLocation = "https://$API/olf/v1/"
     val apiServiceLocation: ApiServiceLocation
         get() = RetrofitClientLocation.getClient(BASE_URLLocation)!!.create(ApiServiceLocation::class.java)
 
 }
 object ApiUtilsMember {
+    var API = BuildConfig.API_BASE
+    var PDT ="fwp-api.evolka.in"
     var DEV = "167.71.194.165"
     var SQA = "206.189.41.105"
-    var BASE_URLMember = "http://$SQA:3000/mmf/v1/"
+    var BASE_URLMember = "https://$API/mmf/v1/"
     val apiServiceMember: ApiServiceMember
         get() = RetrofitClientMember.getClient(BASE_URLMember)!!.create(ApiServiceMember::class.java)
 
 }
 object ApiUtilsComplian {
+    var API = BuildConfig.API_BASE
+    var PDT ="fwp-api.evolka.in"
     var DEV = "167.71.194.165"
     var SQA = "206.189.41.105"
-    var BASE_URLComplian = "http://$SQA:3000/cpf/v1/"
+    var BASE_URLComplian = "https://$API/cpf/v1/"
     val apiServiceComplian: ApiServiceComplian
         get() = RetrofitClientComplian.getClient(BASE_URLComplian)!!.create(ApiServiceComplian::class.java)
 
 }
 object ApiUtilsAuth {
+    var API = BuildConfig.API_BASE
+    var PDT ="fwp-api.evolka.in"
     var DEV = "167.71.194.165"
     var SQA = "206.189.41.105"
-    var BASE_URLAuth = "http://$SQA:3000/mmf/v1/"
+    var BASE_URLAuth = "https://$API/mmf/v1/"
     val apiServiceAuth: ApiServiceAuth
         get() = RetrofitClientAuth.getClient(BASE_URLAuth)!!.create(ApiServiceAuth::class.java)
 
 }
 object ApiUtilsPartner {
+    var API = BuildConfig.API_BASE
+    var PDT ="fwp-api.evolka.in"
     var DEV = "167.71.194.165"
     var SQA = "206.189.41.105"
-    var BASE_URLPartner = "http://$SQA:3000/umf/v1/"
+    var BASE_URLPartner = "https://$API/umf/v1/"
     val apiServicePartner: ApiServicePartner
         get() = RetrofitClientPartner.getClient(BASE_URLPartner)!!.create(ApiServicePartner::class.java)
 

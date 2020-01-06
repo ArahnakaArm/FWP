@@ -9,7 +9,7 @@ class WebView : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.webview)
         webView.loadUrl("https://futureforwardparty.org/join")
-
+        webView.settings.javaScriptEnabled = true
         backarrow.setOnClickListener {
             finish()
             this.overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_right)

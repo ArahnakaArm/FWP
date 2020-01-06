@@ -267,6 +267,16 @@ class Register : androidx.fragment.app.Fragment() {
                             mProgressDialog.dismiss()
                             replaceFragment(SuccessRegister())
                         }
+                        else if(response.code() == 409){
+                            mProgressDialog.dismiss()
+                            val mAlert = AlertDialog.Builder(requireContext())
+                            mAlert.setTitle("พบข้อผิดพลาด")
+                            mAlert.setMessage("อีเมล์ของท่านถูกใช้ไปแล้ว")
+                            mAlert.setNegativeButton("ตกลง"){dialog, which ->
+                                dialog.dismiss()
+                            }
+                            mAlert.show()
+                        }
                         else{
                             mProgressDialog.dismiss()
                             val mAlert = AlertDialog.Builder(requireContext())

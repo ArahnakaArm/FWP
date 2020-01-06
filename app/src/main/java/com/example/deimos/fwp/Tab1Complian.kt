@@ -16,6 +16,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.annotation.Nullable
 import androidx.core.content.edit
 import com.example.deimos.fwp.R.layout.spinner_item
 import kotlinx.android.synthetic.main.complianviewpager.*
@@ -39,12 +40,15 @@ class Tab1Complian  : androidx.fragment.app.Fragment() {
     private var Type : String?=null
     private var closebut : ImageView?=null
     private var Next : Button?=null
+
     private var viewp : androidx.viewpager.widget.ViewPager?=null
     private var sharedPreferences:SharedPreferences?=null
     private var arrayList : ArrayList<String>?=null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.compliantab1,container,false)
     }
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sp = activity?.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
@@ -55,6 +59,9 @@ class Tab1Complian  : androidx.fragment.app.Fragment() {
         arrayListGuide.add("")
         closebut =activity!!.findViewById(R.id.closebutton)
         Next =activity!!.findViewById(R.id.next)
+
+
+
         viewp = activity!!.findViewById(R.id.viewpager)
 
 
@@ -115,7 +122,7 @@ class Tab1Complian  : androidx.fragment.app.Fragment() {
 
                     sp = activity?.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
                     var edditor = sp!!.edit()
-                    spinner.setSelection(sp!!.getInt("spin",0))
+                    //spinner.setSelection(sp!!.getInt("spin",0))
 
                 } else if (response.code() == 401) {
                     val mAlert = AlertDialog.Builder(view!!.context)
@@ -209,8 +216,19 @@ class Tab1Complian  : androidx.fragment.app.Fragment() {
                     edditor.putInt("spin",position)
                     edditor.commit()
 
+                    sp!!.edit {
+
+                        putString("Type",Type)
+
+                    }
+
                 }else if(position == 0){
                     Type = ""
+
+                    sp!!.edit {
+                        putString("Type",Type)
+
+                    }
 
                 }
             }
@@ -282,15 +300,25 @@ class Tab1Complian  : androidx.fragment.app.Fragment() {
                 mAlert.show()
 
             }else{
+
                 sp = activity?.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
                 var edditor = sp!!.edit()
                 sp!!.edit {
                     putString("Subject",Subject)
                     putString("Detail",Detail)
-                    putString("firstName",nameComplian.text.toString())
-                    putString("lastName",surnameInputComplian.text.toString())
                     putString("Type",Type)
 
+
+                }
+                if(!nameComplian.text.isEmpty() && !surnameInputComplian.text.isEmpty()){
+                    sp!!.edit {
+
+                        putString("firstName",nameComplian.text.toString())
+                        putString("lastName",surnameInputComplian.text.toString())
+
+
+
+                    }
                 }
 
                 d("Check",sp!!.getString("Type","-"))
@@ -321,6 +349,8 @@ class Tab1Complian  : androidx.fragment.app.Fragment() {
         d("A","yes")
 
     }
+
+
     private fun isValidate(type : String?,subject : String?, descrip : String?):Boolean{
         if(type == "" || subject == "" || descrip == "") {
             return false
@@ -329,5 +359,10 @@ class Tab1Complian  : androidx.fragment.app.Fragment() {
             return true
         }
     }
+
+
+
+
+
 
 }

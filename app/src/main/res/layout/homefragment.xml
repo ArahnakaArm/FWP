@@ -149,6 +149,7 @@
             android:layout_width="match_parent"
             android:orientation="vertical"
             android:gravity="center_horizontal"
+            android:descendantFocusability="blocksDescendants"
             android:layout_gravity="center_horizontal"
             android:layout_height="wrap_content">
         <RelativeLayout

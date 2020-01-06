@@ -35,7 +35,7 @@ class Complian : AppCompatActivity(){
         adapter.addFragement(Tab1Complian(),"one")
         adapter.addFragement(Tab2Complian(),"two")
         adapter.addFragement(Tab3Complian(),"three")
-
+        viewpager.offscreenPageLimit = 2
         viewpager.adapter = adapter
         viewpager.beginFakeDrag();
         viewpager?.addOnPageChangeListener(object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
@@ -56,6 +56,7 @@ class Complian : AppCompatActivity(){
 
                     backcomplian.visibility = View.INVISIBLE
                     next2.visibility = View.INVISIBLE
+                    next22.visibility = View.INVISIBLE
                     next.visibility = View.VISIBLE
 
                 }else if(position == 1){
@@ -67,7 +68,8 @@ class Complian : AppCompatActivity(){
                     step3circle.visibility = View.INVISIBLE
                     backcomplian.visibility = View.VISIBLE
                     next2.visibility = View.INVISIBLE
-                    next.visibility = View.VISIBLE
+                    next.visibility = View.INVISIBLE
+                    next22.visibility = View.VISIBLE
 
                 }else if(position == 2){
                     Log.d("Tab", position.toString())
@@ -75,6 +77,7 @@ class Complian : AppCompatActivity(){
                     step3circle.visibility = View.VISIBLE
                     backcomplian.visibility = View.VISIBLE
 
+                    next22.visibility = View.INVISIBLE
                     next.visibility = View.INVISIBLE
                     next2.visibility = View.VISIBLE
 
@@ -95,7 +98,7 @@ class Complian : AppCompatActivity(){
 
             val textFragment = findViewById(R.id.subjectInput) as EditText
             d("TestK",textFragment.text.toString())
-            viewpager.setCurrentItem(getItem(+1,viewpager), true)
+           // viewpager.setCurrentItem(getItem(+1,viewpager), true)
 
 
 
@@ -131,7 +134,7 @@ class Complian : AppCompatActivity(){
             }
 
     }
-    class ViewPagerAdapter(fragmentManager: androidx.fragment.app.FragmentManager) : androidx.fragment.app.FragmentPagerAdapter(fragmentManager) {
+    class ViewPagerAdapter(fragmentManager: androidx.fragment.app.FragmentManager) : androidx.fragment.app.FragmentStatePagerAdapter(fragmentManager) {
         private val fragmentList : MutableList<androidx.fragment.app.Fragment> = ArrayList()
         private val titleList : MutableList<String> = ArrayList()
 
@@ -172,6 +175,17 @@ object Pager {
     public fun replace(){
 
     }
+
+    override fun onDestroy() {
+        d("Destroy","Destroyed")
+        sp = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        var edditor = sp!!.edit()
+        edditor.putInt("spin", 0)
+        edditor.commit()
+        super.onDestroy()
+    }
+
+
 
 
 }

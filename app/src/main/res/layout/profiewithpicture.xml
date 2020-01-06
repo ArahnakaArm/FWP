@@ -430,7 +430,7 @@
             android:textColor="@color/White"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/linear3layer"
-            android:text="เวอร์ชั่น 1.0"/>
+            android:text="เวอร์ชั่น 1.0.1"/>
     </RelativeLayout>
 </ScrollView>
 

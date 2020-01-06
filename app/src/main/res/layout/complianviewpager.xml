@@ -218,6 +218,25 @@
     <Button
         android:layout_width="300dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/sendcomplainbutton"
+        android:textSize="20dp"
+        android:fontFamily="@font/anakotmai_light"
+        android:textColor="@color/White"
+        android:id="@+id/next"
+        android:text="ถัดไป"/>
+    <Button
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/sendcomplainbutton"
+        android:textSize="20dp"
+        android:fontFamily="@font/anakotmai_light"
+        android:textColor="@color/White"
+        android:id="@+id/next22"
+        android:visibility="invisible"
+        android:text="ถัดไป"/>
+    <Button
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
         android:textSize="20dp"
         android:background="@drawable/sendcomplainbutton"
         android:fontFamily="@font/anakotmai_light"
@@ -225,15 +244,8 @@
         android:visibility="invisible"
         android:id="@+id/next2"
         android:text="ส่งคำร้อง"/>
-         <Button
-             android:layout_width="300dp"
-             android:layout_height="wrap_content"
-             android:background="@drawable/sendcomplainbutton"
-             android:textSize="20dp"
-             android:fontFamily="@font/anakotmai_light"
-             android:textColor="@color/White"
-             android:id="@+id/next"
-             android:text="ถัดไป"/>
+
+
 </RelativeLayout>
 
          </LinearLayout>

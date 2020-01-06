@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/news"
+        android:enabled="true"
+        android:iconTint="@color/Grey"
+        android:icon="@drawable/homeiconnews"
+        android:title=""/>
 
+    <item
+        android:id="@+id/video"
+        android:enabled="true"
+        android:icon="@drawable/menu1"
+        android:title=""/>
+
+    <item
+        android:id="@+id/complain"
+        android:enabled="true"
+        android:icon="@drawable/complain"
+        android:title=""/>
     <item
         android:id="@+id/location"
         android:enabled="true"
@@ -8,24 +25,9 @@
         android:title=""/>
 
 
-    <item
-        android:id="@+id/video"
-        android:enabled="true"
-        android:icon="@drawable/menu1"
-
-        android:title=""/>
-    <item
-        android:id="@+id/news"
-        android:enabled="true"
-
-        android:title=""/>
 
 
-    <item
-        android:id="@+id/complain"
-        android:enabled="true"
-        android:icon="@drawable/complain"
-        android:title=""/>
+
     <item
         android:id="@+id/profile"
         android:enabled="true"

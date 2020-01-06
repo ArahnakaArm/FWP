@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.editprofile.*
 import kotlinx.android.synthetic.main.profiewithpicture.*
@@ -150,6 +151,12 @@ class EditProfile : AppCompatActivity() {
 
                     override fun onResponse(call: Call<ChangeProfileModel>, response: Response<ChangeProfileModel>) {
                         if (response.isSuccessful()) {
+
+                            sp = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+                            sp!!.edit {
+                                putString("firstName",response.body()!!.firstName)
+                                putString("lastName",response.body()!!.lastName)
+                            }
                             d("CheckValue","Success")
                             mProgressDialog.dismiss();
                             mAlert.setTitle("สำเร็จ")

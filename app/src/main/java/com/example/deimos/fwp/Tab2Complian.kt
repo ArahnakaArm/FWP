@@ -25,8 +25,11 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.viewpager.widget.ViewPager
+import com.example.deimos.fwp.Complian.Pager.getItem
 
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
@@ -55,10 +58,14 @@ class Tab2Complian  : androidx.fragment.app.Fragment(),GoogleApiClient.Connectio
     var mAPIService: ApiService? = null
     var pinId : String?=null
     var latlng : String?=null
+    private var initLocation = false
     private var longitude: Double?=null
     private var latitude: Double?=null
     var icon : BitmapDescriptor?=null
+    private var Lat : String?=null
+    private var Long : String?=null
     val PERMISSION_ID = 42
+    var init = 0
     var myFragment : androidx.fragment.app.Fragment?=null
     lateinit var mFusedLocationClient: FusedLocationProviderClient
     var Pins : LatLng?=null
@@ -74,6 +81,18 @@ class Tab2Complian  : androidx.fragment.app.Fragment(),GoogleApiClient.Connectio
         editor!!.putBoolean("Mark",false)
         editor!!.commit()
 
+        val NextButton = activity!!.findViewById(R.id.next22) as Button
+        val ViewPager = activity!!.findViewById(R.id.viewpager) as ViewPager
+        NextButton.setOnClickListener {
+
+            ViewPager.setCurrentItem(ViewPager.currentItem+1)
+            sp = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+            val editor = sp?.edit()
+            editor!!.putString("LAT",Lat)
+            editor!!.putString("LONG",Long)
+            editor?.commit()
+            d("LatLong",Lat +","+Long)
+        }
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
 
@@ -116,20 +135,28 @@ class Tab2Complian  : androidx.fragment.app.Fragment(),GoogleApiClient.Connectio
             it.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel))
         }
         googleMap!!.setOnCameraIdleListener {
-            d("LatLong",googleMap!!.cameraPosition.target.latitude.toString() +","+googleMap!!.cameraPosition.target.longitude.toString())
-            sp = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+           // d("LatLong",googleMap!!.cameraPosition.target.latitude.toString() +","+googleMap!!.cameraPosition.target.longitude.toString())
+          /*  sp = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
             val editor = sp?.edit()
             editor!!.putString("LAT",googleMap!!.cameraPosition.target.latitude.toString())
-            editor!!.putString("LONG",googleMap!!.cameraPosition.target.longitude.toString())
-            editor?.commit()
+            editor!!.putString("LONG",googleMap!!.cameraPosition.target.longitude.toString())*/
+            Lat = googleMap!!.cameraPosition.target.latitude.toString()
+            Long = googleMap!!.cameraPosition.target.longitude.toString()
+          // editor?.commit()
+
         }
 
     }
     override fun onResume() {
         d("LocationDetect","resume")
         super.onResume()
+            getLastLocation()
+
+         //   moveMap(latitude!!, longitude!!)
+
      //  mMapView2?.onResume()
-       getLastLocation()
+
+       //
     }
 
 
@@ -148,15 +175,15 @@ class Tab2Complian  : androidx.fragment.app.Fragment(),GoogleApiClient.Connectio
 
     private fun moveMap(lat : Double,long : Double) {
 
-           val latLng = LatLng(lat!!, long!!)
-            googleMap!!.moveCamera(CameraUpdateFactory.newLatLng(latLng))
-            googleMap!!.animateCamera(CameraUpdateFactory.zoomTo(15f))
-            googleMap!!.getUiSettings().setZoomControlsEnabled(true)
-            sp = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
-            val editor = sp?.edit()
-            editor!!.putString("LAT",lat.toString())
-            editor!!.putString("LONG",long.toString())
-            editor?.commit()
+                val latLng = LatLng(lat!!, long!!)
+                googleMap!!.moveCamera(CameraUpdateFactory.newLatLng(latLng))
+                googleMap!!.animateCamera(CameraUpdateFactory.zoomTo(15f))
+                googleMap!!.getUiSettings().setZoomControlsEnabled(true)
+              /*  sp = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+                val editor = sp?.edit()
+                editor!!.putString("LAT", lat.toString())
+                editor!!.putString("LONG", long.toString())*/
+                //  editor?.commit()
 
 
 
@@ -297,9 +324,14 @@ class Tab2Complian  : androidx.fragment.app.Fragment(),GoogleApiClient.Connectio
                     }
                 }
             } else {
-                Toast.makeText(requireContext(), "Turn on location", Toast.LENGTH_LONG).show()
-                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                startActivity(intent)
+                if (!initLocation) {
+                    initLocation = true
+                    Toast.makeText(requireContext(), "Turn on location", Toast.LENGTH_LONG).show()
+                    val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                    startActivity(intent)
+                }
+
+
             }
         } else {
             requestPermissions()

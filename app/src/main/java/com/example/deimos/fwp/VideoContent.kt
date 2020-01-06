@@ -40,7 +40,7 @@ data class categoryInfoVideoContent(var categoryId : categoryIdVideoContent)
 data class categoryIdVideoContent(var categoryName : categoryNameVideoContent)
 data class categoryNameVideoContent(var en: String,var th: String)
 var mYouTubePlayerView: YouTubePlayerView?=null
-var mAPIService: ApiService? = null
+var mAPIService: ApiServiceContent? = null
 var mOnInitializedListener: YouTubePlayer.OnInitializedListener?=null
 
 class VideoContent : YouTubeBaseActivity() {
@@ -53,7 +53,7 @@ class VideoContent : YouTubeBaseActivity() {
 
         var _id = bundle!!.getString("ID")
 
-        mAPIService = ApiUtils.apiService
+        mAPIService = ApiUtilsContent.apiService
         sharedPreferences = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
         val partnerId = sharedPreferences!!.getString("partnerId","-")
         val sdf = SimpleDateFormat("yyMMdd")

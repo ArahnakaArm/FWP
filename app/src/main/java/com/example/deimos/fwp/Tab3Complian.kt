@@ -63,7 +63,14 @@ data class CompliansRequestModel(var status : String,var subject : String,
                                  var complainType : String,var complainDesc : String,var map : complianRequstMap,var image : ArrayList<String>,var firstName : String,var lastName : String ,var partnerId : String)
 data class complianRequstMap(var lat : Double,var long : Double)
 data class CompliansRequestModelNoImage(var status : String,var subject : String,
-                                 var complainType : String,var complainDesc : String,var map : complianRequstMap,var firstName : String,var lastName : String ,var partnerId : String)
+                                 var complainType : String,var complainDesc : String,var map : complianRequstMap,var partnerId : String,var firstName : String,var lastName : String)
+data class CompliansRequestModelNoTokenNoImage(var status : String,var subject : String,
+                                        var complainType : String,var complainDesc : String,var map : complianRequstMap,var firstName : String,var lastName : String ,var partnerId : String)
+
+data class CompliansRequestModelImage(var status : String,var subject : String,
+                                 var complainType : String,var complainDesc : String,var map : complianRequstMap,var image : ArrayList<String>,var partnerId : String,var firstName : String,var lastName : String)
+
+
 interface SpaceRegionRepresentableComplian {
     fun endpoint(): String
 }
@@ -93,6 +100,8 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
     private val spaceregion = SpaceRegion.SGP
     private val filename = "example_image"
     private val filetype = "jpg"
+    private var LAT : Double?=null
+    private var LONG : Double?=null
     var fileupload : File?=null
     private var countUpload =0
     private var ImageUploadPath = ArrayList<String>()
@@ -107,7 +116,9 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
     private var complianrequstmap: complianRequstMap? = null
     var Send : Button?=null
     private var compliansrequestmodel: CompliansRequestModel? = null
+    private var compliansrequestmodelImage: CompliansRequestModelImage? = null
     private val GALLERY_REQUEST = 1889
+    private var compliansrequestmodelNoTokenNoImage : CompliansRequestModelNoTokenNoImage?=null
     private var compliansrequestmodelNoImage: CompliansRequestModelNoImage? = null
     private val MY_WRITE_PERMISSION_CODE = 200
     var mAPIService: ApiServiceComplian? = null
@@ -134,9 +145,10 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
         Send =activity!!.findViewById(R.id.next2)
 
         sp = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+
+
+
         token = sp!!.getString("user_token","-")
-
-
         Send!!.setOnClickListener {
             if(isImageSelect) {
                 ImageUploadPath.clear()
@@ -418,21 +430,24 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
     }
     private fun doComplian(){
         sharedPreferences = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        LAT = sharedPreferences!!.getString("LAT","-").toDouble()
+        LONG = sharedPreferences!!.getString("LONG","-").toDouble()
+        d("LatLong", LAT.toString()+","+LONG.toString())
         val partnerId = sharedPreferences!!.getString("partnerId", "-")
         val firstName =  sharedPreferences!!.getString("firstName", "-")
         val lastName =  sharedPreferences!!.getString("lastName", "-")
-        complianrequstmap = complianRequstMap(sp!!.getString("LAT","-")!!.toDouble(), sp!!.getString("LONG","-")!!.toDouble())
-        compliansrequestmodel = CompliansRequestModel("New", sp!!.getString("Subject", "-")!!, sp!!.getString("Type", "-")!!, sp!!.getString("Description", "-")!!, complianrequstmap!!, ImageUploadPath
-                    , firstName, lastName, partnerId)
+        complianrequstmap = complianRequstMap(LAT!!, LONG!!)
+        compliansrequestmodelImage = CompliansRequestModelImage("New", sp!!.getString("Subject", "-")!!, sp!!.getString("Type", "-")!!, sp!!.getString("Description", "-")!!, complianrequstmap!!, ImageUploadPath
+                    , partnerId,firstName,lastName)
         compliansrequestmodelNoImage = CompliansRequestModelNoImage("New", sp!!.getString("Subject", "-")!!, sp!!.getString("Type", "-")!!, sp!!.getString("Description", "-")!!, complianrequstmap!!
-                , firstName, lastName, partnerId)
+                , partnerId,firstName,lastName)
 
             mAPIService = ApiUtilsComplian.apiServiceComplian
             val sdf = SimpleDateFormat("yyMMdd")
             val currentDate = sdf.format(Date())
             val r = (10..12).shuffled().first()
-            mAPIService!!.postComplians("Bearer " + token, Register.GenerateRandomString.randomString(22), "AND-" + currentDate + Register.GenerateRandomString.randomString(r),
-                    compliansrequestmodel!!, partnerId).enqueue(object : Callback<responseComplian> {
+            mAPIService!!.postCompliansImage("Bearer " + token, Register.GenerateRandomString.randomString(22), "AND-" + currentDate + Register.GenerateRandomString.randomString(r),
+                    compliansrequestmodelImage!!, partnerId).enqueue(object : Callback<responseComplian> {
                 override fun onResponse(call: Call<responseComplian>, response: Response<responseComplian>) {
                     if (response.isSuccessful()) {
                         complianNumber = response.body()!!.resultData.complainNumber
@@ -502,7 +517,10 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
         val partnerId = sharedPreferences!!.getString("partnerId", "-")
         val firstName =  sharedPreferences!!.getString("firstName", "-")
         val lastName =  sharedPreferences!!.getString("lastName", "-")
-        complianrequstmap = complianRequstMap(sp!!.getString("LAT","-")!!.toDouble(), sp!!.getString("LONG","-")!!.toDouble())
+        LAT = sharedPreferences!!.getString("LAT","-").toDouble()
+        LONG = sharedPreferences!!.getString("LONG","-").toDouble()
+        d("LatLong", LAT.toString()+","+LONG.toString())
+        complianrequstmap = complianRequstMap(LAT!!, LONG!!)
         compliansrequestmodel = CompliansRequestModel("New", sp!!.getString("Subject","-")!!, sp!!.getString("Type","-")!!, sp!!.getString("Description","-")!!,complianrequstmap!!,ImageUploadPath
                 ,firstName,lastName,partnerId)
         mAPIService = ApiUtilsComplian.apiServiceComplian
@@ -562,12 +580,15 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
     }
     private fun doComplianNoImage(){
         sharedPreferences = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        LAT = sharedPreferences!!.getString("LAT","-").toDouble()
+        LONG = sharedPreferences!!.getString("LONG","-").toDouble()
+        d("LatLong", LAT.toString()+","+LONG.toString())
         val partnerId = sharedPreferences!!.getString("partnerId", "-")
         val firstName =  sharedPreferences!!.getString("firstName", "-")
         val lastName =  sharedPreferences!!.getString("lastName", "-")
-        complianrequstmap = complianRequstMap(sp!!.getString("LAT","-")!!.toDouble(), sp!!.getString("LONG","-")!!.toDouble())
+        complianrequstmap = complianRequstMap(LAT!!, LONG!!)
         compliansrequestmodelNoImage = CompliansRequestModelNoImage("New", sp!!.getString("Subject","-")!!, sp!!.getString("Type","-")!!, sp!!.getString("Description","-")!!,complianrequstmap!!
-                ,firstName,lastName,partnerId)
+                ,partnerId,firstName,lastName)
         mAPIService = ApiUtilsComplian.apiServiceComplian
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
@@ -636,18 +657,22 @@ class Tab3Complian : androidx.fragment.app.Fragment() {
     }
     private fun doComplianNoTokenNoImage(){
         sharedPreferences = activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        LAT = sharedPreferences!!.getString("LAT","-").toDouble()
+        LONG = sharedPreferences!!.getString("LONG","-").toDouble()
+        d("LatLong", LAT.toString()+","+LONG.toString())
+        d("LatLong", sp!!.getString("LAT","-")+","+sp!!.getString("LONG","-").toDouble())
         val partnerId = sharedPreferences!!.getString("partnerId", "-")
         val firstName =  sharedPreferences!!.getString("firstName", "-")
         val lastName =  sharedPreferences!!.getString("lastName", "-")
-        complianrequstmap = complianRequstMap(sp!!.getString("LAT","-")!!.toDouble(), sp!!.getString("LONG","-")!!.toDouble())
-        compliansrequestmodelNoImage = CompliansRequestModelNoImage("New", sp!!.getString("Subject","-")!!, sp!!.getString("Type","-")!!, sp!!.getString("Description","-")!!,complianrequstmap!!
+        complianrequstmap = complianRequstMap(LAT!!, LONG!!)
+        compliansrequestmodelNoTokenNoImage = CompliansRequestModelNoTokenNoImage("New", sp!!.getString("Subject","-")!!, sp!!.getString("Type","-")!!, sp!!.getString("Description","-")!!,complianrequstmap!!
                 ,firstName,lastName,partnerId)
         mAPIService = ApiUtilsComplian.apiServiceComplian
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
         mAPIService!!.postCompliansNoTokenNoImage(Register.GenerateRandomString.randomString(22), "AND-" + currentDate + Register.GenerateRandomString.randomString(r),
-                compliansrequestmodelNoImage!!,partnerId).enqueue(object : Callback<responseComplian> {
+                compliansrequestmodelNoTokenNoImage!!,partnerId).enqueue(object : Callback<responseComplian> {
 
             override fun onResponse(call: Call<responseComplian>, response: Response<responseComplian>) {
 

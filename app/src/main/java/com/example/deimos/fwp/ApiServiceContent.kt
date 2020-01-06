@@ -85,7 +85,7 @@ interface ApiServiceContent {
     @Headers("Content-Type: application/json")
     @GET("videos")
     fun getSearchVideo(@Header("x-session-id") header : String,
-                       @Header("x-tid") header2 : String, @Query("partnerId") partnerId : String, @Query("searchAll") searchAll : String, @Query("offset") offset : Int, @Query("limit") limit : Int, @Query("orderby") orderby : String): Call<VideosModel?>
+                       @Header("x-tid") header2 : String, @Query("partnerId") partnerId : String, @Query("searchAll") searchAll : String, @Query("offset") offset : Int, @Query("limit") limit : Int, @Query("orderby") orderby : String,@Query("isPublish") isPublish : Boolean = true): Call<VideosModel?>
 
 
     @Headers("Content-Type: application/json")
@@ -98,9 +98,11 @@ interface ApiServiceContent {
 
 }
 object ApiUtilsContent {
+    var API = BuildConfig.API_BASE
+    var PDT ="fwp-api.evolka.in"
     var DEV = "167.71.194.165"
     var SQA = "206.189.41.105"
-    var BASE_URL = "http://$SQA:3000/ctf/v1/"
+    var BASE_URL = "https://$API/ctf/v1/"
     val apiService: ApiServiceContent
         get() = RetrofitClient.getClient(BASE_URL)!!.create(ApiServiceContent::class.java)
 

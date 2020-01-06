@@ -18,6 +18,11 @@ interface ApiServiceComplian {
 
     @Headers("Content-Type: application/json")
     @POST("complians")
+    fun postCompliansImage(@Header("Authorization") auth: String, @Header("x-session-id") header : String,
+                      @Header("x-tid") header2 : String, @Body compliansRequestModelImage: CompliansRequestModelImage,@Query("partnerId")partnerId:String): Call<responseComplian>
+
+    @Headers("Content-Type: application/json")
+    @POST("complians")
     fun postCompliansNoImage(@Header("Authorization") auth: String, @Header("x-session-id") header : String,
                       @Header("x-tid") header2 : String, @Body compliansRequestModelNoImage: CompliansRequestModelNoImage,@Query("partnerId")partnerId:String): Call<responseComplian>
 
@@ -37,7 +42,7 @@ interface ApiServiceComplian {
     @Headers("Content-Type: application/json")
     @POST("complians")
     fun postCompliansNoTokenNoImage(@Header("x-session-id") header : String,
-                             @Header("x-tid") header2 : String, @Body compliansRequestModel: CompliansRequestModelNoImage,@Query("partnerId")partnerId:String): Call<responseComplian>
+                             @Header("x-tid") header2 : String, @Body compliansRequestModel: CompliansRequestModelNoTokenNoImage,@Query("partnerId")partnerId:String): Call<responseComplian>
 
 
     @Multipart

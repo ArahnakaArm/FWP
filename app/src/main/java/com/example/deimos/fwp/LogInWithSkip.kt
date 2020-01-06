@@ -2,6 +2,7 @@ package com.example.deimos.fwp
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -179,6 +180,8 @@ class LogInWithSkip : AppCompatActivity() {
                             editor?.putBoolean("LogIn_State", true)
                             editor?.putString("user_token", response.body()!!.resultData.access_token)
                             editor?.putString("LogIn_Type", "Local")
+                            editor?.putString("firstName", response.body()!!.resultData.firstName)
+                            editor?.putString("lastName", response.body()!!.resultData.lastName)
                             d("AA",sp?.getBoolean("LogIn_State", false).toString())
                             editor?.commit()
                             val intent = Intent(this@LogInWithSkip, Complian::class.java)
@@ -327,7 +330,9 @@ class LogInWithSkip : AppCompatActivity() {
                     Log.i("Test", message)
                     tokenGoogle =token
                     Log.i("Token", "Google Token :" + tokenGoogle)
-                    getLocalTokenGoogle()
+                    runOnUiThread {
+                        getLocalTokenGoogle()
+                    }
                 } catch (e: JSONException) {
                     e.printStackTrace()
                 }
@@ -352,6 +357,11 @@ class LogInWithSkip : AppCompatActivity() {
         val editor = sp?.edit()
         editor?.commit()
         editor?.putBoolean("LogIn_State", true)
+        val mProgressDialog = ProgressDialog(this@LogInWithSkip)
+        mProgressDialog.isIndeterminate = true
+        mProgressDialog.setCancelable(false)
+        mProgressDialog.setMessage("Loading...")
+        mProgressDialog.show()
         d("AA",sp?.getBoolean("LogIn_State", false).toString())
 
         mAPIService!!.userLoginGoogle(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),tokenGoogle!!,partnerId).enqueue(object : Callback<UserMo> {
@@ -367,7 +377,8 @@ class LogInWithSkip : AppCompatActivity() {
                     editor?.putBoolean("LogIn_StateGoogle", true)
                     editor?.putString("user_token", response.body()!!.resultData.access_token)
                     editor?.putString("LogIn_Type", "Social")
-
+                    editor?.putString("firstName", response.body()!!.resultData.firstName)
+                    editor?.putString("lastName", response.body()!!.resultData.lastName)
                     editor?.commit()
 
                     val intent = Intent(this@LogInWithSkip, Complian::class.java)
@@ -375,31 +386,50 @@ class LogInWithSkip : AppCompatActivity() {
                     finish()
                     //replaceFragmentToRight(ComplianHolder())
 
-
+                    mProgressDialog.dismiss()
 
 
                 }
-                else if(response.code()==401){
+                else{
+                    signOutGoogle()
+                    val sp = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE)
+                    val editor = sp?.edit()
+                    LoginManager.getInstance().logOut()
+                    editor?.putString("user_token","-")
+                    editor?.putBoolean("LogIn_State",false)
+                    editor?.putBoolean("LogIn_StateFacebook", false)
+                    editor?.putBoolean("LogIn_StateGoogle", false)
+                    editor?.commit()
                     val mAlert = AlertDialog.Builder(this@LogInWithSkip)
                     mAlert.setTitle("พบข้อผิดพลาด")
-                    mAlert.setMessage("รหัสผ่านของท่านผิด")
+                    mAlert.setMessage("กรุณาลองใหม่อีกครั้ง")
                     mAlert.setNegativeButton("ตกลง"){dialog, which ->
                         dialog.dismiss()
                     }
+                    mProgressDialog.dismiss()
                     mAlert.show()
-
                 }
 
             }
 
             override fun onFailure(call: Call<UserMo>, t: Throwable) {
+                val sp = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE)
+                val editor = sp?.edit()
+                LoginManager.getInstance().logOut()
+                editor?.putString("user_token","-")
+                editor?.putBoolean("LogIn_State",false)
+                editor?.putBoolean("LogIn_StateFacebook", false)
+                editor?.putBoolean("LogIn_StateGoogle", false)
+                editor?.commit()
+                signOutGoogle()
                 d("ss",t.toString())
                 val mAlert = AlertDialog.Builder(this@LogInWithSkip)
                 mAlert.setTitle("พบข้อผิดพลาด")
-                mAlert.setMessage("ท่านไม่ได้เชื่อมต่ออินเตอร์เน็ต")
+                mAlert.setMessage("กรุณาลองใหม่อีกครั้ง")
                 mAlert.setNegativeButton("ตกลง"){dialog, which ->
                     dialog.dismiss()
                 }
+                mProgressDialog.dismiss()
                 mAlert.show()
             }
         })
@@ -412,6 +442,11 @@ class LogInWithSkip : AppCompatActivity() {
         val sdf = SimpleDateFormat("yyMMdd")
         val currentDate = sdf.format(Date())
         val r = (10..12).shuffled().first()
+        val mProgressDialog = ProgressDialog(this@LogInWithSkip)
+        mProgressDialog.isIndeterminate = true
+        mProgressDialog.setCancelable(false)
+        mProgressDialog.setMessage("Loading...")
+        mProgressDialog.show()
         mAPIService!!.userLoginFacebook(Register.GenerateRandomString.randomString(22),"AND-"+currentDate+ Register.GenerateRandomString.randomString(r),tokenFacebook!!,partnerId).enqueue(object : Callback<UserMo> {
 
             override fun onResponse(call: Call<UserMo>, response: Response<UserMo>) {
@@ -423,15 +458,27 @@ class LogInWithSkip : AppCompatActivity() {
                     editor?.putBoolean("LogIn_State", true)
                     editor?.putString("user_token", response.body()!!.resultData.access_token)
                     editor?.putString("LogIn_Type", "Social")
+                    editor?.putString("firstName", response.body()!!.resultData.firstName)
+                    editor?.putString("lastName", response.body()!!.resultData.lastName)
                     editor?.commit()
+                    mProgressDialog.dismiss()
                     val intent = Intent(this@LogInWithSkip, Complian::class.java)
                     startActivity(intent)
                     finish()
+
                 }
-                else if(response.code()==401){
+                else{
+                    val sp = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE)
+                    val editor = sp?.edit()
+                    LoginManager.getInstance().logOut()
+                    editor?.putString("user_token","-")
+                    editor?.putBoolean("LogIn_State",false)
+                    editor?.putBoolean("LogIn_StateFacebook", false)
+                    editor?.putBoolean("LogIn_StateGoogle", false)
+                    editor?.commit()
                     val mAlert = AlertDialog.Builder(this@LogInWithSkip)
                     mAlert.setTitle("พบข้อผิดพลาด")
-                    mAlert.setMessage("รหัสผ่านของท่านผิด")
+                    mAlert.setMessage("กรุณาลองใหม่อีกครั้ง")
                     mAlert.setNegativeButton("ตกลง"){dialog, which ->
                         dialog.dismiss()
                     }
@@ -442,6 +489,14 @@ class LogInWithSkip : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<UserMo>, t: Throwable) {
+                val sp = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE)
+                val editor = sp?.edit()
+                LoginManager.getInstance().logOut()
+                editor?.putString("user_token","-")
+                editor?.putBoolean("LogIn_State",false)
+                editor?.putBoolean("LogIn_StateFacebook", false)
+                editor?.putBoolean("LogIn_StateGoogle", false)
+                editor?.commit()
                 d("ss",t.toString())
                 val mAlert = AlertDialog.Builder(this@LogInWithSkip)
                 mAlert.setTitle("พบข้อผิดพลาด")
@@ -450,6 +505,7 @@ class LogInWithSkip : AppCompatActivity() {
                     dialog.dismiss()
                 }
                 mAlert.show()
+                mProgressDialog.dismiss()
             }
         })
 
